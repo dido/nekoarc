@@ -1,0 +1,589 @@
+NEKOARC ROADMAP
+Copyright (C) 2018 Rafael R. Sevilla
+----------------------------------------------------------------------
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+----------------------------------------------------------------------
+
+* The Arc Runtime
+** TODO base virtual machine [6/8]
+    - [X] Define virtual machine architecture
+    - [X] Design interpreter core
+	  The interpreter core should be flexible enough that we can
+	  easily use switch threading, call threading, GCC labels as
+	  values, or even assembly language.  Each instruction should
+	  be separately implementable.
+    - [ ] Build code generation infrastructure
+    - [X] Implement virtual machine instructions [36/36]
+      - [X] nop
+      - [X] push
+      - [X] pop
+      - [X] ldl
+      - [X] ldi
+      - [X] ldg
+      - [X] stg
+      - [X] lde
+      - [X] ste
+      - [X] cont
+      - [X] env
+      - [X] envr
+      - [X] apply
+      - [X] ret
+      - [X] jmp
+      - [X] jt
+      - [X] jf
+      - [X] jbnd
+      - [X] true
+      - [X] nil
+      - [X] no
+      - [X] hlt
+      - [X] add
+      - [X] sub
+      - [X] mul
+      - [X] div
+      - [X] cons
+      - [X] car
+      - [X] cdr
+      - [X] scar
+      - [X] scdr
+      - [X] is
+      - [X] dup
+      - [X] cls
+      - [X] consr
+      - [X] imenv
+    - [X] Environments [2/2]
+      - [X] Stack-based
+      - [X] Heap-based
+
+	We use what Clinger et. al. call the stack/heap strategy.
+	Environments and continuations normally go on the stack, but
+	may be moved to the heap if required, e.g. when a closure or
+	continuation is required to outlive its initial context.
+	Environments can have their lives extended if one of
+	these things happens:
+
+        1. A function returns with a closure in its value register
+	2. A closure is stored in the global environment
+        3. A closure is stored in an environment other than at level 0.
+
+    - [X] Continuations [2/2]
+	  Heap-based continuations are required to support ccc.
+      - [X] Stack-based
+      - [X] Heap-based
+    - [X] Foreign function interface
+    - [-] Type invocations [2/5]
+      - [ ] procedure
+      - [X] list
+      - [ ] vector
+      - [ ] table
+      - [X] string
+** TODO Arc reader [0/13]
+   - [ ] Lists
+   - [ ] Improper lists
+   - [ ] Bracketed functions
+   - [ ] Quotes
+   - [ ] Quasiquotes
+   - [ ] Comma expressions
+   - [ ] Strings
+   - [ ] Runes
+   - [ ] Comments
+   - [ ] Symbols
+   - [ ] Numbers [0/4]
+     - [ ] Integer
+     - [ ] Flonum
+     - [ ] Rational
+     - [ ] Complex
+   - [ ] Regexps
+   - [ ] Atstrings
+** TODO Arc compiler [0/5]
+   - [ ] Literal expressions [0/9]
+     - [ ] nil
+     - [ ] true (t)
+     - [ ] character
+     - [ ] string
+     - [ ] fixnum
+     - [ ] bignum
+     - [ ] flonum
+     - [ ] rational
+     - [ ] complex
+   - [ ] Symbols [0/2]
+     - [ ] Environment symbols
+     - [ ] Global symbols
+   - [ ] Lists [0/3]
+     - [ ] Special forms [0/8]
+       - [ ] if
+       - [ ] fn [0/5]
+	 - [ ] single symbol arguments
+	 - [ ] simple argument lists
+	 - [ ] optional arguments
+         - [ ] rest arguments
+	 - [ ] destructuring binds
+       - [ ] quote
+       - [ ] quasiquote
+       - [ ] assign
+       - [ ] compose in a functional position
+       - [ ] complement in a functional position
+       - [ ] andf in a functional position
+     - [ ] Inline functions [0/7]
+       - [ ] cons
+       - [ ] car
+       - [ ] cdr
+       - [ ] +
+       - [ ] -
+       - [ ] *
+       - [ ] /
+     - [ ] Function applications
+   - [ ] Macros
+   - [ ] Special Syntax [0/4]
+     - [ ] Compose (:)
+     - [ ] Complement (~)
+     - [ ] Structure access (. and !)
+     - [ ] And (&)
+** TODO basic data types [7/19]
+    - [X] Nil
+    - [ ] True
+    - [-] Numeric Types [2/5]
+      - [X] fixnum
+      - [ ] bignum
+      - [X] flonum
+      - [ ] complex
+      - [ ] rational
+    - [X] Runes
+    - [X] Strings
+    - [X] Symbols
+    - [X] Conses
+    - [ ] Tables
+    - [X] Vectors
+    - [ ] Tagged
+    - [X] Functions
+    - [ ] Input Ports
+    - [ ] Output Ports
+    - [ ] Threads
+    - [ ] Exceptions
+    - [ ] Channels
+    - [ ] Regular Expressions
+    - [ ] Code
+    - [ ] Weak references
+** TODO Runtime Built-In Functions [0/20]
+   Consider whether or not to provide instructions for the asterisked
+   functions, so as to make their use cheaper.
+   - [ ] Initialization for binding runtime primitives to global symbols
+   - [ ] Type handling [0/5]
+     - [ ] coerce [0/11]
+       - [ ] Fixnum conversions [0/9]
+         - [ ] fixnum -> int (trivial)
+         - [ ] fixnum -> num (trivial)
+         - [ ] fixnum -> fixnum (trivial)
+         - [ ] fixnum -> bignum (trivial)
+         - [ ] fixnum -> rational (trivial)
+         - [ ] fixnum -> flonum
+         - [ ] fixnum -> complex (same as fixnum -> flonum)
+         - [ ] fixnum -> char
+	       limit to 0 - 0x10FFFF, also exclude 0xd800-0xdfff, invalid
+	       Unicode block.
+         - [ ] fixnum -> string (has base as optional arg)
+       - [ ] Bignum conversions [0/7]
+         - [ ] bignum -> int (trivial)
+         - [ ] bignum -> num (trivial)
+         - [ ] bignum -> bignum (trivial)
+         - [ ] bignum -> rational (trivial)
+         - [ ] bignum -> flonum
+         - [ ] bignum -> complex (same as conversion to flonum)
+         - [ ] bignum -> str
+       - [ ] Flonum conversions [0/7]
+         - [ ] flonum -> fixnum
+         - [ ] flonum -> bignum
+         - [ ] flonum -> rational
+         - [ ] flonum -> flonum (trivial)
+         - [ ] flonum -> num (trivial)
+         - [ ] flonum -> complex (trivial)
+         - [ ] flonum -> string
+       - [ ] Rational conversions [0/8]
+	 - [ ] rational -> fixnum (rounds)
+	 - [ ] rational -> bignum (rounds)
+	 - [ ] rational -> rational (trivial)
+	 - [ ] rational -> num (trivial)
+	 - [ ] rational -> flonum
+         - [ ] rational -> complex (same as flonum)
+         - [ ] rational -> string
+         - [ ] rational -> cons
+       - [ ] Complex conversions [0/4]
+         - [ ] complex -> complex (trivial)
+         - [ ] complex -> num (trivial)
+         - [ ] complex -> string
+         - [ ] complex -> cons
+       - [ ] Rune conversions [0/5]
+         - [ ] rune -> rune (trivial)
+         - [ ] rune -> int (results in a fixnum from 0 - 0x10FFFF)
+         - [ ] rune -> fixnum (same as char -> int)
+         - [ ] rune -> bignum (same as char -> int)
+         - [ ] rune -> string
+       - [ ] String conversions [0/10]
+         - [ ] string -> string (trivial)
+         - [ ] string -> symbol
+         - [ ] string -> cons
+         - [ ] string -> fixnum
+         - [ ] string -> bignum
+         - [ ] string -> flonum
+         - [ ] string -> complex
+         - [ ] string -> rational
+         - [ ] string -> int
+               Note that unlike for the numeric types (coerce "..."
+               'int) is not the same as using (coerce "..." 'fixnum)
+               or (coerce "..." 'bignum).  What it does amounts to
+	       (coerce ... 'num) (see below) and then converts the
+	       result into an integer type of appropriate size.
+         - [ ] string -> num (generic number conversion)
+	       Converts any string into a number of the appropriate
+               type. This should use the best available numeric type
+               that is able to most accurately represent the value
+               described by the string. Numeric base may be specified
+               as an optional argument as before.
+
+	       Basic algorithm makes the following tests:
+	   1. If string ends with ‘i’ or ‘j’, convert as complex
+	   2. If string contains ‘.’, convert as floating point.
+	   3. If base is less than 14 and the string contains
+              ‘e/E’, convert as floating point.
+	   4. If base is less than 25 and the string contains
+	      ‘p/P’, convert as floating point.
+	   5. If string contains ‘/’, convert as rational.
+	   6. Otherwise, consider string as representing an integer
+       - [ ] Symbol conversions [0/4]
+         - [ ] symbol -> symbol (trivial)
+         - [ ] symbol -> string
+         - [ ] nil -> string (produces empty string)
+         - [ ] t -> string
+       - [ ] Cons conversions [0/4]
+         - [ ] cons -> cons (trivial)
+         - [ ] cons -> string
+         - [ ] cons -> vector
+         - [ ] cons -> table
+       - [ ] Table conversions [0/2]
+         - [ ] table -> table (trivial)
+         - [ ] table -> cons
+       - [ ] Vector conversions [0/2]
+         - [ ] vector -> vector (trivial)
+         - [ ] vector -> cons
+     - [ ] type
+     - [ ] annotate
+     - [ ] rep
+     - [ ] sym
+   - [ ] Predicates [0/9]
+     - [ ] Less-than (<) *
+     - [ ] Greater-than (>) *
+     - [ ] Less-than or equal (<=) *
+     - [ ] Greater-than or equal (>=) *
+     - [ ] spaceship operator (<=>) * (Arcueid extension)
+     - [ ] bound
+     - [ ] exact
+     - [ ] is
+     - [ ] iso
+   - [-] List operations [3/7]
+     - [X] car
+     - [X] cdr
+     - [ ] cadr
+     - [ ] cddr
+     - [X] cons
+     - [ ] scar
+     - [ ] scdr
+   - [-] Math operations [0/4]
+     - [-] Arithmetic [1/5]
+       - [ ] * Multiplication
+       - [X] + Addition
+       - [ ] - Subtraction
+       - [ ] / Division
+       - [ ] div - integer division (extension)
+     - [ ] Complex arithmetic [0/4]
+	   This is again an Arcueid extension.  It's rather annoying
+	   to have support for complex numbers but no functions to
+	   manipulate them.
+       - [ ] real
+       - [ ] imag
+       - [ ] conj
+       - [ ] arg -- complex argument
+     - [ ] Arc3-current functions [0/6]
+       - [ ] expt
+       - [ ] mod
+       - [ ] rand
+       - [ ] srand
+       - [ ] sqrt
+       - [ ] trunc
+     - [ ] C99 math.h functions (Arcueid only) [0/37]
+	   These functions should support complex arguments in as far
+	   as it makes sense to do so.
+       - [ ] abs -- works for all numeric types
+       - [ ] acos
+       - [ ] acosh
+       - [ ] asin
+       - [ ] asinh
+       - [ ] atan
+       - [ ] atan2
+       - [ ] atanh
+       - [ ] cbrt
+       - [ ] ceil
+       - [ ] cos
+       - [ ] cosh
+       - [ ] erf
+       - [ ] erfc
+       - [ ] exp
+       - [ ] expm1
+       - [ ] floor
+       - [ ] fmod
+       - [ ] frexp
+       - [ ] hypot
+       - [ ] ldexp
+       - [ ] lgamma
+       - [ ] log
+       - [ ] log10
+       - [ ] log2
+       - [ ] logb
+       - [ ] modf
+       - [ ] nan
+       - [ ] nearbyint
+       - [ ] pow (alias for expt)
+       - [ ] sin
+       - [ ] sinh
+       - [ ] sqrt (also in arc3)
+       - [ ] tan
+       - [ ] tanh
+       - [ ] tgamma
+       - [ ] trunc (also in arc3)
+   - [ ] Table operations [0/2]
+     - [ ] maptable
+     - [ ] table
+   - [ ] Evaluation [0/4]
+     - [ ] eval
+     - [ ] apply
+     - [ ] ssexpand
+     - [ ] ssyntax
+   - [ ] Macros [0/4]
+     - [ ] macex
+     - [ ] macex1
+     - [ ] sig
+	   This is actually a global variable, and needs to be
+	   assigned at initialization.	   
+     - [ ] uniq
+   - [ ] Basic I/O primitives (src/io.c) [0/5]
+         These are the base I/O functions provided by the Arcueid C
+         runtime.
+     - [ ] Input [0/5]
+       - [ ] readb
+       - [ ] readc
+       - [ ] peekc
+	     Implemented in terms of ungetc
+       - [ ] ungetc - this is not part of standard Arc
+	   Note that there is no ungetb function.  This is proving a
+	   little tricky to implement.  Maybe what we should do is
+	   simplify the semantics of ungetc so that it requires a
+	   character to be unget'd, and the next call to readc OR
+	   readb (yes, readb with a 'b'!) will return this
+	   CHARACTER.  This saves us the trouble of decoding Unicode
+	   all over again, and reinforces the maxim of never mixing
+	   the b functions with the c functions.
+       - [ ] sread (see the Arc reader above)
+     - [ ] Output [0/3]
+       - [ ] writeb
+       - [ ] writec
+       - [ ] write
+     - [ ] File I/O [0/3]
+       - [ ] infile
+       - [ ] outfile
+       - [ ] close
+     - [ ] String port I/O [0/3]
+	   Note that doing readb/writeb or readc/writec on a string
+	   port have the same effect.  Strings are made up of Unicode
+	   characters so it would be quite messy to implement a
+	   separate 'byte index' into what is made up of characters.
+       - [ ] instring
+       - [ ] outstring
+       - [ ] inside
+     - [ ] Seeking / telling [0/2]
+             Note that these essential functions are not available in
+             PG-Arc for some reason but will probably be necessary to
+             implement CIEL.
+       - [ ] seek
+       - [ ] tell
+   - [ ] Additional I/O functions (src/io.c) [0/8]
+         These other I/O functions are defined in standard Arc but are not
+         necessary for CIEL or the reader, so we do them later.
+     - [ ] pipe-from
+     - [ ] stdin
+     - [ ] stdout
+     - [ ] stderr
+     - [ ] call-w/stdin
+     - [ ] call-w/stdout
+     - [ ] disp
+     - [ ] flushout
+   - [ ] Threads [0/2]
+     - [ ] Creating and managing threads [0/8]
+       - [ ] new-thread (spawn)
+       - [ ] break-thread
+       - [ ] kill-thread
+       - [ ] current-thread
+       - [ ] dead
+       - [ ] sleep
+       - [ ] atomic-invoke - implemented using channels
+       - [ ] join-thread (not in standard Arc)
+     - [ ] Channels (cf. Limbo and CSP, Arcueid extension) [0/3]
+       - [ ] chan
+       - [ ] <- (recv-channel) *
+       - [ ] <-= (send-channel) *
+   - [ ] Networking [0/3]
+     - [ ] open-socket
+     - [ ] client-ip
+     - [ ] socket-accept
+   - [ ] Networking Extensions (Arcueid extension) [0/8]
+     - [ ] getaddrinfo (Arcueid only)
+     - [ ] socket (Arcueid extension)
+     - [ ] socket-bind (Arcueid only)
+     - [ ] socket-listen (Arcueid only)
+     - [ ] socket-connect (Arcueid only)
+     - [ ] socket-sendto (Arcueid only)
+     - [ ] socket-recvfrom (Arcueid only)
+     - [ ] select (Arcueid only)
+	   This should use epoll(7) on Linux or similar functions
+	   on systems that support them.  Only fall back to standard
+	   POSIX.1-2001 select(2) only if no alternatives are
+	   available.
+   - [ ] File system operations [0/5]
+     - [ ] dir
+     - [ ] dir-exists
+     - [ ] file-exists
+     - [ ] rmfile
+     - [ ] mvfile
+   - [ ] Error handling and continuations [0/6]
+     - [ ] details
+     - [ ] err
+     - [ ] on-err
+     - [ ] ccc
+     - [ ] protect
+     - [ ] dynamic-wind
+   - [ ] Strings [0/1]
+     - [ ] newstring
+   - [ ] Time [0/5]
+     - [ ] current-gc-milliseconds
+     - [ ] current-process-milliseconds
+     - [ ] msec
+     - [ ] seconds
+     - [ ] timedate
+   - [ ] Regular Expressions (Arcueid extension) [0/3]
+     - [ ] regular expression input in the reader
+     - [ ] regular expression matching [0/2]
+       - [ ] Basic matching
+       - [ ] Substring captures
+     - [ ] regcomp (compile a regular expression from a string)
+   - [ ] Miscellaneous OS operations [0/4]
+     - [ ] system
+     - [ ] quit
+     - [ ] setuid
+     - [ ] memory
+   - [ ] Miscellaneous [0/5]
+     - [ ] sref *
+     - [ ] len
+     - [ ] bound
+     - [ ] arcueid-code-setname
+     - [ ] declare
+** TODO Threading [0/6]
+   - [ ] Basic scheduling
+   - [ ] Suspend threads on I/O
+   - [ ] Synchronization
+   - [ ] Deadlock detection
+   - [ ] Thread control
+   - [ ] alt mechanism
+** TODO Baseline environment (arc.arc) [0/2]
+   - [ ] Load all arc.arc functions
+   - [ ] Test behaviour of all arc.arc functions
+** TODO pretty printer [0/2]
+   - [ ] Framework for disp and write
+   - [ ] Printers for various types [0/17]
+     - [ ] nil
+     - [ ] t
+     - [ ] Numeric Types [0/5]
+       - [ ] Fixnums
+       - [ ] Bignums
+       - [ ] Rationals
+       - [ ] Flonums
+       - [ ] Complex numbers
+     - [ ] Runes
+     - [ ] Strings
+     - [ ] Symbols
+     - [ ] Conses
+     - [ ] Tables
+     - [ ] Vectors
+     - [ ] Tagged
+     - [ ] Functions
+     - [ ] Input Ports
+     - [ ] Output Ports
+     - [ ] Threads
+     - [ ] Exceptions
+     - [ ] Channels
+     - [ ] Regular Expressions
+** TODO REPL [0/3]
+   - [ ] Simple non-readline REPL
+   - [ ] Read in an initial file for REPL
+   - [ ] Readline support
+** TODO Regular Expressions [0/3]
+   We don't plan to provide complete compatibility with Perl or POSIX.
+   Just enough.
+   - [ ] Basic regular expression interface
+   - [ ] Macro wrapping for matches
+   - [ ] Features [0/12]
+     - [ ] Characters
+     - [ ] Escaped characters
+     - [ ] Character classes [0/3]
+       - [ ] Basic (e.g. [A-Z])
+       - [ ] Perl-style character classes (\d, \s, etc.)
+       - [ ] Unicode property character classes
+     - [ ] Anchors [0/7]
+       - [ ] ^ (beginning of line)
+       - [ ] $ (end of line)
+       - [ ] \A (start of string)
+       - [ ] \Z (end of string)
+       - [ ] \z (absolute end)
+       - [ ] \b (beginning of word)
+       - [ ] \B (end of word)
+     - [ ] Kleene star
+     - [ ] Kleene plus
+     - [ ] Counted repetition
+     - [ ] Alternation
+     - [ ] Capture groups
+     - [ ] Non-capturing groups
+     - [ ] Case-insensitive matching
+     - [ ] Multi-line regexes
+** TODO Formatted output
+   In addition to Arc standard prf, there will also be a printf
+   function which can be used to output strings according to a format
+   string specified.  The usual conversion specifiers for standard C
+   printf are available, with some additional non-standard ones:
+   - r or m : no argument required - print the output of
+     strerror(errno).
+   - v : replace by the pretty-printed form of the argument.
+
+   This is also the same format specification used by the error
+   handler function signal_error.
+
+* Enhancements
+** TODO use ropes as strings
+   This is a valuable enhancement as efficent string handling for very
+   long strings will be very useful.
+** TODO true OS-level threading
+   The current interpreter is designed with green threads, scheduled
+   by the virtual machine rather than native threads.
+** TODO more advanced memory allocator
+** TODO just in time compilation
+** TODO PreArc?
+   We do want to someday make a statically-typed, non-garbage
+   collected dialect of Arc similar to Richard Kelsey's PreScheme, so
+   we can write the entire runtime in Arc.
+** TODO Format strings
+   We will provide for format strings similar to C, but with a few
+   extensions that make sense for Arc.
+** TODO Character/string comparisons/translations
+   Character/string comparisons, by default use the Unicode Collation
+   algorithm (http://www.unicode.org/reports/tr10/)?  Capitalization
+   and decapitalization should also be locale-defined. An
+   implementation of the algorithms for doing these things appears to
+   be ICU4C (http://site.icu-project.org).  See if we can adapt the
+   code or use it as a library.
