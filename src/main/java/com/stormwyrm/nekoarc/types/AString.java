@@ -1,5 +1,8 @@
 package com.stormwyrm.nekoarc.types;
 
+import com.stormwyrm.nekoarc.InvokeThread;
+import com.stormwyrm.nekoarc.NekoArcException;
+
 public class AString extends ArcObject
 {
 	public static final ArcObject TYPE = Symbol.intern("string");
@@ -19,10 +22,7 @@ public class AString extends ArcObject
 	@Override
 	public ArcObject add(ArcObject ae)
 	{
-		String as = ae.toString();
-		StringBuilder sb = new StringBuilder(this.string);
-		sb.append(as);
-		return(new AString(sb.toString()));
+		return(new AString(this.string + ae.toString()));
 	}
 
 	@Override
@@ -35,5 +35,23 @@ public class AString extends ArcObject
 	public boolean is(ArcObject other)
 	{
 		return(this == other || ((other instanceof AString) && string.equals(((AString)other).string)));
+	}
+
+	@Override
+	public int requiredArgs()
+	{
+		return(1);
+	}
+
+	@Override
+	public ArcObject invoke(InvokeThread thr)
+	{
+		Fixnum idx = Fixnum.cast(thr.getenv(0, 0), this);
+		if (idx.fixnum < 0)
+			throw new NekoArcException("negative string index");
+		if (idx.fixnum >= string.length())
+			throw new NekoArcException("string index out of range");
+		int c = string.codePointAt((int) idx.fixnum);
+		return(Rune.get(c));
 	}
 }
