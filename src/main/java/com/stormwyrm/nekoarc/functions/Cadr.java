@@ -4,10 +4,14 @@ import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.types.ArcObject;
 
 public class Cadr extends Builtin {
-    public static final Cadr CADR = new Cadr();
+    private static final Cadr INSTANCE = new Cadr();
 
     private Cadr() {
         super("cadr", 1, 0, 0, false);
+    }
+
+    public static Builtin getInstance() {
+        return(INSTANCE);
     }
 
     @Override

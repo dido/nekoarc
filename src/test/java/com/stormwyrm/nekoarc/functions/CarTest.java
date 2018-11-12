@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class CarTest {
     @Test
     public void test() {
-        Builtin car = Car.CAR;
+        Builtin car = Car.getInstance();
         // Apply the above builtin
         // env 0 0 0; nil; push; ld1 1; cons; push ldl 0; apply 1; ret;
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0

@@ -13,7 +13,7 @@ public class SRefTest {
     @Test
     public void testCons() {
         Cons cons = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), new Cons(Fixnum.get(3), new Cons(Fixnum.get(4), Nil.NIL))));
-        SRef sref = SRef.SREF;
+        Builtin sref = SRef.getInstance();
         // Essentially (sref '(1 2 3 4) 5 2)
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
                 0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0

@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class CdrTest {
     @Test
     public void test() {
-        Builtin cdr = Cdr.CDR;
+        Builtin cdr = Cdr.getInstance();
         // Apply the above builtin
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
                 0x44, 0x01, 0x00, 0x00, 0x00,			// ldi 1

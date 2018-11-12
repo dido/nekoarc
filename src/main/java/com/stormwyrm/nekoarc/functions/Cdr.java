@@ -4,7 +4,11 @@ import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.types.ArcObject;
 
 public class Cdr extends Builtin {
-    public static final Cdr CDR = new Cdr();
+    private static final Cdr INSTANCE = new Cdr();
+
+    public static Builtin getInstance() {
+        return(INSTANCE);
+    }
 
     private Cdr() {
         super("cdr", 1, 0, 0, false);

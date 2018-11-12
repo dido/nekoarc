@@ -12,7 +12,7 @@ public class LenTest {
     @Test
     public void testString() {
         AString str = new AString("日本語");
-        Len len = Len.LEN;
+        Builtin len = Len.getInstance();
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
                 0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
                 0x01,									// push
@@ -35,7 +35,7 @@ public class LenTest {
     @Test
     public void testVector() {
         Vector vec = new Vector(5);
-        Len len = Len.LEN;
+        Builtin len = Len.getInstance();
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
                 0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
                 0x01,									// push
@@ -58,7 +58,7 @@ public class LenTest {
     @Test
     public void testCons() {
         Cons cons = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), new Cons(Fixnum.get(3), new Cons(Fixnum.get(4), Nil.NIL))));
-        Len len = Len.LEN;
+        Builtin len = Len.getInstance();
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
                 0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
                 0x01,									// push
