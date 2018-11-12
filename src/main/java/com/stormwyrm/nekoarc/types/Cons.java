@@ -59,8 +59,16 @@ public class Cons extends ArcObject
 		return(nth(index.fixnum).scar(value));
 	}
 
+	@Override
+    public long len() {
+	    // FIXME: Handle cyclic lists somehow
+        if (cdr instanceof Cons)
+            return(1 + cdr.len());
+        throw new NekoArcException("cannot get length of improper list");
+    }
+
 	@SuppressWarnings("serial")
-	static class OOB extends RuntimeException {
+	private static class OOB extends RuntimeException {
 	}
 
 	public Cons nth(long idx)
