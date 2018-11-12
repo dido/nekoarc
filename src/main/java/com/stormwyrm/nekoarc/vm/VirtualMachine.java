@@ -455,7 +455,7 @@ public class VirtualMachine implements Callable
 
 	public ArcObject defbuiltin(Builtin builtin)
     {
-        bind(Symbol.intern(builtin.getName()), builtin);
+        bind((Symbol)Symbol.intern(builtin.getName()), builtin);
         return(builtin);
     }
 
