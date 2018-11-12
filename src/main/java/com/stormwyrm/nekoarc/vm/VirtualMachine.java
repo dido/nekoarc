@@ -6,7 +6,7 @@ import com.stormwyrm.nekoarc.HeapEnv;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Unbound;
-import com.stormwyrm.nekoarc.functions.Builtin;
+import com.stormwyrm.nekoarc.functions.*;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
@@ -455,7 +455,7 @@ public class VirtualMachine implements Callable
 
 	public ArcObject defbuiltin(Builtin builtin)
     {
-        bind((Symbol)Symbol.intern(builtin.getName()), builtin);
+        bind(Symbol.intern(builtin.getName()), builtin);
         return(builtin);
     }
 
@@ -736,4 +736,15 @@ public class VirtualMachine implements Callable
 		// thereby becoming garbage unless part of a continuation).
 		setenvreg(parentenv);
 	}
+
+	public void bindBuiltins() {
+        defbuiltin(Cadr.getInstance());
+        defbuiltin(Car.getInstance());
+        defbuiltin(Cddr.getInstance());
+        defbuiltin(Cdr.getInstance());
+        defbuiltin(FCons.getInstance());
+        defbuiltin(Len.getInstance());
+        defbuiltin(Scar.getInstance());
+        defbuiltin(Scdr.getInstance());
+    }
 }
