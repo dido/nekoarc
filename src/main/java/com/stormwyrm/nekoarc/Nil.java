@@ -22,6 +22,11 @@ public class Nil extends Cons
 	}
 
 	@Override
+	public long len() {
+        return (0);
+    }
+
+    @Override
 	public boolean is(ArcObject other)
 	{
 		return(this == other || (other instanceof Nil));
