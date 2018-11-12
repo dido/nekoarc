@@ -4,10 +4,14 @@ import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.types.ArcObject;
 
 public class SRef extends Builtin {
-    public static final SRef SREF = new SRef();
+    private static final SRef INSTANCE = new SRef();
 
     private SRef() {
         super("sref", 3, 0, 0, false);
+    }
+
+    public static Builtin getInstance() {
+        return(INSTANCE);
     }
 
     @Override

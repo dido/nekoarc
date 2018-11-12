@@ -6,7 +6,7 @@ import com.stormwyrm.nekoarc.HeapEnv;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Unbound;
-import com.stormwyrm.nekoarc.functions.Builtin;
+import com.stormwyrm.nekoarc.functions.*;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
@@ -289,7 +289,7 @@ public class VirtualMachine implements Callable
 		NOINST,
 	};
 
-	private ObjectMap<Symbol, ArcObject> genv = new ObjectMap<Symbol, ArcObject>();
+	private ObjectMap<Symbol, ArcObject> genv = new ObjectMap<>();
 
 	public VirtualMachine(int stacksize)
 	{
@@ -441,7 +441,7 @@ public class VirtualMachine implements Callable
 		return(sp);
 	}
 
-	public void setSP(int sp)
+	void setSP(int sp)
 	{
 		this.sp = sp;
 	}
@@ -604,7 +604,7 @@ public class VirtualMachine implements Callable
 		return(stack[index]);
 	}
 
-	public ArcObject setStackIndex(int index, ArcObject value)
+	private ArcObject setStackIndex(int index, ArcObject value)
 	{
 		return(stack[index] = value);
 	}
@@ -668,7 +668,7 @@ public class VirtualMachine implements Callable
 		return bp;
 	}
 
-	public void setBP(int bp)
+	private void setBP(int bp)
 	{
 		this.bp = bp;
 	}
@@ -688,6 +688,19 @@ public class VirtualMachine implements Callable
 	{
 		return(caller);
 	}
+
+	public void initSyms()
+    {
+        defbuiltin(Cadr.getInstance());
+        defbuiltin(Car.getInstance());
+        defbuiltin(Cddr.getInstance());
+        defbuiltin(Cdr.getInstance());
+        defbuiltin(FCons.getInstance());
+        defbuiltin(Len.getInstance());
+        defbuiltin(Scar.getInstance());
+        defbuiltin(Scdr.getInstance());
+        defbuiltin(NewString.getInstance());
+    }
 
 	/**
 	 * Move n elements from the top of stack, overwriting the current

@@ -5,8 +5,11 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 
 public class Len extends Builtin {
-    @SuppressWarnings("WeakerAccess")
-    public static final Len LEN = new Len();
+    private static final Len INSTANCE = new Len();
+
+    public static Builtin getInstance() {
+        return(INSTANCE);
+    }
 
     private Len() {
         super("len", 1, 0, 0, false);

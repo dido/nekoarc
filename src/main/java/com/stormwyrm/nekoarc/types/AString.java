@@ -13,6 +13,13 @@ public class AString extends ArcObject
 		this.string = str;
 	}
 
+	public AString(long len, Rune r) {
+		StringBuilder sb = new StringBuilder();
+		while (len-- > 0)
+			sb.appendCodePoint(r.rune);
+		this.string = sb.toString();
+	}
+
 	@Override
 	public ArcObject type()
 	{

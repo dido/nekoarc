@@ -8,9 +8,14 @@ import com.stormwyrm.nekoarc.types.Fixnum;
 
 public class CCC extends Builtin
 {
-	protected CCC()
+	private static final CCC INSTANCE = new CCC();
+	private CCC()
 	{
 		super("ccc", 1);
+	}
+
+	public static Builtin getInstance() {
+		return(INSTANCE);
 	}
 
 	@Override

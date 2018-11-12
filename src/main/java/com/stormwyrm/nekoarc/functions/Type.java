@@ -3,20 +3,19 @@ package com.stormwyrm.nekoarc.functions;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.types.ArcObject;
 
-public class Cdr extends Builtin {
-    private static final Cdr INSTANCE = new Cdr();
+public class Type extends Builtin {
+    private static final Type INSTANCE = new Type();
+
+    private Type() {
+        super("type", 1, 0, 0, false);
+    }
 
     public static Builtin getInstance() {
         return(INSTANCE);
     }
 
-    private Cdr() {
-        super("cdr", 1, 0, 0, false);
-    }
-
     @Override
     public ArcObject invoke(InvokeThread vm) {
-        return(vm.getenv(0,0).cdr());
+        return(vm.getenv(0,0).type());
     }
-
 }

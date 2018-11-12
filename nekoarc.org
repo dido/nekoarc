@@ -165,11 +165,11 @@ notice and this notice are preserved.
     - [ ] Regular Expressions
     - [ ] Code
     - [ ] Weak references
-** TODO Runtime Built-In Functions [0/20]
+** TODO Runtime Built-In Functions [3/20]
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
-   - [ ] Initialization for binding runtime primitives to global symbols
-   - [ ] Type handling [0/5]
+   - [X] Initialization for binding runtime primitives to global symbols
+   - [-] Type handling [1/5]
      - [ ] coerce [0/11]
        - [ ] Fixnum conversions [0/9]
          - [ ] fixnum -> int (trivial)
@@ -266,7 +266,7 @@ notice and this notice are preserved.
        - [ ] Vector conversions [0/2]
          - [ ] vector -> vector (trivial)
          - [ ] vector -> cons
-     - [ ] type
+     - [X] type
      - [ ] annotate
      - [ ] rep
      - [ ] sym
@@ -280,14 +280,14 @@ notice and this notice are preserved.
      - [ ] exact
      - [ ] is
      - [ ] iso
-   - [-] List operations [4/7]
+   - [X] List operations [7/7]
      - [X] car
      - [X] cdr
      - [X] cadr
-     - [ ] cddr
+     - [X] cddr
      - [X] cons
-     - [ ] scar
-     - [ ] scdr
+     - [X] scar
+     - [X] scdr
    - [-] Math operations [0/4]
      - [-] Arithmetic [1/5]
        - [ ] * Multiplication
@@ -365,7 +365,7 @@ notice and this notice are preserved.
 	   This is actually a global variable, and needs to be
 	   assigned at initialization.	   
      - [ ] uniq
-   - [ ] Basic I/O primitives (src/io.c) [0/5]
+   - [ ] Basic I/O primitives [0/5]
          These are the base I/O functions provided by the Arcueid C
          runtime.
      - [ ] Input [0/5]
@@ -460,8 +460,8 @@ notice and this notice are preserved.
      - [ ] ccc
      - [ ] protect
      - [ ] dynamic-wind
-   - [ ] Strings [0/1]
-     - [ ] newstring
+   - [X] Strings [1/1]
+     - [X] newstring
    - [ ] Time [0/5]
      - [ ] current-gc-milliseconds
      - [ ] current-process-milliseconds
