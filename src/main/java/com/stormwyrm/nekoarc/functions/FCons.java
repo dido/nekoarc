@@ -3,10 +3,10 @@ package com.stormwyrm.nekoarc.functions;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.types.ArcObject;
 
-public class Cons extends Builtin {
-    public static final Cons CONS = new Cons();
+public class FCons extends Builtin {
+    public static final FCons CONS = new FCons();
 
-    private Cons() {
+    private FCons() {
         super("cons", 2, 0, 0, false);
     }
 
