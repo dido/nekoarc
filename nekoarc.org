@@ -280,13 +280,13 @@ notice and this notice are preserved.
      - [ ] exact
      - [ ] is
      - [ ] iso
-   - [-] List operations [5/7]
+   - [-] List operations [6/7]
      - [X] car
      - [X] cdr
      - [X] cadr
      - [X] cddr
      - [X] cons
-     - [ ] scar
+     - [X] scar
      - [ ] scdr
    - [-] Math operations [0/4]
      - [-] Arithmetic [1/5]
