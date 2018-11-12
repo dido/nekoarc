@@ -700,6 +700,8 @@ public class VirtualMachine implements Callable
         defbuiltin(Scar.getInstance());
         defbuiltin(Scdr.getInstance());
         defbuiltin(NewString.getInstance());
+        defbuiltin(Type.getInstance());
+        defbuiltin(Annotate.getInstance());
     }
 
 	/**

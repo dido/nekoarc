@@ -49,6 +49,10 @@ public abstract class ArcObject implements Callable
 
 	public abstract ArcObject type();
 
+	public ArcObject rep() {
+		return(this);
+	}
+
 	public int requiredArgs()
 	{
 		throw new NekoArcException("Cannot invoke object of type " + type());
