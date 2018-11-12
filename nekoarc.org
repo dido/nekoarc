@@ -479,9 +479,9 @@ notice and this notice are preserved.
      - [ ] quit
      - [ ] setuid
      - [ ] memory
-   - [ ] Miscellaneous [0/5]
+   - [-] Miscellaneous [1/5]
      - [ ] sref *
-     - [ ] len
+     - [X] len
      - [ ] bound
      - [ ] arcueid-code-setname
      - [ ] declare
@@ -565,18 +565,6 @@ notice and this notice are preserved.
    handler function signal_error.
 
 * Enhancements
-** TODO use ropes as strings
-   This is a valuable enhancement as efficent string handling for very
-   long strings will be very useful.
-** TODO true OS-level threading
-   The current interpreter is designed with green threads, scheduled
-   by the virtual machine rather than native threads.
-** TODO more advanced memory allocator
-** TODO just in time compilation
-** TODO PreArc?
-   We do want to someday make a statically-typed, non-garbage
-   collected dialect of Arc similar to Richard Kelsey's PreScheme, so
-   we can write the entire runtime in Arc.
 ** TODO Format strings
    We will provide for format strings similar to C, but with a few
    extensions that make sense for Arc.
