@@ -20,9 +20,13 @@ public class AString extends ArcObject
 	}
 
 	@Override
-	public ArcObject add(ArcObject ae)
-	{
+	public ArcObject add(ArcObject ae) {
 		return(new AString(this.string + ae.toString()));
+	}
+
+	@Override
+	public long len() {
+		return(string.length());
 	}
 
 	@Override
