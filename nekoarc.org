@@ -479,8 +479,8 @@ notice and this notice are preserved.
      - [ ] quit
      - [ ] setuid
      - [ ] memory
-   - [-] Miscellaneous [1/5]
-     - [ ] sref *
+   - [-] Miscellaneous [2/5]
+     - [X] sref *
      - [X] len
      - [ ] bound
      - [ ] arcueid-code-setname
