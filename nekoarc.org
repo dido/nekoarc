@@ -165,7 +165,7 @@ notice and this notice are preserved.
     - [ ] Regular Expressions
     - [ ] Code
     - [ ] Weak references
-** TODO Runtime Built-In Functions [0/20]
+** TODO Runtime Built-In Functions [1/20]
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
    - [ ] Initialization for binding runtime primitives to global symbols
@@ -280,14 +280,14 @@ notice and this notice are preserved.
      - [ ] exact
      - [ ] is
      - [ ] iso
-   - [-] List operations [6/7]
+   - [X] List operations [7/7]
      - [X] car
      - [X] cdr
      - [X] cadr
      - [X] cddr
      - [X] cons
      - [X] scar
-     - [ ] scdr
+     - [X] scdr
    - [-] Math operations [0/4]
      - [-] Arithmetic [1/5]
        - [ ] * Multiplication
