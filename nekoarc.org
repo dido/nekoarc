@@ -140,22 +140,19 @@ notice and this notice are preserved.
      - [ ] Complement (~)
      - [ ] Structure access (. and !)
      - [ ] And (&)
-** TODO basic data types [7/19]
+** TODO basic data types [10/19]
     - [X] Nil
-    - [ ] True
-    - [-] Numeric Types [2/5]
+    - [X] True
+    - [X] Numeric Types [2/2]
       - [X] fixnum
-      - [ ] bignum
       - [X] flonum
-      - [ ] complex
-      - [ ] rational
     - [X] Runes
     - [X] Strings
     - [X] Symbols
     - [X] Conses
     - [ ] Tables
     - [X] Vectors
-    - [ ] Tagged
+    - [X] Tagged
     - [X] Functions
     - [ ] Input Ports
     - [ ] Output Ports
@@ -169,7 +166,7 @@ notice and this notice are preserved.
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
    - [X] Initialization for binding runtime primitives to global symbols
-   - [-] Type handling [1/5]
+   - [-] Type handling [2/5]
      - [ ] coerce [0/11]
        - [ ] Fixnum conversions [0/9]
          - [ ] fixnum -> int (trivial)
@@ -267,7 +264,7 @@ notice and this notice are preserved.
          - [ ] vector -> vector (trivial)
          - [ ] vector -> cons
      - [X] type
-     - [ ] annotate
+     - [X] annotate
      - [ ] rep
      - [ ] sym
    - [ ] Predicates [0/9]
