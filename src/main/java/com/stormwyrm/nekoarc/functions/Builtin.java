@@ -7,9 +7,9 @@ import com.stormwyrm.nekoarc.types.Symbol;
 public abstract class Builtin extends ArcObject
 {
 	public static final Symbol TYPE = (Symbol) Symbol.intern("fn");
-	protected final String name;
-	protected final int rargs, eargs, oargs;
-	protected final boolean variadic;
+	private final String name;
+	private final int rargs, eargs, oargs;
+	private final boolean variadic;
 
 	protected Builtin(String name, int req, int opt, int extra, boolean va)
 	{
@@ -56,5 +56,10 @@ public abstract class Builtin extends ArcObject
 	public ArcObject type()
 	{
 		return(TYPE);
+	}
+
+	@Override
+	public String toString() {
+		return("#<procedure:" + name +">");
 	}
 }
