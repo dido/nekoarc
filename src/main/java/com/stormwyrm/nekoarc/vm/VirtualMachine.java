@@ -691,7 +691,15 @@ public class VirtualMachine implements Callable
 
 	public void initSyms()
     {
-
+        defbuiltin(Cadr.getInstance());
+        defbuiltin(Car.getInstance());
+        defbuiltin(Cddr.getInstance());
+        defbuiltin(Cdr.getInstance());
+        defbuiltin(FCons.getInstance());
+        defbuiltin(Len.getInstance());
+        defbuiltin(Scar.getInstance());
+        defbuiltin(Scdr.getInstance());
+        defbuiltin(NewString.getInstance());
     }
 
 	/**
@@ -736,15 +744,4 @@ public class VirtualMachine implements Callable
 		// thereby becoming garbage unless part of a continuation).
 		setenvreg(parentenv);
 	}
-
-	public void bindBuiltins() {
-        defbuiltin(Cadr.getInstance());
-        defbuiltin(Car.getInstance());
-        defbuiltin(Cddr.getInstance());
-        defbuiltin(Cdr.getInstance());
-        defbuiltin(FCons.getInstance());
-        defbuiltin(Len.getInstance());
-        defbuiltin(Scar.getInstance());
-        defbuiltin(Scdr.getInstance());
-    }
 }
