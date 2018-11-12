@@ -44,7 +44,7 @@ public abstract class ArcObject implements Callable
 
 	public long len()
 	{
-		throw new NekoArcException("len: expects one string, list, or hash argument");
+		throw new NekoArcException("len: expects one string, vector, list, or hash argument");
 	}
 
 	public abstract ArcObject type();
