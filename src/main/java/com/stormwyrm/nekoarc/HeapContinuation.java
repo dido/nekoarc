@@ -28,7 +28,7 @@ public class HeapContinuation extends Vector implements Continuation
 	 */
 	public void restore(VirtualMachine vm, Callable cc)
 	{
-		int svsize = this.length();
+		int svsize = (int)this.len();
 
 		vm.stackcheck(svsize + 4, "stack overflow while restoring heap continuation");
 
