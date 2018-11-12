@@ -1,5 +1,8 @@
 package com.stormwyrm.nekoarc.types;
 
+import com.stormwyrm.nekoarc.InvokeThread;
+import com.stormwyrm.nekoarc.NekoArcException;
+
 public class Vector extends ArcObject
 {
 	public static final ArcObject TYPE = Symbol.intern("vector");
@@ -20,7 +23,8 @@ public class Vector extends ArcObject
 		return(vec[i] = val);
 	}
 
-	public int length()
+	@Override
+	public long len()
 	{
 		return(vec.length);
 	}
@@ -35,6 +39,23 @@ public class Vector extends ArcObject
 	public String toString()
 	{
 		return("<" + type().toString() + ">");
+	}
+
+	@Override
+	public int requiredArgs()
+	{
+		return(1);
+	}
+
+	@Override
+	public ArcObject invoke(InvokeThread thr)
+	{
+		Fixnum idx = Fixnum.cast(thr.getenv(0, 0), this);
+		if (idx.fixnum < 0)
+			throw new NekoArcException("negative vector index");
+		if (idx.fixnum >= this.len())
+			throw new NekoArcException("vector index out of range");
+		return(vec[(int)idx.fixnum]);
 	}
 
 }
