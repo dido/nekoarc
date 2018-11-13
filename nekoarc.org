@@ -479,10 +479,10 @@ notice and this notice are preserved.
      - [ ] quit
      - [ ] setuid
      - [ ] memory
-   - [-] Miscellaneous [2/5]
+   - [-] Miscellaneous [3/5]
      - [X] sref *
      - [X] len
-     - [ ] bound
+     - [X] bound
      - [ ] arcueid-code-setname
      - [ ] declare
 ** TODO Threading [0/6]
