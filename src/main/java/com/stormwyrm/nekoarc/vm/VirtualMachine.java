@@ -697,6 +697,8 @@ public class VirtualMachine implements Callable
         defbuiltin(SRef.getInstance());
         defbuiltin(NewString.getInstance());
         defbuiltin(Bound.getInstance());
+        defbuiltin(FTable.getInstance());
+        defbuiltin(MapTable.getInstance());
     }
 
 	/**
