@@ -6,12 +6,12 @@ import java.lang.ref.WeakReference;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.util.LongMap;
 
-public class Fixnum extends Numeric
+public class Fixnum extends Numeric implements Orderable
 {
 	public final ArcObject TYPE = Symbol.intern("fixnum");
 	public final long fixnum;
-	private static final LongMap<WeakReference<Fixnum>> table = new LongMap<WeakReference<Fixnum>>();
-	private static final ReferenceQueue<Fixnum> rq = new ReferenceQueue<Fixnum>();
+	private static final LongMap<WeakReference<Fixnum>> table = new LongMap<>();
+	private static final ReferenceQueue<Fixnum> rq = new ReferenceQueue<>();
 	public static final Fixnum ZERO = get(0);
 	public static final Fixnum ONE = get(1);
 	public static final Fixnum TEN = get(10);
@@ -31,7 +31,7 @@ public class Fixnum extends Numeric
 				return(f);
 		}
 		f = new Fixnum(x);
-		table.put(x, new WeakReference<Fixnum>(f, rq));
+		table.put(x, new WeakReference<>(f, rq));
 		return(f);
 	}
 
@@ -95,5 +95,11 @@ public class Fixnum extends Numeric
 	public String toString()
 	{
 		return(String.valueOf(fixnum));
+	}
+
+	@Override
+	public boolean lessThan(ArcObject x) {
+		Fixnum f = Fixnum.cast(x, this);
+		return(this.fixnum < f.fixnum);
 	}
 }
