@@ -1,11 +1,6 @@
 package com.stormwyrm.nekoarc.vm;
 
-import com.stormwyrm.nekoarc.Continuation;
-import com.stormwyrm.nekoarc.HeapContinuation;
-import com.stormwyrm.nekoarc.HeapEnv;
-import com.stormwyrm.nekoarc.NekoArcException;
-import com.stormwyrm.nekoarc.Nil;
-import com.stormwyrm.nekoarc.Unbound;
+import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.functions.*;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
@@ -699,7 +694,9 @@ public class VirtualMachine implements Callable
         defbuiltin(Len.getInstance());
         defbuiltin(Scar.getInstance());
         defbuiltin(Scdr.getInstance());
+        defbuiltin(SRef.getInstance());
         defbuiltin(NewString.getInstance());
+        defbuiltin(Bound.getInstance());
     }
 
 	/**
@@ -744,4 +741,12 @@ public class VirtualMachine implements Callable
 		// thereby becoming garbage unless part of a continuation).
 		setenvreg(parentenv);
 	}
+
+    public ArcObject boundP(ArcObject arg) {
+		if (!(arg instanceof Symbol))
+			throw new NekoArcException("bound expected symbol, given " + arg);
+		if (genv.containsKey((Symbol)arg))
+			return(True.T);
+		return(Nil.NIL);
+    }
 }
