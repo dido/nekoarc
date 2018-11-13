@@ -11,8 +11,6 @@ import static org.junit.Assert.*;
 public class AddTest {
     @Test
     public void test0() {
-        // Apply the above builtin
-        // env 0 0 0; ldl 0; apply 0; ret;
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
                 0x45, 0x00, 0x00, 0x00, 0x00,			// ldg 0
                 0x4c, 0x00,								// apply 0
@@ -32,8 +30,6 @@ public class AddTest {
 
     @Test
     public void test1() {
-        // Apply the above builtin
-        // env 0 0 0; ldi 1; push; ldl 0; apply 1; ret;
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
                 0x44, 0x01, 0x00, 0x00, 0x00,			// ldi 1
                 0x01,									// push
@@ -55,7 +51,6 @@ public class AddTest {
 
     @Test
     public void test2() {
-        // env 0 0 0; ldi 1; push; ldi 2; push; ldg 0; apply 2; ret;
         byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
                 0x44, 0x01, 0x00, 0x00, 0x00,			// ldi 1
                 0x01,									// push
