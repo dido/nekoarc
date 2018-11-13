@@ -8,8 +8,8 @@ import com.stormwyrm.nekoarc.vm.VirtualMachine;
  *  emulate them using threads. */
 public class InvokeThread extends Thread
 {
-	public final Callable caller;
-	public final ArcObject obj;
+	private final Callable caller;
+	private final ArcObject obj;
 	public final VirtualMachine vm;
 
 	public InvokeThread(VirtualMachine v, Callable c, ArcObject o)
@@ -52,4 +52,8 @@ public class InvokeThread extends Thread
 
 		return(vm.getAcc());
 	}
+
+    public int argc() {
+		return(vm.argc());
+    }
 }
