@@ -140,7 +140,7 @@ notice and this notice are preserved.
      - [ ] Complement (~)
      - [ ] Structure access (. and !)
      - [ ] And (&)
-** TODO basic data types [10/20]
+** TODO basic data types [11/20]
     - [X] Nil
     - [X] True
     - [X] Numeric Types [2/2]
@@ -152,7 +152,7 @@ notice and this notice are preserved.
     - [X] Conses
     - [X] Tables
     - [X] Vectors
-    - [ ] Tagged
+    - [X] Tagged
     - [X] Functions
     - [ ] Input Ports
     - [ ] Output Ports
@@ -163,11 +163,11 @@ notice and this notice are preserved.
     - [ ] Code
     - [ ] Weak references
     - [ ] Objects
-** TODO Runtime Built-In Functions [4/21]
+** TODO Runtime Built-In Functions [4/19]
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
    - [X] Initialization for binding runtime primitives to global symbols
-   - [-] Type handling [1/5]
+   - [-] Type handling [3/5]
      - [ ] coerce [0/11]
        - [ ] Fixnum conversions [0/9]
          - [ ] fixnum -> int (trivial)
@@ -265,8 +265,8 @@ notice and this notice are preserved.
          - [ ] vector -> vector (trivial)
          - [ ] vector -> cons
      - [X] type
-     - [ ] annotate
-     - [ ] rep
+     - [X] annotate
+     - [X] rep
      - [ ] sym
    - [ ] Predicates [0/9]
      - [ ] Less-than (<) *
@@ -428,23 +428,6 @@ notice and this notice are preserved.
        - [ ] chan
        - [ ] <- (recv-channel) *
        - [ ] <-= (send-channel) *
-   - [ ] Networking [0/3]
-     - [ ] open-socket
-     - [ ] client-ip
-     - [ ] socket-accept
-   - [ ] Networking Extensions (Arcueid extension) [0/8]
-     - [ ] getaddrinfo (Arcueid only)
-     - [ ] socket (Arcueid extension)
-     - [ ] socket-bind (Arcueid only)
-     - [ ] socket-listen (Arcueid only)
-     - [ ] socket-connect (Arcueid only)
-     - [ ] socket-sendto (Arcueid only)
-     - [ ] socket-recvfrom (Arcueid only)
-     - [ ] select (Arcueid only)
-	   This should use epoll(7) on Linux or similar functions
-	   on systems that support them.  Only fall back to standard
-	   POSIX.1-2001 select(2) only if no alternatives are
-	   available.
    - [ ] File system operations [0/5]
      - [ ] dir
      - [ ] dir-exists
