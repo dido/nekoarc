@@ -510,39 +510,34 @@ public class ObjectMap<K, V>
 		return (h ^ h >>> hashShift) & mask;
 	}
 
-	public String toString (String separator) {
-		return toString(separator, false);
-	}
-
-	public String toString () {
-		return toString(", ", true);
-	}
-
-	private String toString (String separator, boolean braces) {
-		if (size == 0) return braces ? "{}" : "";
+	public String toString() {
+		if (size == 0) return("#hash()");
 		StringBuilder buffer = new StringBuilder(32);
-		if (braces) buffer.append('{');
+		buffer.append("#hash(");
 		K[] keyTable = this.keyTable;
 		V[] valueTable = this.valueTable;
 		int i = keyTable.length;
 		while (i-- > 0) {
 			K key = keyTable[i];
 			if (key == null) continue;
+			buffer.append('(');
 			buffer.append(key);
-			buffer.append('=');
+			buffer.append(" . ");
 			buffer.append(valueTable[i]);
+			buffer.append(')');
 			break;
 		}
 		while (i-- > 0) {
 			K key = keyTable[i];
 			if (key == null) continue;
-			buffer.append(separator);
+			buffer.append(" (");
 			buffer.append(key);
-			buffer.append('=');
+			buffer.append(" . ");
 			buffer.append(valueTable[i]);
+			buffer.append(')');
 		}
-		if (braces) buffer.append('}');
-		return buffer.toString();
+		buffer.append(')');
+		return(buffer.toString());
 	}
 
 }
