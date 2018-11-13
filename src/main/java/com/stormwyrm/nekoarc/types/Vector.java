@@ -48,6 +48,11 @@ public class Vector extends ArcObject
 	}
 
 	@Override
+    public ArcObject sref(ArcObject value, ArcObject index) {
+	    return(this.setIndex((int) Fixnum.cast(index, this).fixnum, value));
+    }
+
+    @Override
 	public ArcObject invoke(InvokeThread thr)
 	{
 		Fixnum idx = Fixnum.cast(thr.getenv(0, 0), this);
