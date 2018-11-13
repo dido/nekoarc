@@ -205,13 +205,12 @@ notice and this notice are preserved.
      - [X] annotate
      - [X] rep
      - [X] sym
-   - [ ] Predicates [0/9]
-     - [ ] Less-than (<) *
+   - [-] Predicates [1/9]
+     - [X] Less-than (<) *
      - [ ] Greater-than (>) *
      - [ ] Less-than or equal (<=) *
      - [ ] Greater-than or equal (>=) *
      - [ ] spaceship operator (<=>) * (Arcueid extension)
-     - [ ] bound
      - [ ] exact
      - [ ] is
      - [ ] iso
