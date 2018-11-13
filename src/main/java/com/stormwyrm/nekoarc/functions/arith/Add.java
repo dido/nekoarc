@@ -8,16 +8,21 @@ import com.stormwyrm.nekoarc.types.Fixnum;
 
 public class Add extends Builtin
 {
-	public static final Add ADD = new Add();
+	private static final Add INSTANCE = new Add();
+
 	private Add()
 	{
 		super("+", 0, 0, 0, true);
 	}
 
-	@Override
+    public static Builtin getInstance() {
+        return(INSTANCE);
+    }
+
+    @Override
 	public ArcObject invoke(InvokeThread vm)
 	{
-		if (vm.vm.argc() == 0)
+		if (vm.argc() == 0)
 			return(Fixnum.get(0));
 		ArcObject x = vm.getenv(0, 0);
 		ArcObject sum = x.car();
