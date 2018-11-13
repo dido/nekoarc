@@ -140,7 +140,7 @@ notice and this notice are preserved.
      - [ ] Complement (~)
      - [ ] Structure access (. and !)
      - [ ] And (&)
-** TODO basic data types [10/19]
+** TODO basic data types [10/20]
     - [X] Nil
     - [X] True
     - [X] Numeric Types [2/2]
@@ -150,9 +150,9 @@ notice and this notice are preserved.
     - [X] Strings
     - [X] Symbols
     - [X] Conses
-    - [ ] Tables
+    - [X] Tables
     - [X] Vectors
-    - [X] Tagged
+    - [ ] Tagged
     - [X] Functions
     - [ ] Input Ports
     - [ ] Output Ports
@@ -162,11 +162,12 @@ notice and this notice are preserved.
     - [ ] Regular Expressions
     - [ ] Code
     - [ ] Weak references
-** TODO Runtime Built-In Functions [3/20]
+    - [ ] Objects
+** TODO Runtime Built-In Functions [4/21]
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
    - [X] Initialization for binding runtime primitives to global symbols
-   - [-] Type handling [2/5]
+   - [-] Type handling [1/5]
      - [ ] coerce [0/11]
        - [ ] Fixnum conversions [0/9]
          - [ ] fixnum -> int (trivial)
@@ -264,7 +265,7 @@ notice and this notice are preserved.
          - [ ] vector -> vector (trivial)
          - [ ] vector -> cons
      - [X] type
-     - [X] annotate
+     - [ ] annotate
      - [ ] rep
      - [ ] sym
    - [ ] Predicates [0/9]
@@ -347,9 +348,9 @@ notice and this notice are preserved.
        - [ ] tanh
        - [ ] tgamma
        - [ ] trunc (also in arc3)
-   - [ ] Table operations [0/2]
-     - [ ] maptable
-     - [ ] table
+   - [X] Table operations [2/2]
+     - [X] maptable
+     - [X] table
    - [ ] Evaluation [0/4]
      - [ ] eval
      - [ ] apply
@@ -459,6 +460,10 @@ notice and this notice are preserved.
      - [ ] dynamic-wind
    - [X] Strings [1/1]
      - [X] newstring
+   - [ ] Objects [0/3]
+     - [ ] obj
+     - [ ] clone
+     - [ ] slot
    - [ ] Time [0/5]
      - [ ] current-gc-milliseconds
      - [ ] current-process-milliseconds
@@ -476,10 +481,10 @@ notice and this notice are preserved.
      - [ ] quit
      - [ ] setuid
      - [ ] memory
-   - [-] Miscellaneous [2/5]
+   - [-] Miscellaneous [3/5]
      - [X] sref *
      - [X] len
-     - [ ] bound
+     - [X] bound
      - [ ] arcueid-code-setname
      - [ ] declare
 ** TODO Threading [0/6]

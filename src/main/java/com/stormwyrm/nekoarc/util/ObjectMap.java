@@ -1,5 +1,7 @@
 package com.stormwyrm.nekoarc.util;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 /** An unordered map. This implementation is a cuckoo hash map using 3 hashes, random walking, and a small stash for problematic
@@ -9,7 +11,7 @@ import java.util.Random;
  * depending on hash collisions. Load factors greater than 0.91 greatly increase the chances the map will have to rehash to the
  * next higher POT size.
  * @author Nathan Sweet */
-public class ObjectMap<K, V>
+public class ObjectMap<K, V> implements Iterable<K>
 {
 //	private static final int PRIME1 = 0xbe1f14b1;
 	private static final int PRIME2 = 0xb4b82e39;
@@ -510,39 +512,72 @@ public class ObjectMap<K, V>
 		return (h ^ h >>> hashShift) & mask;
 	}
 
-	public String toString (String separator) {
-		return toString(separator, false);
-	}
-
-	public String toString () {
-		return toString(", ", true);
-	}
-
-	private String toString (String separator, boolean braces) {
-		if (size == 0) return braces ? "{}" : "";
+	public String toString() {
+		if (size == 0) return("#hash()");
 		StringBuilder buffer = new StringBuilder(32);
-		if (braces) buffer.append('{');
+		buffer.append("#hash(");
 		K[] keyTable = this.keyTable;
 		V[] valueTable = this.valueTable;
 		int i = keyTable.length;
 		while (i-- > 0) {
 			K key = keyTable[i];
 			if (key == null) continue;
+			buffer.append('(');
 			buffer.append(key);
-			buffer.append('=');
+			buffer.append(" . ");
 			buffer.append(valueTable[i]);
+			buffer.append(')');
 			break;
 		}
 		while (i-- > 0) {
 			K key = keyTable[i];
 			if (key == null) continue;
-			buffer.append(separator);
+			buffer.append(" (");
 			buffer.append(key);
-			buffer.append('=');
+			buffer.append(" . ");
 			buffer.append(valueTable[i]);
+			buffer.append(')');
 		}
-		if (braces) buffer.append('}');
-		return buffer.toString();
+		buffer.append(')');
+		return(buffer.toString());
 	}
 
+    @Override
+    public Iterator<K> iterator() {
+	    Iterator<K> it = new Iterator<K>() {
+	        private int i = keyTable.length;
+
+	        @Override
+            public boolean hasNext() {
+	            while (i > 0) {
+	                K key = keyTable[i];
+	                if (key == null) {
+                        i--;
+                        continue;
+                    }
+	                return(true);
+                }
+                return(false);
+            }
+
+	        @Override
+            public K next() {
+                while (i > 0) {
+                    K key = keyTable[i];
+                    if (key == null) {
+                        i--;
+                        continue;
+                    }
+                    return(key);
+                }
+                throw new NoSuchElementException();
+            }
+
+	        @Override
+            public void remove() {
+	            throw new UnsupportedOperationException();
+            }
+        };
+        return(it);
+    }
 }
