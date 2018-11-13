@@ -2,6 +2,7 @@ package com.stormwyrm.nekoarc.vm;
 
 import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.functions.*;
+import com.stormwyrm.nekoarc.functions.arith.Add;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
@@ -686,14 +687,15 @@ public class VirtualMachine implements Callable
 
 	public void initSyms()
     {
-        defbuiltin(Cadr.getInstance());
         defbuiltin(Car.getInstance());
-        defbuiltin(Cddr.getInstance());
         defbuiltin(Cdr.getInstance());
+        defbuiltin(Cadr.getInstance());
+        defbuiltin(Cddr.getInstance());
         defbuiltin(FCons.getInstance());
-        defbuiltin(Len.getInstance());
         defbuiltin(Scar.getInstance());
         defbuiltin(Scdr.getInstance());
+
+        defbuiltin(Len.getInstance());
         defbuiltin(SRef.getInstance());
         defbuiltin(NewString.getInstance());
         defbuiltin(Type.getInstance());
@@ -703,6 +705,8 @@ public class VirtualMachine implements Callable
         defbuiltin(Bound.getInstance());
         defbuiltin(FTable.getInstance());
         defbuiltin(MapTable.getInstance());
+
+        defbuiltin(Add.getInstance());
     }
 
 	/**
