@@ -3,7 +3,9 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.util.ObjectMap;
 
-public class Table extends ArcObject {
+import java.util.Iterator;
+
+public class Table extends ArcObject implements Iterable<ArcObject> {
     public static final ArcObject TYPE = Symbol.intern("vector");
     private ObjectMap<ArcObject, ArcObject> table;
 
@@ -39,4 +41,13 @@ public class Table extends ArcObject {
         return(this.get(thr.getenv(0, 0)));
     }
 
+    @Override
+    public String toString() {
+        return(table.toString());
+    }
+
+    @Override
+    public Iterator<ArcObject> iterator() {
+        return(table.iterator());
+    }
 }
