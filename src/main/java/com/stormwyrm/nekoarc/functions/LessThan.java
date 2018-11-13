@@ -6,7 +6,6 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.True;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Orderable;
-import com.stormwyrm.nekoarc.vm.instruction.NIL;
 
 public class LessThan extends Builtin {
     private static final LessThan INSTANCE = new LessThan();
