@@ -2,7 +2,7 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.NekoArcException;
 
-public class Flonum extends Numeric
+public class Flonum extends Numeric implements Orderable
 {
 	public static final ArcObject TYPE = Symbol.intern("flonum");
 	public double flonum;
@@ -64,5 +64,11 @@ public class Flonum extends Numeric
 	public boolean is(ArcObject other)
 	{
 		return(this == other || ((other instanceof Flonum) && flonum == (((Flonum)other).flonum)));
+	}
+
+	@Override
+	public boolean lessThan(ArcObject x) {
+		Flonum f = Flonum.cast(x, this);
+		return(this.flonum < f.flonum);
 	}
 }
