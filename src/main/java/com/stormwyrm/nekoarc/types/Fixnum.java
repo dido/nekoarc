@@ -99,6 +99,8 @@ public class Fixnum extends Numeric implements Orderable
 
 	@Override
 	public boolean lessThan(ArcObject x) {
+	    if (x instanceof Flonum)
+	        return((double)this.fixnum < ((Flonum)x).flonum);
 		Fixnum f = Fixnum.cast(x, this);
 		return(this.fixnum < f.fixnum);
 	}
