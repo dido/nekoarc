@@ -205,9 +205,9 @@ notice and this notice are preserved.
      - [X] annotate
      - [X] rep
      - [X] sym
-   - [-] Predicates [1/9]
+   - [-] Predicates [2/8]
      - [X] Less-than (<) *
-     - [ ] Greater-than (>) *
+     - [X] Greater-than (>) *
      - [ ] Less-than or equal (<=) *
      - [ ] Greater-than or equal (>=) *
      - [ ] spaceship operator (<=>) * (Arcueid extension)
