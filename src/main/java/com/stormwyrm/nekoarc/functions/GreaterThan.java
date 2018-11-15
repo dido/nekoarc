@@ -29,7 +29,7 @@ public class GreaterThan extends Builtin {
             throw new NekoArcException("invalid comparison, " + x + " does not have order");
         Orderable o = (Orderable)x;
         while (!args.is(Nil.NIL)) {
-            if (o.lessThan(args.car()) || x.is(args))
+            if (o.lessThan(args.car()) || x.is(args.car()))
                 return(Nil.NIL);
             args = args.cdr();
         }
