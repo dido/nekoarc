@@ -687,25 +687,14 @@ public class VirtualMachine implements Callable
 
 	public void initSyms()
     {
-        defbuiltin(Car.getInstance());
-        defbuiltin(Cdr.getInstance());
-        defbuiltin(Cadr.getInstance());
-        defbuiltin(Cddr.getInstance());
-        defbuiltin(FCons.getInstance());
-        defbuiltin(Scar.getInstance());
-        defbuiltin(Scdr.getInstance());
 
-        defbuiltin(Len.getInstance());
-        defbuiltin(SRef.getInstance());
-        defbuiltin(NewString.getInstance());
-        defbuiltin(Type.getInstance());
-        defbuiltin(Rep.getInstance());
-        defbuiltin(Sym.getInstance());
-        defbuiltin(Annotate.getInstance());
-        defbuiltin(Bound.getInstance());
-        defbuiltin(FTable.getInstance());
-        defbuiltin(MapTable.getInstance());
+    	// Type handling (4/5)
+		defbuiltin(Type.getInstance());
+		defbuiltin(Annotate.getInstance());
+		defbuiltin(Rep.getInstance());
+		defbuiltin(Sym.getInstance());
 
+        // Predicates
         defbuiltin(LessThan.getInstance());
         defbuiltin(GreaterThan.getInstance());
 		defbuiltin(LessThanOrEqual.getInstance());
@@ -715,8 +704,30 @@ public class VirtualMachine implements Callable
 		defbuiltin(Is.getInstance());
 		defbuiltin((Iso.getInstance()));
 
-        defbuiltin(Add.getInstance());
-    }
+		// List Operations (7/7)
+		defbuiltin(Car.getInstance());
+		defbuiltin(Cdr.getInstance());
+		defbuiltin(Cadr.getInstance());
+		defbuiltin(Cddr.getInstance());
+		defbuiltin(FCons.getInstance());
+		defbuiltin(Scar.getInstance());
+		defbuiltin(Scdr.getInstance());
+
+		// Math Operations
+		defbuiltin(Add.getInstance());
+
+		// Tables
+		defbuiltin(FTable.getInstance());
+		defbuiltin(MapTable.getInstance());
+
+		// Strings
+		defbuiltin(NewString.getInstance());
+
+		// Miscellaneous
+		defbuiltin(Len.getInstance());
+		defbuiltin(SRef.getInstance());
+		defbuiltin(Bound.getInstance());
+	}
 
 	/**
 	 * Move n elements from the top of stack, overwriting the current
