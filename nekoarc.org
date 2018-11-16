@@ -7,7 +7,7 @@ notice and this notice are preserved.
 ----------------------------------------------------------------------
 
 * The Arc Runtime
-** TODO base virtual machine [6/8]
+** TODO base virtual machine [7/8]
     - [X] Define virtual machine architecture
     - [X] Design interpreter core
 	  The interpreter core should be flexible enough that we can
@@ -66,17 +66,16 @@ notice and this notice are preserved.
         1. A function returns with a closure in its value register
 	2. A closure is stored in the global environment
         3. A closure is stored in an environment other than at level 0.
-
     - [X] Continuations [2/2]
 	  Heap-based continuations are required to support ccc.
       - [X] Stack-based
       - [X] Heap-based
     - [X] Foreign function interface
-    - [-] Type invocations [2/5]
-      - [ ] procedure
+    - [X] Type invocations [5/5]
+      - [X] procedure
       - [X] list
-      - [ ] vector
-      - [ ] table
+      - [X] vector
+      - [X] table
       - [X] string
 ** TODO Arc reader [0/13]
    - [ ] Lists
@@ -377,6 +376,8 @@ notice and this notice are preserved.
      - [ ] ccc
      - [ ] protect
      - [ ] dynamic-wind
+     - [ ] ccmark
+     - [ ] scmark
    - [X] Strings [1/1]
      - [X] newstring
    - [ ] Objects [0/3]
