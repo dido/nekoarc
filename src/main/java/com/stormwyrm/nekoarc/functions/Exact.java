@@ -1,6 +1,8 @@
 package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.InvokeThread;
+import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.True;
 import com.stormwyrm.nekoarc.types.ArcObject;
 
 public class Exact extends Builtin {
@@ -16,6 +18,6 @@ public class Exact extends Builtin {
 
     @Override
     public ArcObject invoke(InvokeThread vm) {
-        return(vm.getenv(0,0).rep());
+        return((vm.getenv(0,0).exactP()) ? True.T : Nil.NIL);
     }
 }
