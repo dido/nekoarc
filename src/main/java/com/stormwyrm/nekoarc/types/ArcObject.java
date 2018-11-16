@@ -73,6 +73,8 @@ public abstract class ArcObject implements Callable
 		return(false);
 	}
 
+	public boolean exactP() { return(false); }
+
 	/** The basic apply. This should normally not be overridden. Only Closure should probably override it because it runs completely within the vm. */
 	public void apply(VirtualMachine vm, Callable caller)
 	{
