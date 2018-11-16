@@ -9,6 +9,6 @@ public abstract class InputPort extends ArcObject {
     }
 
     abstract int readb();
-    abstract Rune readc();
-    abstract Rune peekc();
+    abstract ArcObject readc();
+    abstract ArcObject peekc();
 }
