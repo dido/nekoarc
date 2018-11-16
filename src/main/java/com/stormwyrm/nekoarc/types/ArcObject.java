@@ -120,6 +120,10 @@ public abstract class ArcObject implements Callable
 		return(this == other);
 	}
 
+	// default implementation, subclasses must generally redefine unless object equality is the same as structural
+    // equality
+	public boolean iso(ArcObject other) { return(this.is(other)); }
+
 	@Override
 	public CallSync sync()
 	{
