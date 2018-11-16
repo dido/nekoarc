@@ -163,7 +163,7 @@ notice and this notice are preserved.
     - [ ] Code
     - [ ] Weak references
     - [ ] Objects
-** TODO Runtime Built-In Functions [4/19]
+** TODO Runtime Built-In Functions [5/19]
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
    - [X] Initialization for binding runtime primitives to global symbols
@@ -205,15 +205,15 @@ notice and this notice are preserved.
      - [X] annotate
      - [X] rep
      - [X] sym
-   - [-] Predicates [5/8]
+   - [X] Predicates [8/8]
      - [X] Less-than (<) *
      - [X] Greater-than (>) *
      - [X] Less-than or equal (<=) *
      - [X] Greater-than or equal (>=) *
      - [X] spaceship operator (<=>) * (Arcueid extension)
-     - [ ] exact
-     - [ ] is
-     - [ ] iso
+     - [X] exact
+     - [X] is
+     - [X] iso
    - [X] List operations [7/7]
      - [X] car
      - [X] cdr
