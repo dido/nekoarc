@@ -62,7 +62,12 @@ public class Fixnum extends Numeric implements Orderable
 		return(Fixnum.get(this.fixnum + addend.fixnum));
 	}
 
-	@Override
+    @Override
+    public boolean exactP() {
+        return(true);
+    }
+
+    @Override
 	public Numeric negate()
 	{
 		return(Fixnum.get(-this.fixnum));
