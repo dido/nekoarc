@@ -92,6 +92,15 @@ public class Cons extends ArcObject
 	}
 
 	@Override
+	public boolean iso(ArcObject other) {
+		// FIXME: This will FAIL if the conses have any cycles!
+        if (!(other instanceof Cons))
+            return(false);
+        Cons o = (Cons)other;
+        return(car.iso(o.car()) && cdr.iso(o.cdr()));
+	}
+
+	@Override
 	public int requiredArgs()
 	{
 		return(1);
