@@ -707,6 +707,13 @@ public class VirtualMachine implements Callable
         defbuiltin(MapTable.getInstance());
 
         defbuiltin(LessThan.getInstance());
+        defbuiltin(GreaterThan.getInstance());
+		defbuiltin(LessThanOrEqual.getInstance());
+		defbuiltin(GreaterThanOrEqual.getInstance());
+		defbuiltin(Spaceship.getInstance());
+		defbuiltin(Exact.getInstance());
+		defbuiltin(Is.getInstance());
+		defbuiltin((Iso.getInstance()));
 
         defbuiltin(Add.getInstance());
     }
