@@ -1,4 +1,4 @@
-package com.stormwyrm.nekoarc.functions;
+package com.stormwyrm.nekoarc.functions.list;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.ArcObject;
