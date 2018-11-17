@@ -1,6 +1,7 @@
 package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.functions.list.Cadr;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Cons;
 import com.stormwyrm.nekoarc.types.Fixnum;

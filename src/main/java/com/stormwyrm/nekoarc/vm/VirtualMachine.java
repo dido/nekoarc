@@ -3,6 +3,7 @@ package com.stormwyrm.nekoarc.vm;
 import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.functions.*;
 import com.stormwyrm.nekoarc.functions.arith.Add;
+import com.stormwyrm.nekoarc.functions.list.*;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;

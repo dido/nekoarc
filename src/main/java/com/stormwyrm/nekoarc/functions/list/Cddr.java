@@ -1,6 +1,7 @@
-package com.stormwyrm.nekoarc.functions;
+package com.stormwyrm.nekoarc.functions.list;
 
 import com.stormwyrm.nekoarc.InvokeThread;
+import com.stormwyrm.nekoarc.functions.Builtin;
 import com.stormwyrm.nekoarc.types.ArcObject;
 
 public class Cddr extends Builtin {
