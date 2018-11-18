@@ -21,6 +21,10 @@ public class Table extends ArcObject implements Iterable<ArcObject> {
         return(table.put(key, value));
     }
 
+    public boolean hasKey(ArcObject key) {
+        return(table.containsKey(key));
+    }
+
     @Override
     public ArcObject type() {
         return(TYPE);
@@ -49,5 +53,23 @@ public class Table extends ArcObject implements Iterable<ArcObject> {
     @Override
     public Iterator<ArcObject> iterator() {
         return(table.iterator());
+    }
+
+    @Override
+    public boolean iso(ArcObject other) {
+        if (this.is(other))
+            return(true);
+        if (!(other instanceof Table))
+            return(false);
+        if (this.len() != other.len())
+            return(false);
+        Table t = (Table) other;
+        for (ArcObject key : this) {
+            if (!t.hasKey(key))
+                return(false);
+            if (!this.get(key).iso(t.get(key)))
+                return(false);
+        }
+        return(true);
     }
 }
