@@ -3,6 +3,8 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 
+import java.util.Iterator;
+
 public class Vector extends ArcObject
 {
 	public static final ArcObject TYPE = Symbol.intern("vector");
@@ -36,12 +38,36 @@ public class Vector extends ArcObject
 	}
 
 	@Override
-	public String toString()
-	{
-		return("<" + type().toString() + ">");
+	public String toString() {
+	    StringBuilder sb = new StringBuilder("[");
+	    // FIXME: This is again recursive, and requires cycle detection
+        int i=0;
+        while (i<vec.length) {
+            sb.append(vec[i].toString());
+            if (i<vec.length-1)
+                sb.append(" ");
+            i++;
+        }
+        sb.append("]");
+        return(sb.toString());
 	}
 
-	@Override
+    @Override
+    public boolean iso(ArcObject other) {
+        // FIXME: also recursive
+        if (!(other instanceof Vector))
+            return(false);
+        Vector v2 = (Vector)other;
+        if (v2.len() != this.len())
+            return(false);
+        for (int i=0; i<this.len(); i++) {
+            if (!v2.index(i).iso(this.index(i)))
+                return(false);
+        }
+        return(true);
+    }
+
+    @Override
 	public int requiredArgs()
 	{
 		return(1);
