@@ -5,7 +5,7 @@ import com.stormwyrm.nekoarc.NekoArcException;
 
 import java.util.Iterator;
 
-public class Vector extends ArcObject
+public class Vector extends ArcObject implements Iterable<ArcObject>
 {
 	public static final ArcObject TYPE = Symbol.intern("vector");
 	private ArcObject[] vec;
@@ -89,4 +89,19 @@ public class Vector extends ArcObject
 		return(vec[(int)idx.fixnum]);
 	}
 
+	@Override
+	public Iterator<ArcObject> iterator() {
+		return(new Iterator<ArcObject>() {
+			private int idx = 0;
+			@Override
+			public boolean hasNext() {
+				return(idx >= Vector.this.len());
+			}
+
+			@Override
+			public ArcObject next() {
+				return(Vector.this.index(idx++));
+			}
+		});
+	}
 }
