@@ -121,6 +121,8 @@ public class Cons extends ArcObject implements Iterable<ArcObject>
 
 	@Override
 	public boolean iso(ArcObject other) {
+	    if (this.is(other))
+	        return(true);
 		// FIXME: This will recurse forever if the conses have any cycles!
         if (!(other instanceof Cons))
             return(false);
