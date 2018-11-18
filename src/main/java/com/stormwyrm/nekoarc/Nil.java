@@ -31,4 +31,9 @@ public class Nil extends Cons
 	{
 		return(this == other || (other instanceof Nil));
 	}
+
+	@Override
+	public boolean iso(ArcObject object) {
+		return(is(object));
+	}
 }
