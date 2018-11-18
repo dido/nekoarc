@@ -34,7 +34,7 @@ public abstract class ArcObject implements Callable
 	
 	public ArcObject sref(ArcObject value, ArcObject index)
 	{
-		throw new NekoArcException("Can't sref" + this + "( a " + this.type() + "), other args were " + value + ", " + index);
+		throw new NekoArcException("Can't sref " + this + "(a " + this.type() + "), other args were " + value + ", " + index);
 	}
 
 	public ArcObject add(ArcObject other)
@@ -44,7 +44,7 @@ public abstract class ArcObject implements Callable
 
 	public long len()
 	{
-		throw new NekoArcException("len: expects one string, vector, list, or hash argument");
+		throw new NekoArcException("len: expects one string, vector, list, or hash argument, cannot take length of " + this + " (" + this.type() + ")");
 	}
 
 	public abstract ArcObject type();
@@ -75,7 +75,8 @@ public abstract class ArcObject implements Callable
 
 	public boolean exactP() { return(false); }
 
-	/** The basic apply. This should normally not be overridden. Only Closure should probably override it because it runs completely within the vm. */
+	/** The basic apply. This should normally not be overridden. Only Closure should
+	 * probably override it because it runs completely within the vm. */
 	public void apply(VirtualMachine vm, Callable caller)
 	{
 		int minenv, dsenv, optenv;
