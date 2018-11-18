@@ -1,7 +1,8 @@
-package com.stormwyrm.nekoarc.functions;
+package com.stormwyrm.nekoarc.functions.typehandling;
 
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
+import com.stormwyrm.nekoarc.functions.Builtin;
 import com.stormwyrm.nekoarc.types.AString;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Rune;
