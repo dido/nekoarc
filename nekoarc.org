@@ -153,8 +153,12 @@ notice and this notice are preserved.
     - [X] Vectors
     - [X] Tagged
     - [X] Functions
-    - [ ] Input Ports
-    - [ ] Output Ports
+    - [-] Input Ports [1/2]
+      - [X] instring
+      - [ ] File ports
+    - [ ] Output Ports [0/2]
+      - [ ] outstring
+      - [ ] File ports
     - [ ] Threads
     - [ ] Exceptions
     - [ ] Channels
@@ -298,11 +302,11 @@ notice and this notice are preserved.
 	   This is actually a global variable, and needs to be
 	   assigned at initialization.	   
      - [ ] uniq
-   - [ ] Basic I/O primitives [0/5]
+   - [-] Basic I/O primitives [0/5]
          These are the base I/O functions provided by the Arcueid C
          runtime.
-     - [ ] Input [0/5]
-       - [ ] readb
+     - [-] Input [1/5]
+       - [X] readb
        - [ ] readc
        - [ ] peekc
 	     Implemented in terms of ungetc
@@ -369,7 +373,7 @@ notice and this notice are preserved.
      - [ ] file-exists
      - [ ] rmfile
      - [ ] mvfile
-   - [ ] Error handling and continuations [0/6]
+   - [ ] Error handling and continuations [0/8]
      - [ ] details
      - [ ] err
      - [ ] on-err
