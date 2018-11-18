@@ -4,7 +4,9 @@ import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 
-public class Cons extends ArcObject
+import java.util.Iterator;
+
+public class Cons extends ArcObject implements Iterable<ArcObject>
 {
 	public static final ArcObject TYPE = Symbol.intern("cons");
 	private ArcObject car;
@@ -67,7 +69,7 @@ public class Cons extends ArcObject
         throw new NekoArcException("cannot get length of improper list");
     }
 
-	@SuppressWarnings("serial")
+    @SuppressWarnings("serial")
 	private static class OOB extends RuntimeException {
 	}
 
@@ -91,16 +93,60 @@ public class Cons extends ArcObject
 		return(c);
 	}
 
+    @Override
+    public Iterator<ArcObject> iterator() {
+        final ArcObject self = this;
+        return(new Iterator<ArcObject>() {
+
+            private ArcObject obj = self;
+
+            @Override
+            public boolean hasNext() {
+                return(obj instanceof Cons && !Nil.NIL.is(obj));
+            }
+
+            @Override
+            public ArcObject next() {
+                if (obj.cdr() instanceof Cons) {
+                    ArcObject c = obj.car();
+                    obj = obj.cdr();
+                    return(c);
+                }
+                ArcObject t = obj;
+                obj = Nil.NIL;
+                return(t);
+            }
+        });
+    }
+
 	@Override
 	public boolean iso(ArcObject other) {
-		// FIXME: This will FAIL if the conses have any cycles!
+		// FIXME: This will recurse forever if the conses have any cycles!
         if (!(other instanceof Cons))
             return(false);
         Cons o = (Cons)other;
         return(car.iso(o.car()) && cdr.iso(o.cdr()));
 	}
 
-	@Override
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder("(");
+        // FIXME: recursion might go on forever if there are any cycles
+        Iterator<ArcObject> iter = this.iterator();
+        while (iter.hasNext()) {
+            ArcObject t = iter.next();
+            if (t instanceof Cons && !Nil.NIL.is(t) && !iter.hasNext())
+                sb.append(t.car() + " . " + t.cdr());
+            else
+                sb.append(t.toString());
+            if (iter.hasNext())
+                sb.append(" ");
+        }
+        sb.append(")");
+        return(sb.toString());
+    }
+
+    @Override
 	public int requiredArgs()
 	{
 		return(1);
