@@ -13,7 +13,7 @@ public class ScdrTest {
     @Test
     public void test() {
         Cons cons = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), new Cons(Fixnum.get(3), new Cons(Fixnum.get(4), Nil.NIL))));
-        Builtin scdr = Scdr.getInstance();
+        ArcObject scdr = Scdr.getInstance();
         // Essentially (scdr '(1 2 3 4) nil)
         byte inst[] = {(byte) 0xca, 0x00, 0x00, 0x00,    // env 0 0 0
                 0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
