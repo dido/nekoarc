@@ -8,7 +8,7 @@ public abstract class InputPort extends ArcObject {
         return(TYPE);
     }
 
-    abstract int readb();
-    abstract ArcObject readc();
-    abstract ArcObject peekc();
+    public abstract int readb();
+    public abstract ArcObject readc();
+    public abstract ArcObject peekc();
 }
