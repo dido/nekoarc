@@ -12,7 +12,7 @@ public class InString extends InputPort {
     }
 
     @Override
-    int readb() {
+    public int readb() {
         // Note this will still return the Unicode code points. Reference Arc returns UTF-8 bytes!
         if (ptr >= str.length())
             return(-1);
@@ -20,7 +20,7 @@ public class InString extends InputPort {
     }
 
     @Override
-    ArcObject readc() {
+    public ArcObject readc() {
         if (ptr >= str.length())
             return(Nil.NIL);
         return(Rune.get(str.codePointAt(ptr++)));
@@ -28,7 +28,7 @@ public class InString extends InputPort {
     }
 
     @Override
-    ArcObject peekc() {
+    public ArcObject peekc() {
         return null;
     }
 }
