@@ -95,7 +95,7 @@ public class Vector extends ArcObject implements Iterable<ArcObject>
 			private int idx = 0;
 			@Override
 			public boolean hasNext() {
-				return(idx >= Vector.this.len());
+				return(idx < Vector.this.len());
 			}
 
 			@Override
