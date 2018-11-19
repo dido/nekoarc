@@ -29,6 +29,8 @@ public class InString extends InputPort {
 
     @Override
     public ArcObject peekc() {
-        return null;
+        if (ptr >= str.length())
+            return(Nil.NIL);
+        return(Rune.get(str.codePointAt(ptr)));
     }
 }
