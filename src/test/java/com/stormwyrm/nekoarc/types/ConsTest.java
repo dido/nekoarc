@@ -63,6 +63,13 @@ public class ConsTest {
         assertFalse(c1.is(c2));
         assertFalse(c1.iso(c2));
         assertFalse(c2.iso(c1));
+    }
 
+    @Test
+    public void testNth() {
+        Cons c1 = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), Nil.NIL));
+
+        assertEquals(1, ((Fixnum)c1.nth(0).car()).fixnum);
+        assertEquals(2, ((Fixnum)c1.nth(1).car()).fixnum);
     }
 }
