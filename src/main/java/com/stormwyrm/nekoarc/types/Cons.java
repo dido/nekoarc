@@ -14,6 +14,7 @@ public class Cons extends ArcObject implements Iterable<ArcObject>
 
 	public Cons()
 	{
+	    this.car = this.cdr = Nil.NIL;
 	}
 
 	public Cons(ArcObject car, ArcObject cdr)
@@ -137,9 +138,11 @@ public class Cons extends ArcObject implements Iterable<ArcObject>
         Iterator<ArcObject> iter = this.iterator();
         while (iter.hasNext()) {
             ArcObject t = iter.next();
-            if (t instanceof Cons && !Nil.NIL.is(t) && !iter.hasNext())
-                sb.append(t.car() + " . " + t.cdr());
-            else
+            if (t instanceof Cons && !Nil.NIL.is(t) && !iter.hasNext()) {
+                sb.append(t.car().toString());
+                sb.append(" . ");
+                sb.append(t.cdr().toString());
+            } else
                 sb.append(t.toString());
             if (iter.hasNext())
                 sb.append(" ");
