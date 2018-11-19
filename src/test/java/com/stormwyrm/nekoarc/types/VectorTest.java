@@ -15,7 +15,7 @@ public class VectorTest {
 
         for (int i=0; i<len; i++)
             v.setIndex(i, Fixnum.get(i));
-        assertEquals("[1 2 3 4 5]", v.toString());
+        assertEquals("[0 1 2 3 4]", v.toString());
     }
 
     @Test
