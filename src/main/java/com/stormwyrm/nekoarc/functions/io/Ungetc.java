@@ -1,0 +1,28 @@
+package com.stormwyrm.nekoarc.functions.io;
+
+import com.stormwyrm.nekoarc.InvokeThread;
+import com.stormwyrm.nekoarc.functions.Builtin;
+import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.InputPort;
+import com.stormwyrm.nekoarc.types.Rune;
+import com.stormwyrm.nekoarc.types.Symbol;
+
+public class Ungetc extends Builtin {
+    private static final Ungetc INSTANCE = new Ungetc();
+
+    public static Builtin getInstance() {
+        return(INSTANCE);
+    }
+
+    private Ungetc() {
+        super("ungetc", 1, 0, 0, true);
+    }
+
+    @Override
+    public ArcObject invoke(InvokeThread vm) {
+        Rune r = (Rune) vm.getenv(0, 0);
+        ArcObject f = vm.getenv(0, 1).car();
+        InputPort fp = (f instanceof InputPort) ? ((InputPort)f) : ((InputPort)vm.vm.value((Symbol)Symbol.intern("stdin")));
+        return(fp.ungetc(r));
+    }
+}
