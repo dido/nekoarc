@@ -1,7 +1,10 @@
 package com.stormwyrm.nekoarc.types;
 
+import com.stormwyrm.nekoarc.Nil;
+
 public abstract class InputPort extends ArcObject {
     public static final ArcObject TYPE = Symbol.intern("input");
+    private ArcObject ungetrune = Nil.NIL;
 
     @Override
     public ArcObject type() {
@@ -9,6 +12,24 @@ public abstract class InputPort extends ArcObject {
     }
 
     public abstract int readb();
-    public abstract ArcObject readc();
-    public abstract ArcObject peekc();
+
+    public ArcObject readc() {
+        if (!Nil.NIL.is(ungetrune)) {
+            ArcObject ug = ungetrune;
+            ungetrune = Nil.NIL;
+            return(ug);
+        }
+        return(Nil.NIL);
+    }
+
+    public ArcObject ungetc(Rune r) {
+        return(ungetrune = r);
+    }
+
+    public ArcObject peekc() {
+        ArcObject r = readc();
+        if (!Nil.NIL.is(r))
+            ungetc((Rune)r);
+        return(r);
+    }
 }
