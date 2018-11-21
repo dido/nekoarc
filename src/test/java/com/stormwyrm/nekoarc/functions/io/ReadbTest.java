@@ -1,6 +1,5 @@
 package com.stormwyrm.nekoarc.functions.io;
 
-import com.stormwyrm.nekoarc.True;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.InString;
