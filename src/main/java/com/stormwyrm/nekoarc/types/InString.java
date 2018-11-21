@@ -21,16 +21,12 @@ public class InString extends InputPort {
 
     @Override
     public ArcObject readc() {
+        // call super for ungetrune handling
+        ArcObject r = super.readc();
+        if (!Nil.NIL.is(r))
+            return(r);
         if (ptr >= str.length())
             return(Nil.NIL);
         return(Rune.get(str.codePointAt(ptr++)));
-
-    }
-
-    @Override
-    public ArcObject peekc() {
-        if (ptr >= str.length())
-            return(Nil.NIL);
-        return(Rune.get(str.codePointAt(ptr)));
     }
 }
