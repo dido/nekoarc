@@ -65,7 +65,7 @@ public class IStest
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Flonum(1.0);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -87,7 +87,7 @@ public class IStest
 		literals[0] = new Flonum(1.0);
 		literals[1] = new Flonum(1.0);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -109,7 +109,7 @@ public class IStest
 		literals[0] = new Flonum(1.0);
 		literals[1] = new Flonum(2.0);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -131,7 +131,7 @@ public class IStest
 		literals[0] = Symbol.intern("foo");
 		literals[1] = Symbol.intern("foo");
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -153,7 +153,7 @@ public class IStest
 		literals[0] = Symbol.intern("foo");
 		literals[1] = Symbol.intern("bar");
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -175,7 +175,7 @@ public class IStest
 		literals[0] = new AString("foo");
 		literals[1] = new AString("foo");
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());
 		vm.run();
@@ -197,7 +197,7 @@ public class IStest
 		literals[0] = new AString("foo");
 		literals[1] = new AString("bar");
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());
 		vm.run();
@@ -219,7 +219,7 @@ public class IStest
 		literals[0] = Nil.NIL;
 		literals[1] = Nil.EMPTY_LIST;
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());
 		vm.run();

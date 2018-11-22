@@ -28,7 +28,7 @@ public class SRefTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = cons;
         literals[1] = sref;
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -61,7 +61,7 @@ public class SRefTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = v;
         literals[1] = Symbol.intern("sref");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

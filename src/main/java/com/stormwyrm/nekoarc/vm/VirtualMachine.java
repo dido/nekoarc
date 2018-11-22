@@ -307,7 +307,7 @@ public class VirtualMachine implements Callable
 		caller = new CallSync();
 	}
 
-	public void load(final byte[] instructions, int ip, final ArcObject[] literals)
+	public void load(final byte[] instructions, final ArcObject[] literals, int ip)
 	{
 		this.code = instructions;
 		this.literals = literals;
@@ -316,7 +316,7 @@ public class VirtualMachine implements Callable
 
 	public void load(final byte[] instructions, int ip)
 	{
-		load(instructions, ip, null);
+		load(instructions, null, ip);
 	}
 
 	public void halt()

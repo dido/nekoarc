@@ -24,7 +24,7 @@ public class APPLYtest
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Cons(Fixnum.get(10), new Cons(Fixnum.get(11), new Cons(Fixnum.get(12), Nil.NIL)));
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();

@@ -305,9 +305,9 @@ notice and this notice are preserved.
    - [-] Basic I/O primitives [0/5]
          These are the base I/O functions provided by the Arcueid C
          runtime.
-     - [-] Input [1/5]
+     - [-] Input [2/5]
        - [X] readb
-       - [ ] readc
+       - [X] readc
        - [ ] peekc
 	     Implemented in terms of ungetc
        - [ ] ungetc - this is not part of standard Arc

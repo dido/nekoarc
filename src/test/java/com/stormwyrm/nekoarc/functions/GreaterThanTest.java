@@ -6,7 +6,6 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Flonum;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
-import com.stormwyrm.nekoarc.vm.instruction.TRUE;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -23,7 +22,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -44,7 +43,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -66,7 +65,7 @@ public class GreaterThanTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(3.14159);
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -89,7 +88,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -112,7 +111,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -136,7 +135,7 @@ public class GreaterThanTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -160,7 +159,7 @@ public class GreaterThanTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(0.31831);
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -185,7 +184,7 @@ public class GreaterThanTest {
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
         literals[2] = new Flonum(1e101);
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -210,7 +209,7 @@ public class GreaterThanTest {
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
         literals[2] = new Flonum(1e-100);
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -235,7 +234,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -260,7 +259,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -285,7 +284,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

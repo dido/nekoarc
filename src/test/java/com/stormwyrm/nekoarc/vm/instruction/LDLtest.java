@@ -19,7 +19,7 @@ public class LDLtest
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = Symbol.intern("foo");
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();

@@ -2,7 +2,6 @@ package com.stormwyrm.nekoarc.functions.list;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.functions.Builtin;
-import com.stormwyrm.nekoarc.functions.list.Cadr;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Cons;
 import com.stormwyrm.nekoarc.types.Fixnum;
@@ -28,7 +27,7 @@ public class CadrTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = cons;
         literals[1] = cadr;
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

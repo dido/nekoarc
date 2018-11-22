@@ -1,7 +1,6 @@
 package com.stormwyrm.nekoarc.functions.list;
 
 import com.stormwyrm.nekoarc.functions.Builtin;
-import com.stormwyrm.nekoarc.functions.list.Cdr;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
@@ -27,7 +26,7 @@ public class CdrTest {
         VirtualMachine vm = new VirtualMachine(1024);
         ArcObject literals[] = new ArcObject[1];
         literals[0] = cdr;
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

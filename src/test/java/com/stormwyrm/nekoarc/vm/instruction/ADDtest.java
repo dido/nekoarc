@@ -44,7 +44,7 @@ public class ADDtest {
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Flonum(3.14);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -65,7 +65,7 @@ public class ADDtest {
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Flonum(3.14);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -87,7 +87,7 @@ public class ADDtest {
 		literals[0] = new Flonum(3.14);
 		literals[1] = new Flonum(2.71);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -109,7 +109,7 @@ public class ADDtest {
 		literals[0] = new AString("abc");
 		literals[1] = new AString("def");
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -130,7 +130,7 @@ public class ADDtest {
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new AString("foo");
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -152,7 +152,7 @@ public class ADDtest {
 		literals[0] = new AString("foo");
 		literals[1] = new Flonum(1.1);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();

@@ -21,7 +21,7 @@ public class TypeTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("type");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

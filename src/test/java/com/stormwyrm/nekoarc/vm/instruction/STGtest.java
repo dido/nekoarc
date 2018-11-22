@@ -22,7 +22,7 @@ public class STGtest
 		Symbol sym = (Symbol)Symbol.intern("foo");
 		literals[0] = sym;
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setAcc(Nil.NIL);
 		vm.bind(sym, Fixnum.get(1234));
 		assertTrue(vm.runnable());

@@ -22,7 +22,7 @@ public class NewStringTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("newstring");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -45,7 +45,7 @@ public class NewStringTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = Symbol.intern("newstring");
         literals[1] = Rune.get(0x41);
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

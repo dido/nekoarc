@@ -34,7 +34,7 @@ public class HeapContinuationTest
 		hc.setIndex(1, Fixnum.get(2));
 		hc.setIndex(2, Fixnum.get(3));
 
-		// Code:
+		// CodeGen:
 		// env 2 0 0; lde0 0; push; lde0 1; apply 1; ret; hlt; hlt; hlt; hlt; hlt;
 		// add everything already on the stack to the value applied to the continuation, get the
 		// stuff in the environment and add it too, and return the sum.
@@ -113,7 +113,7 @@ public class HeapContinuationTest
 		VirtualMachine vm = new VirtualMachine(4);
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setargc(1);
 		vm.push(Fixnum.get(100));
 		vm.setAcc(literals[0]);
@@ -155,7 +155,7 @@ public class HeapContinuationTest
 		VirtualMachine vm = new VirtualMachine(5);
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
-		vm.load(inst, 0, literals);
+		vm.load(inst, literals, 0);
 		vm.setargc(1);
 		vm.push(Fixnum.get(1));
 		vm.setAcc(literals[0]);
