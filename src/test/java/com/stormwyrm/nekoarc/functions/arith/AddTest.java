@@ -16,11 +16,11 @@ public class AddTest {
                 0x4c, 0x00,								// apply 0
                 0x0d									// ret
         };
-        VirtualMachine vm = new VirtualMachine(1024);
-        vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, 0, literals);
+        VirtualMachine vm = new VirtualMachine(1024);
+        vm.initSyms();
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -41,7 +41,7 @@ public class AddTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -64,7 +64,7 @@ public class AddTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -89,7 +89,7 @@ public class AddTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, 0, literals);
+        vm.load(inst, literals, 0);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
