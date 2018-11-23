@@ -11,6 +11,7 @@ import com.stormwyrm.nekoarc.functions.typehandling.Rep;
 import com.stormwyrm.nekoarc.functions.typehandling.Sym;
 import com.stormwyrm.nekoarc.functions.typehandling.Type;
 import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.util.CallSync;
@@ -27,10 +28,8 @@ public class VirtualMachine implements Callable
 	private ArcObject[] stack;		// stack
 	private final CallSync caller;
 	private int ip;					// instruction pointer
-	private byte[] code;
 	private boolean runnable;
 	private ArcObject acc;			// accumulator
-	private ArcObject[] literals;
 	private int argc;				// argument counter for current function
 	private static final INVALID NOINST = new INVALID();
 	private static final Instruction[] jmptbl = {
@@ -292,7 +291,11 @@ public class VirtualMachine implements Callable
 		NOINST,
 	};
 
-	private ObjectMap<Symbol, ArcObject> genv = new ObjectMap<>();
+	public final CodeGen cg;
+    private byte[] code;
+    private ArcObject[] literals;
+
+    private ObjectMap<Symbol, ArcObject> genv = new ObjectMap<>();
 
 	public VirtualMachine(int stacksize)
 	{
@@ -305,10 +308,14 @@ public class VirtualMachine implements Callable
 		cont = Nil.NIL;
 		setAcc(Nil.NIL);
 		caller = new CallSync();
+		cg = new CodeGen();
 	}
 
-	public void load(final byte[] instructions, final ArcObject[] literals)
-	{
+	public void load() {
+	    cg.load(this);
+    }
+
+	public void load(final byte[] instructions, final ArcObject[] literals) {
 		this.code = instructions;
 		this.literals = literals;
 	}
