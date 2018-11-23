@@ -28,10 +28,10 @@ public class CodeGen extends ArcObject {
     }
 
     public void load(VirtualMachine vm) {
-        if (geninst.length > pos)
-            geninst = Arrays.copyOf(geninst, pos);
-        if (genlits.length > litpos)
-            genlits = Arrays.copyOf(genlits, litpos);
+    //  if (geninst.length > pos)
+    //       geninst = Arrays.copyOf(geninst, pos);
+    //  if (genlits.length > litpos)
+    //    genlits = Arrays.copyOf(genlits, litpos);
         vm.load(geninst, genlits);
     }
 
@@ -69,6 +69,10 @@ public class CodeGen extends ArcObject {
         return(pos);
     }
 
+    public int setPos(int pos) {
+        return(this.pos = pos);
+    }
+
     public int literal(ArcObject lit) {
         if (litpos >= genlits.length)
             genlits = Arrays.copyOf(genlits, genlits.length * 2);
@@ -76,6 +80,14 @@ public class CodeGen extends ArcObject {
         int tmppos = litpos;
         litpos++;
         return(tmppos);
+    }
+
+    public int litPos() {
+        return(litpos);
+    }
+
+    public int setLitPos(int litpos) {
+        return(this.litpos = litpos);
     }
 
     @Override
