@@ -7,14 +7,10 @@ notice and this notice are preserved.
 ----------------------------------------------------------------------
 
 * The Arc Runtime
-** TODO base virtual machine [7/8]
+** TODO base virtual machine [8/8]
     - [X] Define virtual machine architecture
     - [X] Design interpreter core
-	  The interpreter core should be flexible enough that we can
-	  easily use switch threading, call threading, GCC labels as
-	  values, or even assembly language.  Each instruction should
-	  be separately implementable.
-    - [ ] Build code generation infrastructure
+    - [X] Build code generation infrastructure
     - [X] Implement virtual machine instructions [36/36]
       - [X] nop
       - [X] push
