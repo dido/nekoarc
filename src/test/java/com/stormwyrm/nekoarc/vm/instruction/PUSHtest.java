@@ -17,7 +17,7 @@ public class PUSHtest
 		byte inst[] = { 0x44, (byte) 0x5d, (byte) 0xc3, (byte) 0x1f, (byte) 0x21, 0x01,
 				0x44, (byte) 0xa3, (byte) 0x3c, (byte) 0xe0, (byte) 0xde, 0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();

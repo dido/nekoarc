@@ -23,7 +23,7 @@ public class SCARtest
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Cons(Fixnum.get(1), Fixnum.get(2));
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, literals, 0);
+		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();

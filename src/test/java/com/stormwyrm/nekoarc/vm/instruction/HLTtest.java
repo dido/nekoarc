@@ -14,7 +14,7 @@ public class HLTtest
 	{
 		byte inst[] = { 0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
 		vm.run();

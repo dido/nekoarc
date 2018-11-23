@@ -22,7 +22,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -43,7 +43,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -65,7 +65,7 @@ public class GreaterThanTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(3.14159);
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -88,7 +88,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -111,7 +111,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -135,7 +135,7 @@ public class GreaterThanTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -159,7 +159,7 @@ public class GreaterThanTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(0.31831);
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -184,7 +184,7 @@ public class GreaterThanTest {
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
         literals[2] = new Flonum(1e101);
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -209,7 +209,7 @@ public class GreaterThanTest {
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
         literals[2] = new Flonum(1e-100);
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -234,7 +234,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -259,7 +259,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -284,7 +284,7 @@ public class GreaterThanTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

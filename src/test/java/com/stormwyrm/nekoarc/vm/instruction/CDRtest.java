@@ -20,7 +20,7 @@ public class CDRtest {
 				0x1b,
 				0x14};
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();

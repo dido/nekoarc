@@ -47,7 +47,7 @@ public class Java2ArcTest
 		ArcObject literals[] = new ArcObject[2];
 		literals[0] = new Closure(Nil.NIL, Fixnum.get(18));	// position of second
 		literals[1] = builtin;
-		vm.load(inst, literals, 0);
+		vm.load(inst, literals);
 		vm.setargc(0);
 		assertTrue(vm.runnable());
 		vm.run();

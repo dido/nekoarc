@@ -24,7 +24,7 @@ public class LenTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = str;
         literals[1] = len;
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -47,7 +47,7 @@ public class LenTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = vec;
         literals[1] = len;
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -70,7 +70,7 @@ public class LenTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = cons;
         literals[1] = len;
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

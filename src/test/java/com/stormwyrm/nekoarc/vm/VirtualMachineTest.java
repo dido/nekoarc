@@ -6,7 +6,6 @@ import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Unbound;
 import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
 public class VirtualMachineTest
@@ -17,24 +16,24 @@ public class VirtualMachineTest
 		byte data[] = { 0x01, 0x00, 0x00, 0x00 };
 		VirtualMachine vm = new VirtualMachine(1024);
 
-		vm.load(data, 0);
+		vm.load(data);
 		assertEquals(1, vm.instArg());
 		
 		byte data2[] = { (byte) 0xff, 0x00, 0x00, 0x00 };
-		vm.load(data2, 0);
+		vm.load(data2);
 		assertEquals(255, vm.instArg());
 
 		byte data3[] = { (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff };
-		vm.load(data3, 0);
+		vm.load(data3);
 		assertEquals(-1, vm.instArg());
 
 		byte data4[] = { (byte) 0x5d, (byte) 0xc3, (byte) 0x1f, (byte) 0x21 };
-		vm.load(data4, 0);
+		vm.load(data4);
 		assertEquals(555729757, vm.instArg());
 		
 		// two's complement negative
 		byte data5[] = { (byte) 0xa3, (byte) 0x3c, (byte) 0xe0, (byte) 0xde };
-		vm.load(data5, 0);
+		vm.load(data5);
 		assertEquals(-555729757, vm.instArg());
 	}
 
@@ -43,7 +42,7 @@ public class VirtualMachineTest
 	{
 		byte data[] = { (byte) 0x12, (byte) 0xff };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(data, 0);
+		vm.load(data);
 		assertEquals(0x12, vm.smallInstArg());
 		assertEquals(-1, vm.smallInstArg());
 	}

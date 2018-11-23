@@ -20,7 +20,7 @@ public class LDGtest
 		Symbol sym = (Symbol)Symbol.intern("foo");
 		literals[0] = sym;
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, literals, 0);
+		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		vm.bind(sym, Fixnum.get(1234));
 		assertTrue(vm.runnable());

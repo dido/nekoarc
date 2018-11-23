@@ -22,7 +22,7 @@ public class DCARtest
 				0x26,
 				0x14};
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -37,7 +37,7 @@ public class DCARtest
 		// nil; dcar; hlt
 		byte inst[] = { 0x13, 0x26, 0x14};
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
 		vm.run();
@@ -54,7 +54,7 @@ public class DCARtest
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = Unbound.UNBOUND;
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, literals, 0);
+		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();

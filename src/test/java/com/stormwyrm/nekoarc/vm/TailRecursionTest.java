@@ -52,7 +52,7 @@ public class TailRecursionTest
 				0x0d									// ret
 		};
 		VirtualMachine vm = new VirtualMachine(14);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.push(Fixnum.get(1));							// x
 		vm.push(Fixnum.get(50000));						// y

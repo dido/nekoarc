@@ -25,7 +25,7 @@ public class STE0test
 						(byte)0x6a, 0x00,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -54,7 +54,7 @@ public class STE0test
 						(byte)0x6a, 0x01,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -83,7 +83,7 @@ public class STE0test
 						(byte)0x6a, 0x02,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -112,7 +112,7 @@ public class STE0test
 						(byte)0x6a, 0x03,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -141,7 +141,7 @@ public class STE0test
 						(byte)0x6a, 0x04,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());

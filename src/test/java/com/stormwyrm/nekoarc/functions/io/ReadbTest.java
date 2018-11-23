@@ -24,7 +24,7 @@ public class ReadbTest {
         ArcObject literals[] = new ArcObject[2];
         literals[0] = Symbol.intern("readb");
         literals[1] = new InString("abc");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

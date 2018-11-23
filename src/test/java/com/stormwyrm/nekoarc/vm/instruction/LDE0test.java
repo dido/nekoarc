@@ -24,7 +24,7 @@ public class LDE0test
 						(byte)0x69, 0x00,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -48,7 +48,7 @@ public class LDE0test
 						(byte)0x69, 0x01,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -72,7 +72,7 @@ public class LDE0test
 						(byte)0x69, 0x02,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -96,7 +96,7 @@ public class LDE0test
 						(byte)0x69, 0x03,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -120,7 +120,7 @@ public class LDE0test
 						(byte)0x69, 0x03,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());

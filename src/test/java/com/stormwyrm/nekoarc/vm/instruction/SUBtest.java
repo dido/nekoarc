@@ -22,7 +22,7 @@ public class SUBtest
 				0x16,
 				0x14};
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -41,7 +41,7 @@ public class SUBtest
 				0x16,
 				0x14};
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -62,7 +62,7 @@ public class SUBtest
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Flonum(3.14);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, literals, 0);
+		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -83,7 +83,7 @@ public class SUBtest
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Flonum(3.14);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, literals, 0);
+		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();
@@ -105,7 +105,7 @@ public class SUBtest
 		literals[0] = new Flonum(3.14);
 		literals[1] = new Flonum(2.71);
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, literals, 0);
+		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		vm.run();

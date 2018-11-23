@@ -59,7 +59,7 @@ public class FibonacciTest
 		VirtualMachine vm = new VirtualMachine(8);
 		ArcObject literals[] = new ArcObject[1];
 		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
-		vm.load(inst, literals, 0);
+		vm.load(inst, literals);
 		vm.setargc(1);
 		vm.push(Fixnum.get(25));
 		vm.setAcc(Nil.NIL);

@@ -1,6 +1,7 @@
 package com.stormwyrm.nekoarc.functions.arith;
 
 import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
@@ -20,7 +21,7 @@ public class AddTest {
         literals[0] = Symbol.intern("+");
         VirtualMachine vm = new VirtualMachine(1024);
         vm.initSyms();
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -41,7 +42,7 @@ public class AddTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -64,7 +65,7 @@ public class AddTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -89,7 +90,7 @@ public class AddTest {
         vm.initSyms();
         ArcObject literals[] = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, literals, 0);
+        vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();

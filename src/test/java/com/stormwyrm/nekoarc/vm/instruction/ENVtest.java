@@ -24,7 +24,7 @@ public class ENVtest
 						(byte)0xca, 0x03, 0x01, 0x01,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -47,7 +47,7 @@ public class ENVtest
 						(byte)0xca, 0x03, 0x01, 0x01,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(1);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -76,7 +76,7 @@ public class ENVtest
 						(byte)0xca, 0x03, 0x01, 0x01,
 						0x14 };
 		VirtualMachine vm = new VirtualMachine(1024);
-		vm.load(inst, 0);
+		vm.load(inst);
 		vm.setargc(5);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
