@@ -307,16 +307,15 @@ public class VirtualMachine implements Callable
 		caller = new CallSync();
 	}
 
-	public void load(final byte[] instructions, final ArcObject[] literals, int ip)
+	public void load(final byte[] instructions, final ArcObject[] literals)
 	{
 		this.code = instructions;
 		this.literals = literals;
-		this.ip = ip;
 	}
 
-	public void load(final byte[] instructions, int ip)
+	public void load(final byte[] instructions)
 	{
-		load(instructions, null, ip);
+		load(instructions, null);
 	}
 
 	public void halt()
