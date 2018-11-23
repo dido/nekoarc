@@ -2,48 +2,81 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
-import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 import java.util.Vector;
 
 public class CodeGen extends ArcObject {
     public static final ArcObject TYPE = Symbol.intern("code");
 
-    private ByteArrayOutputStream geninst;
-    private Vector<ArcObject> genlits;
+    private byte[] geninst;
+    private int pos, litpos;
+    private ArcObject[] genlits;
 
     public CodeGen() {
-        geninst = new ByteArrayOutputStream();
-        genlits = new Vector<>();
+        pos = 0;
+        geninst = new byte[32];
+        litpos = 0;
+        genlits = new ArcObject[32];
     }
 
-    public void load(VirtualMachine vm, int ip) {
-        vm.load(geninst.toByteArray(), (ArcObject[])genlits.toArray(), ip);
+    private int instwrite(byte b) {
+        if (pos >= geninst.length)
+            geninst = Arrays.copyOf(geninst, geninst.length * 2);
+        geninst[pos] = b;
+        int tmppos = pos;
+        pos++;
+        return(tmppos);
     }
 
-    public int emits(byte op, byte... vals) {
-        int pos = geninst.size();
-        geninst.write(op);
-        for (byte val : vals)
-            geninst.write(val);
-        return(pos);
+    public void load(VirtualMachine vm) {
+        if (geninst.length > pos)
+            geninst = Arrays.copyOf(geninst, pos);
+        if (genlits.length > litpos)
+            genlits = Arrays.copyOf(genlits, litpos);
+        vm.load(geninst, genlits);
+    }
+
+    public int emits(byte op, int... vals) {
+        int tmppos = instwrite(op);
+        for (int val : vals)
+            instwrite((byte)val);
+        return(tmppos);
     }
 
     public int emit(byte op, int... vals) {
-        int pos = geninst.size();
-        geninst.write(op);
+        int pos = instwrite(op);
         for (int val : vals) {
             for (int i=0; i<4; i++) {
-                geninst.write(val & 0xff);
+                instwrite((byte) (val & 0xff));
                 val >>= 8;
             }
         }
         return(pos);
     }
 
+    public int setAtPos(int pos, int val) {
+        for (int i=pos; i<pos+4; i++) {
+            geninst[i] = (byte) (val & 0xff);
+            val >>= 8;
+        }
+        return(pos);
+    }
+
+    public byte getAtPos(int pos) {
+        return(geninst[pos]);
+    }
+
+    public int pos() {
+        return(pos);
+    }
+
     public int literal(ArcObject lit) {
-        int size = genlits.size();
-        genlits.addElement(lit);
-        return(size);
+        if (litpos >= genlits.length)
+            genlits = Arrays.copyOf(genlits, genlits.length * 2);
+        genlits[litpos] = lit;
+        int tmppos = litpos;
+        litpos++;
+        return(tmppos);
     }
 
     @Override
