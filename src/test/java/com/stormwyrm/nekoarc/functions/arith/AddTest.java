@@ -1,5 +1,6 @@
 package com.stormwyrm.nekoarc.functions.arith;
 
+import com.stormwyrm.nekoarc.Op;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Fixnum;
@@ -12,16 +13,16 @@ import static org.junit.Assert.*;
 public class AddTest {
     @Test
     public void test0() {
-        byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
-                0x45, 0x00, 0x00, 0x00, 0x00,			// ldg 0
-                0x4c, 0x00,								// apply 0
-                0x0d									// ret
-        };
-        ArcObject literals[] = new ArcObject[1];
-        literals[0] = Symbol.intern("+");
+        CodeGen cg = new CodeGen();
+        Op.ENV.emits(cg, 0, 0, 0);
+        Op.LDG.emit(cg, 0);
+        Op.APPLY.emit(cg, 0);
+        Op.RET.emit(cg);
+        cg.literal(Symbol.intern("+"));
+
         VirtualMachine vm = new VirtualMachine(1024);
         vm.initSyms();
-        vm.load(inst, literals);
+        cg.load(vm);
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
