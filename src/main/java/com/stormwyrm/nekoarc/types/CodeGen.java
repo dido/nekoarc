@@ -3,7 +3,6 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
 import java.util.Arrays;
-import java.util.Vector;
 
 public class CodeGen extends ArcObject {
     public static final ArcObject TYPE = Symbol.intern("code");
@@ -82,5 +81,10 @@ public class CodeGen extends ArcObject {
     @Override
     public ArcObject type() {
         return(TYPE);
+    }
+
+    @Override
+    public String toString() {
+        return("#<CodeGen code: " + pos + " literals: " + litpos + ">");
     }
 }
