@@ -13,16 +13,15 @@ import static org.junit.Assert.*;
 public class AddTest {
     @Test
     public void test0() {
-        CodeGen cg = new CodeGen();
-        Op.ENV.emits(cg, 0, 0, 0);
-        Op.LDG.emit(cg, 0);
-        Op.APPLY.emit(cg, 0);
-        Op.RET.emit(cg);
-        cg.literal(Symbol.intern("+"));
-
         VirtualMachine vm = new VirtualMachine(1024);
         vm.initSyms();
-        cg.load(vm);
+        Op.ENV.emits(vm, 0, 0, 0);
+        Op.LDG.emit(vm, 0);
+        Op.APPLY.emit(vm, 0);
+        Op.RET.emit(vm);
+        vm.cg.literal(Symbol.intern("+"));
+
+        vm.load();
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
