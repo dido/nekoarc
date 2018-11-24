@@ -1,3 +1,21 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.stormwyrm.nekoarc.vm;
 
 import com.stormwyrm.nekoarc.*;
@@ -336,13 +354,18 @@ public class VirtualMachine implements Callable
 	}
 
 	/**
-	 * Attempt to garbage collect the stack, after Richard A. Kelsey, "Tail Recursive Stack Disciplines for an Interpreter"
-	 * Basically, the only things on the stack that are garbage collected are environments and continuations.
-	 * The algorithm here works by copying all environments and continuations from the stack to the heap. When that's done it will move the stack pointer
-	 * to the top of the stack.
-	 * 1. Start with the environment register. Move that environment and all of its children to the heap.
-	 * 2. Continue with the continuation register. Copy the current continuation into the heap.
-	 * 3. Compact the stack by moving the remainder of the non-stack/non-continuation elements down.
+	 * Attempt to garbage collect the stack, after Richard A. Kelsey,
+	 * "Tail Recursive Stack Disciplines for an Interpreter" Basically, the only
+	 * things on the stack that are garbage collected are environments and
+	 * continuations. The algorithm here works by copying all environments and
+	 * continuations from the stack to the heap. When that's done it will move
+	 * the stack pointer to the top of the stack.
+	 * 1. Start with the environment register. Move that environment and all of
+	 *    its children to the heap.
+	 * 2. Continue with the continuation register. Copy the current continuation
+	 * 	  into the heap.
+	 * 3. Compact the stack by moving the remainder of the non-stack /
+	 *    non-continuation elements down.
 	 */
 	private void stackgc()
 	{
@@ -488,9 +511,11 @@ public class VirtualMachine implements Callable
 	public void argcheck(int minarg, int maxarg)
 	{
 		if (argc() < minarg)
-			throw new NekoArcException("too few arguments, at least " + minarg + " required, " + argc() + " passed");
+			throw new NekoArcException("too few arguments, at least " + minarg +
+					" required, " + argc() + " passed");
 		if (maxarg >= 0 && argc() > maxarg)
-			throw new NekoArcException("too many arguments, at most " + maxarg + " allowed, " + argc() + " passed");
+			throw new NekoArcException("too many arguments, at most " + maxarg +
+					" allowed, " + argc() + " passed");
 	}
 
 	public void argcheck(int arg)
@@ -498,8 +523,8 @@ public class VirtualMachine implements Callable
 		argcheck(arg, arg);
 	}
 
-	/* Create an environment. If there is enough space on the stack, that environment will be there,
-	 * if not, it will be created in the heap. */
+	/** Create an environment. If there is enough space on the stack, that
+	 * environment will be there, if not, it will be created in the heap. */
 	public void mkenv(int prevsize, int extrasize)
 	{
 		// Do a check for the space on the stack. If there is not enough,
@@ -527,10 +552,12 @@ public class VirtualMachine implements Callable
 	/** Create a new heap environment ab initio */
 	private void mkheapenv(int prevsize, int extrasize)
 	{
-		// First, convert what will become the parent environment to a heap environment if it is not already one
+		// First, convert what will become the parent environment to a
+		// heap environment if it is not already one
 		env = HeapEnv.fromStackEnv(this, env);
 		int envstart = sp - prevsize;
-		// Create new heap environment and copy the environment values from the stack into it
+		// Create new heap environment and copy the environment values
+		// from the stack into it
 		HeapEnv nenv = new HeapEnv(prevsize + extrasize, env);
 		for (int i=0; i<prevsize; i++)
 			nenv.setEnv(i, stackIndex(envstart + i));
@@ -628,7 +655,8 @@ public class VirtualMachine implements Callable
 		}
 	}
 
-	// Make a continuation on the stack. The new continuation is saved in the continuation register.
+	/** Make a continuation on the stack. The new continuation is
+		saved in the continuation register. */
 	public void makecont(int ipoffset)
 	{
 		stackcheck(4, "stack overflow while creating continuation");
@@ -659,8 +687,8 @@ public class VirtualMachine implements Callable
 			Continuation ct = (Continuation)cont;
 			ct.restore(this, caller);
 		} else if (cont.is(Nil.NIL)) {
-			// If we have no continuation, that was an attempt to return from the topmost
-			// level and we should halt the machine.
+			// If we have no continuation, that was an attempt to return from
+			// the topmost level and we should halt the machine.
 			halt();
 		} else {
 			throw new NekoArcException("invalid continuation");
