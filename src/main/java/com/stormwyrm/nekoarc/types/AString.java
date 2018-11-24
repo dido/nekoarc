@@ -1,3 +1,20 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.InvokeThread;
@@ -6,18 +23,16 @@ import com.stormwyrm.nekoarc.NekoArcException;
 public class AString extends ArcObject
 {
 	public static final ArcObject TYPE = Symbol.intern("string");
-	public final String string;
+	public StringBuffer string;
 
-	public AString(String str)
-	{
-		this.string = str;
+	public AString(String str) {
+		this.string = new StringBuffer(str);
 	}
 
 	public AString(long len, Rune r) {
-		StringBuilder sb = new StringBuilder();
+		this.string = new StringBuffer((int)len);
 		while (len-- > 0)
-			sb.appendCodePoint(r.rune);
-		this.string = sb.toString();
+			string.appendCodePoint(r.rune);
 	}
 
 	@Override
@@ -28,7 +43,8 @@ public class AString extends ArcObject
 
 	@Override
 	public ArcObject add(ArcObject ae) {
-		return(new AString(this.string + ae.toString()));
+		this.string.append(ae.toString());
+		return(this);
 	}
 
 	@Override
@@ -39,13 +55,14 @@ public class AString extends ArcObject
 	@Override
 	public String toString()
 	{
-		return(string);
+		return(string.toString());
 	}
 
 	@Override
-	public boolean is(ArcObject other)
-	{
-		return(this == other || ((other instanceof AString) && string.equals(((AString)other).string)));
+	public boolean is(ArcObject other) {
+		if (this == other)
+			return(true);
+		return((other instanceof AString) && (this.toString().compareTo(other.toString())) == 0);
 	}
 
 	@Override
@@ -55,8 +72,15 @@ public class AString extends ArcObject
 	}
 
 	@Override
-	public ArcObject invoke(InvokeThread thr)
-	{
+	public ArcObject sref(ArcObject value, ArcObject index) {
+		Rune r = (Rune)value;
+		int idx = (int)Fixnum.cast(index, this).fixnum;
+		this.string.replace(idx, idx+1, String.format("%c", r.rune));
+		return(value);
+	}
+
+	@Override
+	public ArcObject invoke(InvokeThread thr) {
 		Fixnum idx = Fixnum.cast(thr.getenv(0, 0), this);
 		if (idx.fixnum < 0)
 			throw new NekoArcException("negative string index");
