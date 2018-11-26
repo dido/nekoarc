@@ -40,6 +40,14 @@ public class FixnumTest {
         assertEquals("string", result.type().toString());
         assertEquals("123", result.toString());
 
+        result = f.coerce(Symbol.intern("string"), new Cons(Fixnum.get(16), Nil.NIL));
+        assertEquals("string", result.type().toString());
+        assertEquals("7b", result.toString());
+
+        result = f.coerce(Symbol.intern("string"), new Cons(Fixnum.get(35), Nil.NIL));
+        assertEquals("string", result.type().toString());
+        assertEquals("3i", result.toString());
+
         result = f.coerce(Symbol.intern("rune"), Nil.NIL);
         assertEquals("rune", result.type().toString());
         assertEquals("#\\{", result.toString());
