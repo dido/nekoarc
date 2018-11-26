@@ -128,7 +128,7 @@ public class Fixnum extends Numeric implements Orderable
 	}
 
 	@Override
-	public ArcObject coerce(ArcObject newtype) {
+	public ArcObject coerce(ArcObject newtype, ArcObject params) {
         if (newtype == Symbol.intern("fixnum"))
             return(this);
         if (newtype == Symbol.intern("flonum"))
@@ -137,6 +137,6 @@ public class Fixnum extends Numeric implements Orderable
             return(new AString(this.toString()));
         if (newtype == Symbol.intern("rune"))
             return(Rune.get((int) this.fixnum));
-        return(super.coerce(newtype));
+        return(super.coerce(newtype, params));
 	}
 }
