@@ -167,12 +167,12 @@ notice and this notice are preserved.
    functions, so as to make their use cheaper.
    - [X] Initialization for binding runtime primitives to global symbols
    - [-] Type handling [4/5]
-     - [ ] coerce [0/8]
-       - [ ] Fixnum conversions [0/4]
-	 - [ ] fixnum -> fixnum (trivial)
-         - [ ] flonum -> fixnum
-         - [ ] string -> fixnum
-         - [ ] rune -> fixnum
+     - [-] coerce [1/8]
+       - [X] Fixnum conversions [4/4]
+	 - [X] fixnum (trivial)
+         - [X] flonum
+         - [X] string
+         - [X] rune
        - [ ] Flonum conversions [0/3]
 	 - [ ] flonum -> flonum (trivial)
 	 - [ ] fixnum -> flonum
