@@ -21,6 +21,7 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 
 import com.stormwyrm.nekoarc.NekoArcException;
+import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.util.LongMap;
 
 public class Fixnum extends Numeric implements Orderable
@@ -133,8 +134,12 @@ public class Fixnum extends Numeric implements Orderable
             return(this);
         if (newtype == Symbol.intern("flonum"))
             return(Flonum.cast(this, this));
-        if (newtype == Symbol.intern("string"))
-            return(new AString(this.toString()));
+        if (newtype == Symbol.intern("string")) {
+            int base=10;
+            if (!Nil.NIL.is(params) && params.car() instanceof Fixnum)
+                base = (int)((Fixnum)params.car()).fixnum;
+            return(new AString(Long.toString(this.fixnum, base)));
+        }
         if (newtype == Symbol.intern("rune"))
             return(Rune.get((int) this.fixnum));
         return(super.coerce(newtype, params));
