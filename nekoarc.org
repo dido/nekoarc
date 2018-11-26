@@ -181,9 +181,9 @@ notice and this notice are preserved.
          - [X] rune (trivial)
 	 - [X] fixnum
 	 - [X] string
-       - [ ] String conversions [0/6]
-         - [ ] string (trivial)
-	 - [ ] fixnum (only if string is an integer)
+       - [-] String conversions [2/6]
+         - [X] string (trivial)
+	 - [X] fixnum (only if string is an integer)
          - [ ] flonum (only if string can be parsed to a flonum)
 	 - [ ] symbol (same as intern)
 	 - [ ] cons (converted into a list of characters)
