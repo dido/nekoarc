@@ -17,6 +17,7 @@
  */
 package com.stormwyrm.nekoarc.types;
 
+import com.stormwyrm.nekoarc.Nil;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -27,19 +28,19 @@ public class FixnumTest {
         Fixnum f = Fixnum.get(123);
         ArcObject result;
 
-        result = f.coerce(Symbol.intern("fixnum"));
+        result = f.coerce(Symbol.intern("fixnum"), Nil.NIL);
         assertEquals("fixnum", result.type().toString());
         assertEquals(result, f);
 
-        result = f.coerce(Symbol.intern("flonum"));
+        result = f.coerce(Symbol.intern("flonum"), Nil.NIL);
         assertEquals("flonum", result.type().toString());
         assertEquals(((Flonum)result).flonum, 123.0, 1e-6);
 
-        result = f.coerce(Symbol.intern("string"));
+        result = f.coerce(Symbol.intern("string"), Nil.NIL);
         assertEquals("string", result.type().toString());
         assertEquals("123", result.toString());
 
-        result = f.coerce(Symbol.intern("rune"));
+        result = f.coerce(Symbol.intern("rune"), Nil.NIL);
         assertEquals("rune", result.type().toString());
         assertEquals("#\\{", result.toString());
     }
