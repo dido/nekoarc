@@ -244,7 +244,13 @@ public abstract class ArcObject implements Callable
 		return(caller);
 	}
 
-	public ArcObject coerce(ArcObject newtype) {
+    /**
+     * Coerce an object to a new type
+     * @param newtype The new type to convert to
+     * @param extra additional parameters for the conversion, if any
+     * @return coerced object of new type if coercion is valid
+     */
+	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
 		throw new NekoArcException("Cannot coerce " + this + "to " + newtype);
 	}
 }
