@@ -75,7 +75,7 @@ public abstract class ArcObject implements Callable
 	 * characters in strings.
 	 * @param value The new value to assign to the index
 	 * @param index The index
-	 * @return
+	 * @return the new value assigned
 	 */
 	public ArcObject sref(ArcObject value, ArcObject index)  {
 		throw new NekoArcException("Can't sref " + this
@@ -242,5 +242,9 @@ public abstract class ArcObject implements Callable
 	public CallSync sync()
 	{
 		return(caller);
+	}
+
+	public ArcObject coerce(ArcObject newtype) {
+		throw new NekoArcException("Cannot coerce " + this + "to " + newtype);
 	}
 }
