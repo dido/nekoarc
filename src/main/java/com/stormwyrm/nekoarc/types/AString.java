@@ -19,6 +19,7 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
+import com.stormwyrm.nekoarc.Nil;
 
 public class AString extends ArcObject
 {
@@ -89,4 +90,21 @@ public class AString extends ArcObject
 		int c = string.codePointAt((int) idx.fixnum);
 		return(Rune.get(c));
 	}
+
+    @Override
+    public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+        if (newtype == Symbol.intern("string"))
+            return(this);
+        if (newtype == Symbol.intern("fixnum")) {
+            try {
+                int radix = 10;
+                if (!Nil.NIL.is(extra))
+                    radix = (int)Fixnum.cast(extra.car(), this).fixnum;
+                return(Fixnum.get(Long.parseLong(this.toString(), radix)));
+            } catch (NumberFormatException e) {
+                // do nothing, this will automatically fall through to super.coerce below
+            }
+        }
+        return super.coerce(newtype, extra);
+    }
 }
