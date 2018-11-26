@@ -178,28 +178,29 @@ notice and this notice are preserved.
 	 - [X] fixnum
 	 - [X] string
        - [ ] Rune conversions [0/2]
-         - [ ] rune -> rune (trivial)
-	 - [ ] fixnum -> rune
-       - [ ] String conversions [0/8]
-         - [ ] string -> string (trivial)
-	 - [ ] fixnum -> string
-         - [ ] flonum -> string
-	 - [ ] rune -> string
-	 - [ ] symbol -> string
-	 - [ ] cons -> string
-         - [ ] table -> string
-         - [ ] vector -> string
+         - [ ] rune (trivial)
+	 - [ ] fixnum
+       - [ ] String conversions [0/6]
+         - [ ] string (trivial)
+	 - [ ] fixnum (only if string is an integer)
+         - [ ] flonum (only if string can be parsed to a flonum)
+	 - [ ] symbol (same as intern)
+	 - [ ] cons (converted into a list of characters)
+         - [ ] vector (converted into a vector of characters)
        - [ ] Symbol conversions [0/2]
          - [ ] symbol -> symbol (trivial)
-         - [ ] string -> symbol
-       - [ ] Cons conversions [0/2]
-         - [ ] cons -> cons (trivial)
-         - [ ] vector -> cons
-       - [ ] Table conversions [0/1]
-         - [ ] table -> table (trivial)
-       - [ ] Vector conversions [0/2]
-         - [ ] vector -> vector (trivial)
-	 - [ ] cons -> vector
+         - [ ] string
+       - [ ] Cons conversions [0/3]
+         - [ ] cons (trivial)
+	 - [ ] string
+         - [ ] vector
+       - [ ] Table conversions [0/2]
+         - [ ] table (trivial)
+         - [ ] string
+       - [ ] Vector conversions [0/3]
+         - [ ] vector (trivial)
+	 - [ ] cons
+         - [ ] string
      - [X] type
      - [X] annotate
      - [X] rep
