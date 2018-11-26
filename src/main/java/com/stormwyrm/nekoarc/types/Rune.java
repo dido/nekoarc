@@ -17,6 +17,7 @@
  */
 package com.stormwyrm.nekoarc.types;
 
+
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.util.LongMap;
 
@@ -78,5 +79,16 @@ public class Rune extends ArcObject {
                 break;
         }
         return(String.format("#\\%c", rune));
+    }
+
+    @Override
+    public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+        if (newtype == Symbol.intern("rune"))
+            return(this);
+        if (newtype == Symbol.intern("fixnum"))
+            return(Fixnum.get(this.rune));
+        if (newtype == Symbol.intern("string"))
+            return(new AString(String.format("%c", this.rune)));
+        return super.coerce(newtype, extra);
     }
 }
