@@ -8,7 +8,7 @@ public class Coerce extends Builtin {
     private static final Coerce INSTANCE = new Coerce();
 
     private Coerce() {
-        super("coerce", 2, 0, 0, false);
+        super("coerce", 2, 0, 0, true);
     }
 
     public static Builtin getInstance() {
@@ -19,6 +19,7 @@ public class Coerce extends Builtin {
     public ArcObject invoke(InvokeThread vm) {
         ArcObject val = vm.getenv(0);
         ArcObject newtype = vm.getenv(1);
-        return(val.coerce(newtype));
+        ArcObject extra = vm.getenv(3);
+        return(val.coerce(newtype, extra));
     }
 }
