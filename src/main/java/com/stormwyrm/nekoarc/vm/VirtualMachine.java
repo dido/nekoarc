@@ -24,10 +24,7 @@ import com.stormwyrm.nekoarc.functions.arith.Add;
 import com.stormwyrm.nekoarc.functions.io.Readb;
 import com.stormwyrm.nekoarc.functions.io.Readc;
 import com.stormwyrm.nekoarc.functions.list.*;
-import com.stormwyrm.nekoarc.functions.typehandling.Annotate;
-import com.stormwyrm.nekoarc.functions.typehandling.Rep;
-import com.stormwyrm.nekoarc.functions.typehandling.Sym;
-import com.stormwyrm.nekoarc.functions.typehandling.Type;
+import com.stormwyrm.nekoarc.functions.typehandling.*;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Fixnum;
@@ -729,11 +726,12 @@ public class VirtualMachine implements Callable
 	public void initSyms()
     {
 
-    	// Type handling (4/5)
+    	// Type handling (5/5)
 		defbuiltin(Type.getInstance());
 		defbuiltin(Annotate.getInstance());
 		defbuiltin(Rep.getInstance());
 		defbuiltin(Sym.getInstance());
+        defbuiltin(Coerce.getInstance());
 
         // Predicates
         defbuiltin(LessThan.getInstance());
