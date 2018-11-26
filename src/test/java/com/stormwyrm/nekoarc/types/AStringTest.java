@@ -17,6 +17,7 @@
  */
 package com.stormwyrm.nekoarc.types;
 
+import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
@@ -76,5 +77,24 @@ public class AStringTest {
         ArcObject obj = str.sref(Rune.get(0x9f8d), Fixnum.get(1));
         assertEquals("蛟龍", str.toString());
         assertTrue(obj.is(Rune.get(0x9f8d)));
+    }
+
+    @Test
+    public void testCoerce() {
+        AString s = new AString("473");
+        ArcObject result;
+
+        result = s.coerce(Symbol.intern("string"), Nil.NIL);
+        assertEquals("string", result.type().toString());
+        assertEquals(result, s);
+
+        result = s.coerce(Symbol.intern("fixnum"), Nil.NIL);
+        assertEquals("fixnum", result.type().toString());
+        assertEquals(result, Fixnum.get(473));
+
+        s = new AString("Kona");
+        result = s.coerce(Symbol.intern("fixnum"), new Cons(Fixnum.get(27), Nil.NIL));
+        assertEquals("fixnum", result.type().toString());
+        assertEquals(result, Fixnum.get(411787));
     }
 }
