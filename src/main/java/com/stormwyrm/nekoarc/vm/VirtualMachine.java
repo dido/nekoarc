@@ -21,14 +21,12 @@ package com.stormwyrm.nekoarc.vm;
 import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.functions.*;
 import com.stormwyrm.nekoarc.functions.arith.Add;
+import com.stormwyrm.nekoarc.functions.io.FInString;
 import com.stormwyrm.nekoarc.functions.io.Readb;
 import com.stormwyrm.nekoarc.functions.io.Readc;
 import com.stormwyrm.nekoarc.functions.list.*;
 import com.stormwyrm.nekoarc.functions.typehandling.*;
-import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.CodeGen;
-import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.types.Symbol;
+import com.stormwyrm.nekoarc.types.*;
 import com.stormwyrm.nekoarc.util.CallSync;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.util.ObjectMap;
@@ -770,6 +768,7 @@ public class VirtualMachine implements Callable
 		// I/O
 		defbuiltin(Readb.getInstance());
 		defbuiltin(Readc.getInstance());
+		defbuiltin(FInString.getInstance());
 	}
 
 	/**
