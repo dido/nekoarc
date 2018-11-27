@@ -106,5 +106,16 @@ public class AStringTest {
         result = s.coerce(Symbol.intern("flonum"), Nil.NIL);
         assertEquals("flonum", result.type().toString());
         assertEquals(6.62607004e-34, ((Flonum)result).flonum, 1e-12);
+
+        s = new AString("foo");
+        result = s.coerce(Symbol.intern("sym"), Nil.NIL);
+        assertEquals("sym", result.type().toString());
+        assertEquals(Symbol.intern("foo"), result);
+
+        s = new AString("abc");
+        result = s.coerce(Symbol.intern("cons"), Nil.NIL);
+        assertEquals("cons", result.type().toString());
+        ArcObject testlist = (new Cons(Rune.get(0x61), new Cons(Rune.get(0x62), new Cons(Rune.get(0x63), Nil.NIL))));
+        assertTrue(testlist.iso(result));
     }
 }
