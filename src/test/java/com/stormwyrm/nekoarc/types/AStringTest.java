@@ -117,5 +117,10 @@ public class AStringTest {
         assertEquals("cons", result.type().toString());
         ArcObject testlist = (new Cons(Rune.get(0x61), new Cons(Rune.get(0x62), new Cons(Rune.get(0x63), Nil.NIL))));
         assertTrue(testlist.iso(result));
+
+        s = new AString("abc");
+        result = s.coerce(Symbol.intern("vector"), Nil.NIL);
+        assertEquals("vector", result.type().toString());
+        assertTrue((new Vector(Rune.get(0x61), Rune.get(0x62), Rune.get(0x63))).iso(result));
     }
 }
