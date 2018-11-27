@@ -162,12 +162,12 @@ notice and this notice are preserved.
     - [ ] Code
     - [ ] Weak references
     - [ ] Objects
-** TODO Runtime Built-In Functions [5/19]
+** TODO Runtime Built-In Functions [6/19]
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
    - [X] Initialization for binding runtime primitives to global symbols
-   - [-] Type handling [4/5]
-     - [-] coerce [7/8]
+   - [X] Type handling [5/5]
+     - [X] coerce [8/8]
        - [X] Fixnum conversions [4/4]
 	 - [X] fixnum (trivial)
          - [X] flonum
@@ -198,10 +198,10 @@ notice and this notice are preserved.
        - [X] Table conversions [2/2]
          - [X] table (trivial)
          - [X] string
-       - [ ] Vector conversions [0/3]
-         - [ ] vector (trivial)
-	 - [ ] cons
-         - [ ] string
+       - [X] Vector conversions [3/3]
+         - [X] vector (trivial)
+	 - [X] cons
+         - [X] string
      - [X] type
      - [X] annotate
      - [X] rep
