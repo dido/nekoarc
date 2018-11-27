@@ -40,9 +40,6 @@ public class Nil extends Cons
 
 	@Override
 	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
-		if (newtype == Symbol.intern("cons"))
-			return(this);
-
 		if (newtype == Symbol.intern("string"))
 			return(new AString(""));
 
