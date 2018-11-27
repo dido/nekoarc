@@ -18,6 +18,7 @@
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.Op;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
@@ -26,19 +27,16 @@ import static org.junit.Assert.*;
 public class AStringTest {
     @Test
     public void testApply() {
-        AString str = new AString("日本語");
-        // Apply the above string
-        byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
-                0x44, 0x01, 0x00, 0x00, 0x00,			// ldi 1
-                0x01,									// push
-                0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
-                0x4c, 0x01,								// apply 1
-                0x0d									// ret
-        };
         VirtualMachine vm = new VirtualMachine(1024);
-        ArcObject literals[] = new ArcObject[1];
-        literals[0] = str;
-        vm.load(inst, literals);
+        vm.initSyms();
+        Op.ENV.emits(vm, 0, 0, 0);
+        Op.LDI.emit(vm, 1);
+        Op.PUSH.emit(vm);
+        Op.LDL.emit(vm, 0);
+        Op.APPLY.emit(vm, 1);
+        Op.RET.emit(vm);
+        vm.cg.literal(new AString("日本語"));
+        vm.load();
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -49,19 +47,16 @@ public class AStringTest {
 
     @Test
     public void testUnicodeApply() {
-        AString str = new AString("\uD83D\uDE1D\uD83D\uDE0E");
-        // Apply the above string
-        byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
-                0x44, 0x00, 0x00, 0x00, 0x00,			// ldi 0
-                0x01,									// push
-                0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
-                0x4c, 0x01,								// apply 1
-                0x0d									// ret
-        };
         VirtualMachine vm = new VirtualMachine(1024);
-        ArcObject literals[] = new ArcObject[1];
-        literals[0] = str;
-        vm.load(inst, literals);
+        vm.initSyms();
+        Op.ENV.emits(vm, 0, 0, 0);
+        Op.LDI.emit(vm, 0);
+        Op.PUSH.emit(vm);
+        Op.LDL.emit(vm, 0);
+        Op.APPLY.emit(vm, 1);
+        Op.RET.emit(vm);
+        vm.cg.literal(new AString("\uD83D\uDE1D\uD83D\uDE0E"));
+        vm.load();
         vm.setargc(0);
         assertTrue(vm.runnable());
         vm.run();
@@ -86,15 +81,30 @@ public class AStringTest {
 
         result = s.coerce(Symbol.intern("string"), Nil.NIL);
         assertEquals("string", result.type().toString());
-        assertEquals(result, s);
+        assertEquals(s, result);
 
         result = s.coerce(Symbol.intern("fixnum"), Nil.NIL);
         assertEquals("fixnum", result.type().toString());
-        assertEquals(result, Fixnum.get(473));
+        assertEquals(Fixnum.get(473), result);
 
         s = new AString("Kona");
         result = s.coerce(Symbol.intern("fixnum"), new Cons(Fixnum.get(27), Nil.NIL));
         assertEquals("fixnum", result.type().toString());
-        assertEquals(result, Fixnum.get(411787));
+        assertEquals(Fixnum.get(411787), result);
+
+        s = new AString("0.57721566490153286");
+        result = s.coerce(Symbol.intern("flonum"), Nil.NIL);
+        assertEquals("flonum", result.type().toString());
+        assertEquals(0.57721566490153286, ((Flonum)result).flonum, 1e-12);
+
+        s = new AString("6.02214086e23");
+        result = s.coerce(Symbol.intern("flonum"), Nil.NIL);
+        assertEquals("flonum", result.type().toString());
+        assertEquals(6.02214086e23, ((Flonum)result).flonum, 1e-12);
+
+        s = new AString("6.62607004e-34");
+        result = s.coerce(Symbol.intern("flonum"), Nil.NIL);
+        assertEquals("flonum", result.type().toString());
+        assertEquals(6.62607004e-34, ((Flonum)result).flonum, 1e-12);
     }
 }
