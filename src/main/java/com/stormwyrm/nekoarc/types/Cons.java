@@ -163,5 +163,28 @@ public class Cons extends ArcObject implements Iterable<ArcObject>
 		Fixnum idx = Fixnum.cast(thr.getenv(0, 0), this);
 		return(this.nth(idx.fixnum).car());
 	}
+
+	@Override
+	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+		if (newtype == Symbol.intern("cons"))
+			return(this);
+
+		if (newtype == Symbol.intern("string")) {
+			ArcObject sum = car.coerce(newtype, extra);
+			if (cdr instanceof Cons)
+				return(sum.add(cdr.coerce(newtype, extra)));
+			throw new NekoArcException("cannot coerce improper list to " + newtype);
+		}
+
+		if (newtype == Symbol.intern("vector")) {
+			long len = this.len();
+			Vector vec = new Vector((int) len);
+			int i=0;
+			for (ArcObject obj : this)
+				vec.setIndex(i++, obj);
+			return(vec);
+		}
+		return(super.coerce(newtype, extra));
+	}
 }
 
