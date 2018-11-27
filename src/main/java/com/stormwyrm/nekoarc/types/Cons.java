@@ -166,9 +166,6 @@ public class Cons extends ArcObject implements Iterable<ArcObject>
 
 	@Override
 	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
-		if (newtype == Symbol.intern("cons"))
-			return(this);
-
 		if (newtype == Symbol.intern("string")) {
 			ArcObject sum = car.coerce(newtype, extra);
 			if (cdr instanceof Cons)

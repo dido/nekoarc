@@ -138,8 +138,6 @@ public class Flonum extends Numeric implements Orderable
      */
     @Override
     public ArcObject coerce(ArcObject newtype, ArcObject extra) {
-        if (newtype == Symbol.intern("flonum"))
-            return(this);
         if (newtype == Symbol.intern("fixnum"))
             return(Fixnum.cast(this, this));
         if (newtype == Symbol.intern("string"))

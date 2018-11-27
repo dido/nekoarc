@@ -83,8 +83,6 @@ public class Rune extends ArcObject {
 
     @Override
     public ArcObject coerce(ArcObject newtype, ArcObject extra) {
-        if (newtype == Symbol.intern("rune"))
-            return(this);
         if (newtype == Symbol.intern("fixnum"))
             return(Fixnum.get(this.rune));
         if (newtype == Symbol.intern("string"))

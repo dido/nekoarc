@@ -93,8 +93,6 @@ public class AString extends ArcObject
 
     @Override
     public ArcObject coerce(ArcObject newtype, ArcObject extra) {
-        if (newtype == Symbol.intern("string"))
-            return(this);
         if (newtype == Symbol.intern("fixnum")) {
             try {
                 int radix = 10;

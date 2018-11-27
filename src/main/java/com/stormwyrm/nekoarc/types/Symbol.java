@@ -64,8 +64,6 @@ public class Symbol extends Atom
 
 	@Override
 	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
-		if (newtype == Symbol.intern("sym"))
-			return(this);
 		if (newtype == Symbol.intern("string"))
 			return(new AString(this.toString()));
 		return(super.coerce(newtype, extra));

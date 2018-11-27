@@ -6,7 +6,7 @@ import com.stormwyrm.nekoarc.util.ObjectMap;
 import java.util.Iterator;
 
 public class Table extends ArcObject implements Iterable<ArcObject> {
-    public static final ArcObject TYPE = Symbol.intern("vector");
+    public static final ArcObject TYPE = Symbol.intern("table");
     private ObjectMap<ArcObject, ArcObject> table;
 
     public Table() {
@@ -71,5 +71,10 @@ public class Table extends ArcObject implements Iterable<ArcObject> {
                 return(false);
         }
         return(true);
+    }
+
+    @Override
+    public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+        return super.coerce(newtype, extra);
     }
 }
