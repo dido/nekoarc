@@ -124,6 +124,13 @@ public class AString extends ArcObject
 			return(list);
 		}
 
+		if (newtype == Symbol.intern("vector")) {
+			Vector vec = new Vector(string.length());
+			for (int i=0; i<string.length(); i++)
+				vec.setIndex(i, Rune.get(string.codePointAt(i)));
+			return(vec);
+		}
+
         return super.coerce(newtype, extra);
     }
 }
