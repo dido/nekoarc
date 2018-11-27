@@ -102,9 +102,28 @@ public class AString extends ArcObject
                     radix = (int)Fixnum.cast(extra.car(), this).fixnum;
                 return(Fixnum.get(Long.parseLong(this.toString(), radix)));
             } catch (NumberFormatException e) {
-                // do nothing, this will automatically fall through to super.coerce below
+                // do nothing, this will automatically fall through below to report the error
             }
         }
+
+        if (newtype == Symbol.intern("flonum")) {
+        	try {
+        		return(new Flonum(Double.parseDouble(this.toString())));
+			} catch (NumberFormatException e) {
+        		// do nothing, this will automatically fall through below to report the error
+			}
+		}
+
+        if (newtype == Symbol.intern("sym"))
+        	return(Symbol.intern(this.toString()));
+
+		if (newtype == Symbol.intern("cons")) {
+			ArcObject list = Nil.NIL;
+			for (int i=string.length()-1; i>=0; i--)
+				list = new Cons(Rune.get(string.codePointAt(i)), list);
+			return(list);
+		}
+
         return super.coerce(newtype, extra);
     }
 }
