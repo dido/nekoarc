@@ -75,6 +75,8 @@ public class Table extends ArcObject implements Iterable<ArcObject> {
 
     @Override
     public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+        if (newtype == Symbol.intern("string"))
+            return(new AString(this.toString()));
         return super.coerce(newtype, extra);
     }
 }
