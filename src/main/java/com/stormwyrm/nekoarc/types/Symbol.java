@@ -10,7 +10,7 @@ import com.stormwyrm.nekoarc.util.MurmurHash;
 public class Symbol extends Atom
 {
 	public final String symbol;
-	private static final LongMap<WeakReference<Symbol>> symtable = new LongMap<WeakReference<Symbol>>();
+	private static final LongMap<WeakReference<Symbol>> symtable = new LongMap<>();
 	public static final ArcObject TYPE = Symbol.intern("sym");
 
 	private Symbol(String s)
@@ -46,7 +46,7 @@ public class Symbol extends Atom
 				return(sym);
 		}
 		sym = new Symbol(s);
-		symtable.put(hc, new WeakReference<Symbol>(sym));
+		symtable.put(hc, new WeakReference<>(sym));
 		return(sym);
 	}
 
@@ -60,5 +60,14 @@ public class Symbol extends Atom
 	public String toString()
 	{
 		return(this.symbol);
+	}
+
+	@Override
+	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+		if (newtype == Symbol.intern("sym"))
+			return(this);
+		if (newtype == Symbol.intern("string"))
+			return(new AString(this.toString()));
+		return(super.coerce(newtype, extra));
 	}
 }
