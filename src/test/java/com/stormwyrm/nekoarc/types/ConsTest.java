@@ -72,4 +72,23 @@ public class ConsTest {
         assertEquals(1, ((Fixnum)c1.nth(0).car()).fixnum);
         assertEquals(2, ((Fixnum)c1.nth(1).car()).fixnum);
     }
+
+    @Test
+    public void testCoerce() {
+        Cons c = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), new Cons(Fixnum.get(3), Nil.NIL)));
+        ArcObject result;
+
+        result = c.coerce(Symbol.intern("cons"), Nil.NIL);
+        assertEquals("cons", result.type().toString());
+        assertEquals(c, result);
+
+        result = c.coerce(Symbol.intern("string"), Nil.NIL);
+        assertEquals("string", result.type().toString());
+        assertEquals("123", result.toString());
+
+        result = c.coerce(Symbol.intern("vector"), Nil.NIL);
+        assertEquals("vector", result.type().toString());
+        assertTrue((new Vector(Fixnum.get(1), Fixnum.get(2), Fixnum.get(3))).iso(result));
+
+    }
 }
