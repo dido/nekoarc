@@ -1,5 +1,6 @@
 package com.stormwyrm.nekoarc;
 
+import com.stormwyrm.nekoarc.types.AString;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Cons;
 import com.stormwyrm.nekoarc.types.Symbol;
@@ -35,5 +36,16 @@ public class Nil extends Cons
 	@Override
 	public boolean iso(ArcObject object) {
 		return(is(object));
+	}
+
+	@Override
+	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+		if (newtype == Symbol.intern("cons"))
+			return(this);
+
+		if (newtype == Symbol.intern("string"))
+			return(new AString(""));
+
+		return(super.coerce(newtype, extra));
 	}
 }
