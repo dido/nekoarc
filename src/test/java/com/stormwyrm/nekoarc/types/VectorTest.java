@@ -30,4 +30,21 @@ public class VectorTest {
             assertEquals(i, Fixnum.cast(iter.next(), Nil.NIL).fixnum);
         assertFalse(iter.hasNext());
     }
+
+    @Test
+    public void testCoerce() {
+        Vector v = new Vector(Fixnum.get(1), Fixnum.get(2), Fixnum.get(3));
+        ArcObject result;
+
+        result = v.coerce(Symbol.intern("vector"), Nil.NIL);
+        assertEquals(v, result);
+
+        result = v.coerce(Symbol.intern("cons"), Nil.NIL);
+        assertEquals("cons", result.type().toString());
+        assertTrue((new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), new Cons(Fixnum.get(3), Nil.NIL)))).iso(result));
+
+        result = v.coerce(Symbol.intern("string"), Nil.NIL);
+        assertEquals("string", result.type().toString());
+        assertEquals("123", result.toString());
+    }
 }
