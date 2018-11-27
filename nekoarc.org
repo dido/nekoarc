@@ -167,7 +167,7 @@ notice and this notice are preserved.
    functions, so as to make their use cheaper.
    - [X] Initialization for binding runtime primitives to global symbols
    - [-] Type handling [4/5]
-     - [-] coerce [3/8]
+     - [-] coerce [4/8]
        - [X] Fixnum conversions [4/4]
 	 - [X] fixnum (trivial)
          - [X] flonum
@@ -181,13 +181,13 @@ notice and this notice are preserved.
          - [X] rune (trivial)
 	 - [X] fixnum
 	 - [X] string
-       - [-] String conversions [2/6]
+       - [X] String conversions [6/6]
          - [X] string (trivial)
 	 - [X] fixnum (only if string is an integer)
-         - [ ] flonum (only if string can be parsed to a flonum)
-	 - [ ] symbol (same as intern)
-	 - [ ] cons (converted into a list of characters)
-         - [ ] vector (converted into a vector of characters)
+         - [X] flonum (only if string can be parsed to a flonum)
+	 - [X] symbol (same as intern)
+	 - [X] cons (converted into a list of characters)
+         - [X] vector (converted into a vector of characters)
        - [ ] Symbol conversions [0/2]
          - [ ] symbol -> symbol (trivial)
          - [ ] string
