@@ -2,6 +2,7 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
+import com.stormwyrm.nekoarc.Nil;
 
 import java.util.Iterator;
 
@@ -108,5 +109,23 @@ public class Vector extends ArcObject implements Iterable<ArcObject>
 				return(Vector.this.index(idx++));
 			}
 		});
+	}
+
+	@Override
+	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+		if (newtype == Symbol.intern("cons")) {
+			ArcObject list = Nil.NIL;
+			for (int i=vec.length-1; i>=0; i--)
+				list = new Cons(vec[i], list);
+			return(list);
+		}
+
+		if (newtype == Symbol.intern("string")) {
+			ArcObject str = new AString("");
+			for (ArcObject obj : this)
+				str = str.add(obj.coerce(newtype, extra));
+			return(str);
+		}
+		return(super.coerce(newtype, extra));
 	}
 }
