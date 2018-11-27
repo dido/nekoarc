@@ -251,6 +251,8 @@ public abstract class ArcObject implements Callable
      * @return coerced object of new type if coercion is valid
      */
 	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
+		if (newtype.is(this.type()))
+			return(this);
 		throw new NekoArcException("Cannot coerce " + this + " to " + newtype);
 	}
 }
