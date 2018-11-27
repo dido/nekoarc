@@ -7,7 +7,7 @@ notice and this notice are preserved.
 ----------------------------------------------------------------------
 
 * The Arc Runtime
-** TODO base virtual machine [8/8]
+** DONE base virtual machine [8/8]
     - [X] Define virtual machine architecture
     - [X] Design interpreter core
     - [X] Build code generation infrastructure
@@ -151,16 +151,14 @@ notice and this notice are preserved.
     - [X] Functions
     - [-] Input Ports [1/2]
       - [X] instring
-      - [ ] File ports
+      - [ ] infile
     - [ ] Output Ports [0/2]
       - [ ] outstring
       - [ ] File ports
     - [ ] Threads
     - [ ] Exceptions
     - [ ] Channels
-    - [ ] Regular Expressions
     - [ ] Code
-    - [ ] Weak references
     - [ ] Objects
 ** TODO Runtime Built-In Functions [6/19]
    Consider whether or not to provide instructions for the asterisked
@@ -326,12 +324,12 @@ notice and this notice are preserved.
        - [ ] infile
        - [ ] outfile
        - [ ] close
-     - [ ] String port I/O [0/3]
+     - [-] String port I/O [1/3]
 	   Note that doing readb/writeb or readc/writec on a string
 	   port have the same effect.  Strings are made up of Unicode
 	   characters so it would be quite messy to implement a
 	   separate 'byte index' into what is made up of characters.
-       - [ ] instring
+       - [X] instring
        - [ ] outstring
        - [ ] inside
      - [ ] Seeking / telling [0/2]
