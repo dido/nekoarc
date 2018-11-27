@@ -15,6 +15,11 @@ public class Vector extends ArcObject implements Iterable<ArcObject>
 		vec = new ArcObject[length];
 	}
 
+	public Vector(ArcObject... data) {
+		this(data.length);
+		System.arraycopy(data, 0, vec, 0, data.length);
+	}
+
 	public ArcObject index(int i)
 	{
 		return(vec[i]);
