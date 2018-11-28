@@ -35,6 +35,8 @@ public class InString extends InputPort {
 
     @Override
     public int readb() {
+        // For closed checks
+        super.readb();
         // Note this will still return the Unicode code points. Reference Arc returns UTF-8 bytes!
         if (ptr >= str.length())
             return(-1);
@@ -43,7 +45,7 @@ public class InString extends InputPort {
 
     @Override
     public ArcObject readc() {
-        // call super for ungetrune handling
+        // call super for ungetrune and closed check handling
         ArcObject r = super.readc();
         if (!Nil.NIL.is(r))
             return(r);
