@@ -17,27 +17,20 @@
  */
 package com.stormwyrm.nekoarc.types;
 
+import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 
-public abstract class InputPort extends ArcObject {
+public abstract class InputPort extends IOPort {
     public static final ArcObject TYPE = Symbol.intern("input");
     private ArcObject ungetrune = Nil.NIL;
-    private final String name;
 
     /**
      * Create an input port with the given name
+     *
      * @param name the name (path) of the file
      */
     InputPort(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Get the name of the file
-     * @return the name of the file
-     */
-    public String getName() {
-        return(name);
+        super(name);
     }
 
     /**
@@ -53,13 +46,19 @@ public abstract class InputPort extends ArcObject {
      * Read a byte from the input port
      * @return a byte from the input port as an int or -1 if we are at end of file.
      */
-    public abstract int readb();
+    public int readb() {
+        if (closedp())
+            throw new NekoArcException("readb: input port is closed");
+        return(-1);
+    }
 
     /**
      * Read a rune from the input port
      * @return a rune from the input port or nil if we are at end of file
      */
     public ArcObject readc() {
+        if (closedp())
+            throw new NekoArcException("readc: input port is closed");
         if (!Nil.NIL.is(ungetrune)) {
             ArcObject ug = ungetrune;
             ungetrune = Nil.NIL;
@@ -74,6 +73,9 @@ public abstract class InputPort extends ArcObject {
      * @return the rune r
      */
     public ArcObject ungetc(Rune r) {
+        if (closedp())
+            throw new NekoArcException("ungetc: input port is closed");
+
         return(ungetrune = r);
     }
 
@@ -82,14 +84,20 @@ public abstract class InputPort extends ArcObject {
      * @return the next rune, or nil if we are at end of file
      */
     public ArcObject peekc() {
+        if (closedp())
+            throw new NekoArcException("peekc: input port is closed");
         ArcObject r = readc();
         if (!Nil.NIL.is(r))
             ungetc((Rune)r);
         return(r);
     }
 
+    /**
+     * Return a string version of the input port, including the name.
+     * @return string version of the input port
+     */
     @Override
     public String toString() {
-        return("#<input-port:" + name + ">");
+        return("#<input-port:" + getName() + ">");
     }
 }
