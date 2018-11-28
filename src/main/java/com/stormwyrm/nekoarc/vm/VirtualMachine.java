@@ -763,10 +763,11 @@ public class VirtualMachine implements Callable
 		defbuiltin(SRef.getInstance());
 		defbuiltin(Bound.getInstance());
 
-		// I/O
-		defbuiltin(Readb.getInstance());
-		defbuiltin(Readc.getInstance());
-		defbuiltin(Ungetc.getInstance());
+		// Basic I/O primitives
+		defbuiltin(ReadB.getInstance());
+		defbuiltin(ReadC.getInstance());
+		defbuiltin(UngetC.getInstance());
+		defbuiltin(PeekC.getInstance());
 		defbuiltin(FInString.getInstance());
 	}
 
