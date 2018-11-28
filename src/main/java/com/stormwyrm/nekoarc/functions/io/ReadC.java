@@ -6,14 +6,14 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.InputPort;
 import com.stormwyrm.nekoarc.types.Symbol;
 
-public class Readc extends Builtin {
-    private static final Readc INSTANCE = new Readc();
+public class ReadC extends Builtin {
+    private static final ReadC INSTANCE = new ReadC();
 
     public static Builtin getInstance() {
         return(INSTANCE);
     }
 
-    private Readc() {
+    private ReadC() {
         super("readc", 0, 0, 0, true);
     }
 

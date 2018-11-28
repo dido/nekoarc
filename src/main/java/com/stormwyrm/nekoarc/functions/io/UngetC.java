@@ -7,14 +7,14 @@ import com.stormwyrm.nekoarc.types.InputPort;
 import com.stormwyrm.nekoarc.types.Rune;
 import com.stormwyrm.nekoarc.types.Symbol;
 
-public class Ungetc extends Builtin {
-    private static final Ungetc INSTANCE = new Ungetc();
+public class UngetC extends Builtin {
+    private static final UngetC INSTANCE = new UngetC();
 
     public static Builtin getInstance() {
         return(INSTANCE);
     }
 
-    private Ungetc() {
+    private UngetC() {
         super("ungetc", 1, 0, 0, true);
     }
 
