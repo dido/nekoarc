@@ -21,6 +21,24 @@ package com.stormwyrm.nekoarc.types;
  * IOPort: Abstract base class for all I/O ports.
  */
 public abstract class IOPort extends ArcObject {
+    private final String name;
+
+    /**
+     * Create an input port with the given name
+     * @param name the name (path) of the file
+     */
+    IOPort(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Get the name of the file
+     * @return the name of the file
+     */
+    String getName() {
+        return(name);
+    }
+
     /**
      * Is the I/O port closed?
      */
