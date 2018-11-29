@@ -35,13 +35,16 @@ public abstract class OutputPort extends IOPort {
     }
 
     /**
-     * Write a character to the output port
+     * Write a rune (character) to the output port
      * @param r the rune to write
      * @return the rune written
      */
     public ArcObject writec(Rune r) {
         if (closedp())
             throw new NekoArcException("writec: output port is closed");
+        byte[] charbytes = String.format("%c", r.rune).getBytes();
+        for (byte b : charbytes)
+            writeb(b);
         return(r);
     }
 
