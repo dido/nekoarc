@@ -59,15 +59,11 @@ public abstract class InputPort extends IOPort {
             Bit3    = 4,
             Bit4    = 3,
             Bit5    = 2,			            /* Added for RFC 2279 compliance */
-            Bit6    = 1,			            /* Added for RFC 2279 compliance */
-            Bit7    = 0,
             Tx	    = ((1<<(Bitx+1))-1) ^ 0xFF, /* 1000 0000 */
             T2	    = ((1<<(Bit2+1))-1) ^ 0xFF, /* 1100 0000 */
             T3	    = ((1<<(Bit3+1))-1) ^ 0xFF, /* 1110 0000 */
             T4	    = ((1<<(Bit4+1))-1) ^ 0xFF, /* 1111 0000 */
-            T5      = ((1<<(Bit5+1))-1) ^ 0xFF, /* 1111 1000 */
-            T6      = ((1<<(Bit6+1))-1) ^ 0xFF, /* 1111 1100 */
-            T7      = ((1<<(Bit7+1))-1) ^ 0xFF; /* 1111 1110 -- invalid */
+            T5      = ((1<<(Bit5+1))-1) ^ 0xFF; /* 1111 1000 */
 
     /**
      * Read a rune from the input port
@@ -98,15 +94,9 @@ public abstract class InputPort extends IOPort {
             // Four-character sequence: 0x00010000- 0x001FFFFF => T4 Tx Tx Tx
         } else if (c < T5 && c >= T4) {
             nbytes = 4;
-            // Five-character sequence: 00200000-03FFFFFF, T5 Tx Tx Tx Tx
-        } else if (c < T6 && c >= T5) {
-            nbytes = 5;
-            // Six-character sequence 04000000-7FFFFFFF, T6 Tx Tx Tx Tx Tx
-        } else if (c < T7) {
-            nbytes = 6;
-            // Invalid sequence!
+            // invalid non-Unicode sequence
         } else {
-            return (Rune.get(0x80));
+            return (Rune.get(0xfffd));
         }
         byte[] utfbytes = new byte[nbytes];
         utfbytes[0] = (byte)c;
