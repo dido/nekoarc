@@ -28,20 +28,6 @@ public class OutString extends OutputPort {
     }
 
     /**
-     * Write a Unicode rune to the string
-     * @param r the rune to write
-     * @return the rune written
-     */
-    @Override
-    public ArcObject writec(Rune r) {
-        super.writec(r);
-        byte[] charbytes = String.format("%c", r.rune).getBytes();
-        for (byte b : charbytes)
-            outstr.write(b);
-        return(r);
-    }
-
-    /**
      * Get the string inside the outstring.
      * @return the string inside it
      */
