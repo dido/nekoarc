@@ -27,8 +27,12 @@ public class InString extends InputPort {
     }
 
     public InString(String s, String name) {
+        this(s.getBytes(), name);
+    }
+
+    public InString(byte[] b, String name) {
         super(name);
-        this.str = new ByteArrayInputStream(s.getBytes());
+        this.str = new ByteArrayInputStream(b);
     }
 
     @Override
