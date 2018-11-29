@@ -52,6 +52,23 @@ public abstract class InputPort extends IOPort {
         return(-1);
     }
 
+    /* UTF-8 decoding constants */
+    private static final int
+            Bitx    = 6,
+            Bit2    = 5,
+            Bit3    = 4,
+            Bit4    = 3,
+            Bit5    = 2,			            /* Added for RFC 2279 compliance */
+            Bit6    = 1,			            /* Added for RFC 2279 compliance */
+            Bit7    = 0,
+            Tx	    = ((1<<(Bitx+1))-1) ^ 0xFF, /* 1000 0000 */
+            T2	    = ((1<<(Bit2+1))-1) ^ 0xFF, /* 1100 0000 */
+            T3	    = ((1<<(Bit3+1))-1) ^ 0xFF, /* 1110 0000 */
+            T4	    = ((1<<(Bit4+1))-1) ^ 0xFF, /* 1111 0000 */
+            T5      = ((1<<(Bit5+1))-1) ^ 0xFF, /* 1111 1000 */
+            T6      = ((1<<(Bit6+1))-1) ^ 0xFF, /* 1111 1100 */
+            T7      = ((1<<(Bit7+1))-1) ^ 0xFF; /* 1111 1110 -- invalid */
+
     /**
      * Read a rune from the input port
      * @return a rune from the input port or nil if we are at end of file
@@ -64,7 +81,43 @@ public abstract class InputPort extends IOPort {
             ungetrune = Nil.NIL;
             return(ug);
         }
-        return(Nil.NIL);
+        int c = readb();
+        if (c < 0)
+            return(Nil.NIL);
+        // One-character sequence: 00000-0007F => T1
+        if (c < Tx)
+            return(Rune.get(c));
+
+        int nbytes;
+        // Two-character sequence: 0080-07FF => T2 Tx
+        if (c < T3 && c >= T2) {
+            nbytes = 2;
+            // Three-character sequence: 0x800-FFFF => T3 Tx Tx
+        } else if (c < T4 && c >= T3) {
+            nbytes = 3;
+            // Four-character sequence: 0x00010000- 0x001FFFFF => T4 Tx Tx Tx
+        } else if (c < T5 && c >= T4) {
+            nbytes = 4;
+            // Five-character sequence: 00200000-03FFFFFF, T5 Tx Tx Tx Tx
+        } else if (c < T6 && c >= T5) {
+            nbytes = 5;
+            // Six-character sequence 04000000-7FFFFFFF, T6 Tx Tx Tx Tx Tx
+        } else if (c < T7) {
+            nbytes = 6;
+            // Invalid sequence!
+        } else {
+            return (Rune.get(0x80));
+        }
+        byte[] utfbytes = new byte[nbytes];
+        utfbytes[0] = (byte)c;
+        nbytes--;
+        for (int i=0; i<nbytes; i++) {
+            int ch = readb();
+            if (ch < 0)
+                break;
+            utfbytes[i + 1] = (byte) (ch & 0xff);
+        }
+        return(Rune.get((new String(utfbytes)).codePointAt(0)));
     }
 
     /**
@@ -75,7 +128,6 @@ public abstract class InputPort extends IOPort {
     public ArcObject ungetc(Rune r) {
         if (closedp())
             throw new NekoArcException("ungetc: input port is closed");
-
         return(ungetrune = r);
     }
 
