@@ -66,4 +66,80 @@ public class InStringTest {
         assertTrue(Nil.NIL.is(obj));
     }
 
+    @Test
+    public void testInvalid() {
+        byte[] invalid = {
+                (byte) 0xc3, (byte) 0xb1,                // valid 2-octet
+                (byte) 0xc3, (byte) 0x28,               // invalid 2-octet
+                (byte) 0xa0,                            // invalid sequence identifier
+                (byte) 0xa1,                            // invalid sequence identifier
+                (byte) 0xe2, (byte) 0x82, (byte) 0xa1,  // valid 3-octet
+                (byte) 0xe2, 0x28, (byte) 0xa1,          // invalid 3-octet in 2nd octet
+                (byte) 0xe2, (byte)0x82, (byte)0x28,     // invalid 3-octet in 3rd octet
+                (byte) 0xf0, (byte)0x90, (byte)0x8c, (byte)0xbc,    // valid 4-octet
+                (byte) 0xf0, (byte)0x28, (byte)0x8c, (byte)0xbc,    // invalid 4-octet in 2nd octet
+                (byte) 0xf0, (byte)0x90, (byte)0x28, (byte)0xbc,    // invalid 4-octet in 3rd octet
+                (byte) 0xf0, (byte)0x90, (byte)0x8c, (byte)0x28,    // invalid 4-octet in 4th octet
+        };
+
+        InString ins = new InString(invalid, "");
+
+        ArcObject obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xf1, ((Rune)obj).rune);
+
+        // Invalid 2-octet
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xfffd, ((Rune)obj).rune);
+
+        // invalid sequence identifier
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xfffd, ((Rune)obj).rune);
+
+        // invalid sequence identifier
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xfffd, ((Rune)obj).rune);
+
+        // valid 3-octet
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0x20a1, ((Rune)obj).rune);
+
+        // invalid 3-octet in 2nd octet
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xfffd, ((Rune)obj).rune);
+
+        // invalid 3-octet in 3nd octet
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xfffd, ((Rune)obj).rune);
+
+        // valid 4-octet
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0x1033c, ((Rune)obj).rune);
+
+        // invalid 4-octet in 2nd octet
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xfffd, ((Rune)obj).rune);
+
+        // invalid 4-octet in 3rd octet
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xfffd, ((Rune)obj).rune);
+
+        // invalid 4-octet in 4th octet
+        obj = ins.readc();
+        assertTrue(obj instanceof Rune);
+        assertEquals(0xfffd, ((Rune)obj).rune);
+
+        // end of string
+        obj = ins.readc();
+        assertTrue(Nil.NIL.is(obj));
+    }
 }
