@@ -1,9 +1,31 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
 import java.util.Arrays;
 
+/**
+ * Code generator.
+ */
 public class CodeGen extends ArcObject {
     public static final ArcObject TYPE = Symbol.intern("code");
 
@@ -71,6 +93,18 @@ public class CodeGen extends ArcObject {
 
     public int setPos(int pos) {
         return(this.pos = pos);
+    }
+
+    /**
+     * Patch a relative branch instruction (CONT, JMP, JT, JF, etc.)
+     * @param brpos Position of branch instruction
+     * @param dest Intended target of branch instruction
+     * @return calculated branch offset
+     */
+    public int patchRelativeBranch(int brpos, int dest)  {
+        int newval = dest - (brpos + 5);
+        setAtPos(brpos+1, newval);
+        return(newval);
     }
 
     public int literal(ArcObject lit) {
