@@ -15,161 +15,161 @@ public class ArcThreadTest
 	public void testInstArg()
 	{
 		byte[] data = {0x01, 0x00, 0x00, 0x00};
-		ArcThread vm = new ArcThread(1024);
+		ArcThread thr = new ArcThread(1024);
 
-		vm.load(data);
-		vm.setIP(0);
-		assertEquals(1, vm.instArg());
+		thr.load(data);
+		thr.setIP(0);
+		assertEquals(1, thr.instArg());
 
 		byte[] data2 = {(byte) 0xff, 0x00, 0x00, 0x00};
-		vm.load(data2);
-        vm.setIP(0);
-		assertEquals(255, vm.instArg());
+		thr.load(data2);
+        thr.setIP(0);
+		assertEquals(255, thr.instArg());
 
 		byte[] data3 = {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
-		vm.load(data3);
-        vm.setIP(0);
-		assertEquals(-1, vm.instArg());
+		thr.load(data3);
+        thr.setIP(0);
+		assertEquals(-1, thr.instArg());
 
 		byte[] data4 = {(byte) 0x5d, (byte) 0xc3, (byte) 0x1f, (byte) 0x21};
-		vm.load(data4);
-        vm.setIP(0);
-		assertEquals(555729757, vm.instArg());
+		thr.load(data4);
+        thr.setIP(0);
+		assertEquals(555729757, thr.instArg());
 		
 		// two's complement negative
 		byte[] data5 = {(byte) 0xa3, (byte) 0x3c, (byte) 0xe0, (byte) 0xde};
-		vm.load(data5);
-        vm.setIP(0);
-		assertEquals(-555729757, vm.instArg());
+		thr.load(data5);
+        thr.setIP(0);
+		assertEquals(-555729757, thr.instArg());
 	}
 
 	@Test
 	public void testSmallInstArg()
 	{
 		byte[] data = {(byte) 0x12, (byte) 0xff};
-		ArcThread vm = new ArcThread(1024);
-		vm.load(data);
-        vm.setIP(0);
-		assertEquals(0x12, vm.smallInstArg());
-		assertEquals(-1, vm.smallInstArg());
+		ArcThread thr = new ArcThread(1024);
+		thr.load(data);
+        thr.setIP(0);
+		assertEquals(0x12, thr.smallInstArg());
+		assertEquals(-1, thr.smallInstArg());
 	}
 
 	@Test
 	public void testEnv() throws NekoArcException
 	{
-		ArcThread vm = new ArcThread(1024);
+		ArcThread thr = new ArcThread(1024);
 
 		try {
-			vm.getenv(0, 0);
+			thr.getenv(0, 0);
 			fail("exception not thrown");
 		} catch (NekoArcException e) {
 			assertEquals("environment depth exceeded", e.getMessage());
 		}
 
 		try {
-			vm.setenv(0, 0, Nil.NIL);
+			thr.setenv(0, 0, Nil.NIL);
 			fail("exception not thrown");
 		} catch (NekoArcException e) {
 			assertEquals("environment depth exceeded", e.getMessage());
 		}
 
-		vm.push(Fixnum.get(1));
-		vm.push(Fixnum.get(2));
-		vm.push(Fixnum.get(3));
-		vm.mkenv(3, 2);
+		thr.push(Fixnum.get(1));
+		thr.push(Fixnum.get(2));
+		thr.push(Fixnum.get(3));
+		thr.mkenv(3, 2);
 
-		vm.push(Fixnum.get(4));
-		vm.push(Fixnum.get(5));
-		vm.mkenv(2, 4);
+		thr.push(Fixnum.get(4));
+		thr.push(Fixnum.get(5));
+		thr.mkenv(2, 4);
 
-		vm.setenv(1, 3, Fixnum.get(6));
-		vm.setenv(0, 2, Fixnum.get(7));
+		thr.setenv(1, 3, Fixnum.get(6));
+		thr.setenv(0, 2, Fixnum.get(7));
 
-		assertEquals(1, ((Fixnum)vm.getenv(1, 0)).fixnum);
-		assertEquals(2, ((Fixnum)vm.getenv(1, 1)).fixnum);
-		assertEquals(3, ((Fixnum)vm.getenv(1, 2)).fixnum);
-		assertEquals(6, ((Fixnum)vm.getenv(1, 3)).fixnum);
-		assertTrue(vm.getenv(1, 4).is(Unbound.UNBOUND));
+		assertEquals(1, ((Fixnum)thr.getenv(1, 0)).fixnum);
+		assertEquals(2, ((Fixnum)thr.getenv(1, 1)).fixnum);
+		assertEquals(3, ((Fixnum)thr.getenv(1, 2)).fixnum);
+		assertEquals(6, ((Fixnum)thr.getenv(1, 3)).fixnum);
+		assertTrue(thr.getenv(1, 4).is(Unbound.UNBOUND));
 		
-		assertEquals(4, ((Fixnum)vm.getenv(0, 0)).fixnum);
-		assertEquals(5, ((Fixnum)vm.getenv(0, 1)).fixnum);
-		assertEquals(7, ((Fixnum)vm.getenv(0, 2)).fixnum);
-		assertTrue(vm.getenv(0, 3).is(Unbound.UNBOUND));
-		assertTrue(vm.getenv(0, 4).is(Unbound.UNBOUND));
-		assertTrue(vm.getenv(0, 5).is(Unbound.UNBOUND));
+		assertEquals(4, ((Fixnum)thr.getenv(0, 0)).fixnum);
+		assertEquals(5, ((Fixnum)thr.getenv(0, 1)).fixnum);
+		assertEquals(7, ((Fixnum)thr.getenv(0, 2)).fixnum);
+		assertTrue(thr.getenv(0, 3).is(Unbound.UNBOUND));
+		assertTrue(thr.getenv(0, 4).is(Unbound.UNBOUND));
+		assertTrue(thr.getenv(0, 5).is(Unbound.UNBOUND));
 	}
 
 	@Test
 	public void testmenv() throws NekoArcException
 	{
-		ArcThread vm = new ArcThread(1024);
+		ArcThread thr = new ArcThread(1024);
 
 		// New environment just as big as the old environment
-		vm.push(Fixnum.get(0));
-		vm.push(Fixnum.get(1));
-		vm.push(Fixnum.get(2));
-		assertEquals(3, vm.getSP());
+		thr.push(Fixnum.get(0));
+		thr.push(Fixnum.get(1));
+		thr.push(Fixnum.get(2));
+		assertEquals(3, thr.getSP());
 
-		vm.mkenv(3, 0);
-		assertEquals(6, vm.getSP());
-		assertEquals(0, ((Fixnum)vm.getenv(0, 0)).fixnum);
-		assertEquals(1, ((Fixnum)vm.getenv(0, 1)).fixnum);
-		assertEquals(2, ((Fixnum)vm.getenv(0, 2)).fixnum);
+		thr.mkenv(3, 0);
+		assertEquals(6, thr.getSP());
+		assertEquals(0, ((Fixnum)thr.getenv(0, 0)).fixnum);
+		assertEquals(1, ((Fixnum)thr.getenv(0, 1)).fixnum);
+		assertEquals(2, ((Fixnum)thr.getenv(0, 2)).fixnum);
 
-		vm.push(Fixnum.get(3));
-		vm.push(Fixnum.get(4));
-		vm.push(Fixnum.get(5));
-		vm.menv(3);
-		vm.mkenv(3, 0);
-		assertEquals(6, vm.getSP());
-		assertEquals(3, ((Fixnum)vm.getenv(0, 0)).fixnum);
-		assertEquals(4, ((Fixnum)vm.getenv(0, 1)).fixnum);
-		assertEquals(5, ((Fixnum)vm.getenv(0, 2)).fixnum);
+		thr.push(Fixnum.get(3));
+		thr.push(Fixnum.get(4));
+		thr.push(Fixnum.get(5));
+		thr.menv(3);
+		thr.mkenv(3, 0);
+		assertEquals(6, thr.getSP());
+		assertEquals(3, ((Fixnum)thr.getenv(0, 0)).fixnum);
+		assertEquals(4, ((Fixnum)thr.getenv(0, 1)).fixnum);
+		assertEquals(5, ((Fixnum)thr.getenv(0, 2)).fixnum);
 
 		// Reset environment and stack pointer
-		vm.setenvreg(Nil.NIL);
-		vm.setSP(0);
+		thr.setenvreg(Nil.NIL);
+		thr.setSP(0);
 
 		// New environment smaller than old environment
-		vm.push(Fixnum.get(0));
-		vm.push(Fixnum.get(1));
-		vm.push(Fixnum.get(2));
-		vm.mkenv(3, 0);
-		assertEquals(0, ((Fixnum)vm.getenv(0, 0)).fixnum);
-		assertEquals(1, ((Fixnum)vm.getenv(0, 1)).fixnum);
-		assertEquals(2, ((Fixnum)vm.getenv(0, 2)).fixnum);
+		thr.push(Fixnum.get(0));
+		thr.push(Fixnum.get(1));
+		thr.push(Fixnum.get(2));
+		thr.mkenv(3, 0);
+		assertEquals(0, ((Fixnum)thr.getenv(0, 0)).fixnum);
+		assertEquals(1, ((Fixnum)thr.getenv(0, 1)).fixnum);
+		assertEquals(2, ((Fixnum)thr.getenv(0, 2)).fixnum);
 
-		vm.push(Fixnum.get(6));
-		vm.push(Fixnum.get(7));
-		vm.menv(2);
-		vm.mkenv(2, 0);
-		assertEquals(5, vm.getSP());
-		assertEquals(6, ((Fixnum)vm.getenv(0, 0)).fixnum);
-		assertEquals(7, ((Fixnum)vm.getenv(0, 1)).fixnum);
+		thr.push(Fixnum.get(6));
+		thr.push(Fixnum.get(7));
+		thr.menv(2);
+		thr.mkenv(2, 0);
+		assertEquals(5, thr.getSP());
+		assertEquals(6, ((Fixnum)thr.getenv(0, 0)).fixnum);
+		assertEquals(7, ((Fixnum)thr.getenv(0, 1)).fixnum);
 
 		// Reset environment and stack pointer
-		vm.setenvreg(Nil.NIL);
-		vm.setSP(0);
+		thr.setenvreg(Nil.NIL);
+		thr.setSP(0);
 	
 		// New environment larger than old environment
-		vm.push(Fixnum.get(0));
-		vm.push(Fixnum.get(1));
-		vm.push(Fixnum.get(2));
-		vm.mkenv(3, 0);
-		assertEquals(0, ((Fixnum)vm.getenv(0, 0)).fixnum);
-		assertEquals(1, ((Fixnum)vm.getenv(0, 1)).fixnum);
-		assertEquals(2, ((Fixnum)vm.getenv(0, 2)).fixnum);
+		thr.push(Fixnum.get(0));
+		thr.push(Fixnum.get(1));
+		thr.push(Fixnum.get(2));
+		thr.mkenv(3, 0);
+		assertEquals(0, ((Fixnum)thr.getenv(0, 0)).fixnum);
+		assertEquals(1, ((Fixnum)thr.getenv(0, 1)).fixnum);
+		assertEquals(2, ((Fixnum)thr.getenv(0, 2)).fixnum);
 
-		vm.push(Fixnum.get(8));
-		vm.push(Fixnum.get(9));
-		vm.push(Fixnum.get(10));
-		vm.push(Fixnum.get(11));
-		vm.menv(4);
-		vm.mkenv(4, 0);
-		assertEquals(7, vm.getSP());
-		assertEquals(8, ((Fixnum)vm.getenv(0, 0)).fixnum);
-		assertEquals(9, ((Fixnum)vm.getenv(0, 1)).fixnum);
-		assertEquals(10, ((Fixnum)vm.getenv(0, 2)).fixnum);
-		assertEquals(11, ((Fixnum)vm.getenv(0, 3)).fixnum);
+		thr.push(Fixnum.get(8));
+		thr.push(Fixnum.get(9));
+		thr.push(Fixnum.get(10));
+		thr.push(Fixnum.get(11));
+		thr.menv(4);
+		thr.mkenv(4, 0);
+		assertEquals(7, thr.getSP());
+		assertEquals(8, ((Fixnum)thr.getenv(0, 0)).fixnum);
+		assertEquals(9, ((Fixnum)thr.getenv(0, 1)).fixnum);
+		assertEquals(10, ((Fixnum)thr.getenv(0, 2)).fixnum);
+		assertEquals(11, ((Fixnum)thr.getenv(0, 3)).fixnum);
 	}
 }
