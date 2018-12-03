@@ -769,6 +769,9 @@ public class VirtualMachine implements Callable
 		defbuiltin(UngetC.getInstance());
 		defbuiltin(PeekC.getInstance());
 		defbuiltin(FInString.getInstance());
+
+		// Error handling and continuations
+		defbuiltin(CCC.getInstance());
 	}
 
 	/**
