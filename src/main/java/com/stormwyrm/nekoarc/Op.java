@@ -18,7 +18,7 @@
 package com.stormwyrm.nekoarc;
 
 import com.stormwyrm.nekoarc.types.CodeGen;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 
 public enum Op {
    NOP(0x00),
@@ -77,13 +77,13 @@ public enum Op {
         return(cg.emit(opcode, args));
     }
 
-    public int emit(VirtualMachine vm, int... args) { return(emit(vm.cg, args)); }
+    public int emit(ArcThread vm, int... args) { return(emit(vm.cg, args)); }
 
     public int emits(CodeGen cg, int... args) {
         return(cg.emits(opcode, args));
     }
 
-    public int emits(VirtualMachine vm, int... args) {
+    public int emits(ArcThread vm, int... args) {
         return(emits(vm.cg, args));
     }
 }

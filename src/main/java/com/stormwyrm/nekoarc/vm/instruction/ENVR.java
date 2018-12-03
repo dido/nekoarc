@@ -5,12 +5,12 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Cons;
 import com.stormwyrm.nekoarc.vm.Instruction;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 
 public class ENVR implements Instruction
 {
 	@Override
-	public void invoke(VirtualMachine vm) throws NekoArcException
+	public void invoke(ArcThread vm) throws NekoArcException
 	{
 		int minenv, dsenv, optenv, i;
 		minenv = vm.smallInstArg() & 0xff;

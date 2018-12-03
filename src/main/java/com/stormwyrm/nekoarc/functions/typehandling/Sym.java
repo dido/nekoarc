@@ -25,7 +25,7 @@ public class Sym extends Builtin {
         if (obj instanceof AString)
             return(Symbol.intern(obj.toString()));
         if (obj instanceof Rune) {
-            int cp[] = new int[1];
+            int[] cp = new int[1];
 
             cp[0] = ((Rune) obj).rune;
             return (Symbol.intern(new String(cp, 0, 1)));

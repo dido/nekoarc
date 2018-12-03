@@ -6,7 +6,7 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Unbound;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class DCARtest
@@ -15,13 +15,13 @@ public class DCARtest
 	public void testBasic()
 	{
 		// ldi 2; push; ldi 1; cons; dcar; hlt
-		byte inst[] = { 0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+		byte[] inst = {0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x01,
 				0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x19,
 				0x26,
 				0x14};
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -35,8 +35,8 @@ public class DCARtest
 	public void testNil()
 	{
 		// nil; dcar; hlt
-		byte inst[] = { 0x13, 0x26, 0x14};
-		VirtualMachine vm = new VirtualMachine(1024);
+		byte[] inst = {0x13, 0x26, 0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
@@ -50,10 +50,10 @@ public class DCARtest
 	public void testUnbound()
 	{
 		// ldl 0; dcar; hlt
-		byte inst[] = { 0x43, 0x00, 0x00, 0x00, 0x00, 0x26, 0x14 };
-		ArcObject literals[] = new ArcObject[1];
+		byte[] inst = {0x43, 0x00, 0x00, 0x00, 0x00, 0x26, 0x14};
+		ArcObject[] literals = new ArcObject[1];
 		literals[0] = Unbound.UNBOUND;
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());

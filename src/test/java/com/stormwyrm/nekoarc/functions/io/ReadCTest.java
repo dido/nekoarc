@@ -1,7 +1,7 @@
 package com.stormwyrm.nekoarc.functions.io;
 
 import com.stormwyrm.nekoarc.types.*;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,7 +16,7 @@ public class ReadCTest {
                 0x4c, 0x01,                             // apply 1
                 0x0d                                    // ret
         };
-        VirtualMachine vm = new VirtualMachine(1024);
+        ArcThread vm = new ArcThread(1024);
         vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = Symbol.intern("readc");

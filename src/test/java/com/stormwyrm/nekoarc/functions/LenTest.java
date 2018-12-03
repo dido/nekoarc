@@ -2,7 +2,7 @@ package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.*;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 import com.stormwyrm.nekoarc.types.Cons;
 
@@ -13,15 +13,15 @@ public class LenTest {
     public void testString() {
         AString str = new AString("日本語");
         Builtin len = Len.getInstance();
-        byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
-                0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
-                0x01,									// push
-                0x43, 0x01, 0x00, 0x00, 0x00,			// ldl 1
-                0x4c, 0x01,								// apply 1
-                0x0d									// ret
+        byte[] inst = {(byte) 0xca, 0x00, 0x00, 0x00,    // env 0 0 0
+                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
+                0x01,                                    // push
+                0x43, 0x01, 0x00, 0x00, 0x00,            // ldl 1
+                0x4c, 0x01,                                // apply 1
+                0x0d                                    // ret
         };
-        VirtualMachine vm = new VirtualMachine(1024);
-        ArcObject literals[] = new ArcObject[2];
+        ArcThread vm = new ArcThread(1024);
+        ArcObject[] literals = new ArcObject[2];
         literals[0] = str;
         literals[1] = len;
         vm.load(inst, literals);
@@ -36,15 +36,15 @@ public class LenTest {
     public void testVector() {
         Vector vec = new Vector(5);
         Builtin len = Len.getInstance();
-        byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
-                0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
-                0x01,									// push
-                0x43, 0x01, 0x00, 0x00, 0x00,			// ldl 1
-                0x4c, 0x01,								// apply 1
-                0x0d									// ret
+        byte[] inst = {(byte) 0xca, 0x00, 0x00, 0x00,    // env 0 0 0
+                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
+                0x01,                                    // push
+                0x43, 0x01, 0x00, 0x00, 0x00,            // ldl 1
+                0x4c, 0x01,                                // apply 1
+                0x0d                                    // ret
         };
-        VirtualMachine vm = new VirtualMachine(1024);
-        ArcObject literals[] = new ArcObject[2];
+        ArcThread vm = new ArcThread(1024);
+        ArcObject[] literals = new ArcObject[2];
         literals[0] = vec;
         literals[1] = len;
         vm.load(inst, literals);
@@ -59,15 +59,15 @@ public class LenTest {
     public void testCons() {
         Cons cons = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), new Cons(Fixnum.get(3), new Cons(Fixnum.get(4), Nil.NIL))));
         Builtin len = Len.getInstance();
-        byte inst[] = {(byte)0xca, 0x00, 0x00, 0x00,	// env 0 0 0
-                0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
-                0x01,									// push
-                0x43, 0x01, 0x00, 0x00, 0x00,			// ldl 1
-                0x4c, 0x01,								// apply 1
-                0x0d									// ret
+        byte[] inst = {(byte) 0xca, 0x00, 0x00, 0x00,    // env 0 0 0
+                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
+                0x01,                                    // push
+                0x43, 0x01, 0x00, 0x00, 0x00,            // ldl 1
+                0x4c, 0x01,                                // apply 1
+                0x0d                                    // ret
         };
-        VirtualMachine vm = new VirtualMachine(1024);
-        ArcObject literals[] = new ArcObject[2];
+        ArcThread vm = new ArcThread(1024);
+        ArcObject[] literals = new ArcObject[2];
         literals[0] = cons;
         literals[1] = len;
         vm.load(inst, literals);

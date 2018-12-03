@@ -25,7 +25,7 @@ import com.stormwyrm.nekoarc.types.AString;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Flonum;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class ADDtest {
@@ -34,12 +34,12 @@ public class ADDtest {
 	public void testFixnumPlusFixnum() throws NekoArcException
 	{
 		// ldi 1; push; ldi 2; add; hlt
-		byte inst[] = { 0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x15,
-				0x14};
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x15,
+                0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -53,14 +53,14 @@ public class ADDtest {
 	public void testFixnumPlusFlonum() throws NekoArcException
 	{
 		// ldi 1; push; ldl 0; add; hlt
-		byte inst[] = { 0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x15,
-				0x14};
-		ArcObject literals[] = new ArcObject[1];
+        byte[] inst = {0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x15,
+                0x14};
+        ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Flonum(3.14);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -74,14 +74,14 @@ public class ADDtest {
 	public void testFlonumPlusFixnum() throws NekoArcException
 	{
 		// ldl 0; push; ldi 1; add; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, 
-				0x01,
-				0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x15,
-				0x14};
-		ArcObject literals[] = new ArcObject[1];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x15,
+                0x14};
+        ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Flonum(3.14);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -95,15 +95,15 @@ public class ADDtest {
 	public void testFlonumPlusFlonum() throws NekoArcException
 	{
 		// ldl 0; push; ldl 1; add; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, 
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x15,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x15,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = new Flonum(3.14);
 		literals[1] = new Flonum(2.71);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -117,15 +117,15 @@ public class ADDtest {
 	public void testStringPlusString() throws NekoArcException
 	{
 		// ldl 0; push; ldl 1; add; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, 
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x15,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x15,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = new AString("abc");
 		literals[1] = new AString("def");
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -139,14 +139,14 @@ public class ADDtest {
 	public void testStringPlusFixnum() throws NekoArcException
 	{
 		// ldl 0; push; ldi 1; add; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x15,
-				0x14};
-		ArcObject literals[] = new ArcObject[1];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x15,
+                0x14};
+        ArcObject[] literals = new ArcObject[1];
 		literals[0] = new AString("foo");
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -160,15 +160,15 @@ public class ADDtest {
 	public void testStringPlusFlonum() throws NekoArcException
 	{
 		// ldl 0; push; ldl 1; add; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x15,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x15,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = new AString("foo");
 		literals[1] = new Flonum(1.1);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());

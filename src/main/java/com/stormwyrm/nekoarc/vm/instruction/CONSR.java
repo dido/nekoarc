@@ -4,12 +4,12 @@ import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Cons;
 import com.stormwyrm.nekoarc.vm.Instruction;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 
 public class CONSR implements Instruction
 {
 	@Override
-	public void invoke(VirtualMachine vm) throws NekoArcException
+	public void invoke(ArcThread vm) throws NekoArcException
 	{
 		ArcObject arg1, arg2;
 		arg1 = vm.pop();

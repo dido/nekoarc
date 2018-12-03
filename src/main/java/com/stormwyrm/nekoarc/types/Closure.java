@@ -1,7 +1,6 @@
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.util.Callable;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
 public class Closure extends Cons
 {
@@ -14,7 +13,7 @@ public class Closure extends Cons
 
 	/** This is the only place where apply should be overridden */
 	@Override
-	public void apply(VirtualMachine vm, Callable caller)
+	public void apply(ArcThread vm, Callable caller)
 	{
 		ArcObject newenv, newip;
 		newenv = this.car();

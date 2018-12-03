@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class NILtest
@@ -13,8 +13,8 @@ public class NILtest
 	@Test
 	public void test() throws NekoArcException
 	{
-		byte inst[] = { 0x13, 0x14 };
-		VirtualMachine vm = new VirtualMachine(1024);
+		byte[] inst = {0x13, 0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());

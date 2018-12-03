@@ -19,7 +19,6 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Op;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -27,7 +26,7 @@ import static org.junit.Assert.*;
 public class AStringTest {
     @Test
     public void testApply() {
-        VirtualMachine vm = new VirtualMachine(1024);
+        ArcThread vm = new ArcThread(1024);
         vm.initSyms();
         Op.ENV.emits(vm, 0, 0, 0);
         Op.LDI.emit(vm, 1);
@@ -47,7 +46,7 @@ public class AStringTest {
 
     @Test
     public void testUnicodeApply() {
-        VirtualMachine vm = new VirtualMachine(1024);
+        ArcThread vm = new ArcThread(1024);
         vm.initSyms();
         Op.ENV.emits(vm, 0, 0, 0);
         Op.LDI.emit(vm, 0);

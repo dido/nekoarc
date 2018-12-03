@@ -1,42 +1,43 @@
-package com.stormwyrm.nekoarc.vm;
+package com.stormwyrm.nekoarc.types;
 
 import static org.junit.Assert.*;
 
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Unbound;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import org.junit.Test;
 
-public class VirtualMachineTest
+public class ArcThreadTest
 {	
 	@Test
 	public void testInstArg()
 	{
-		byte data[] = { 0x01, 0x00, 0x00, 0x00 };
-		VirtualMachine vm = new VirtualMachine(1024);
+		byte[] data = {0x01, 0x00, 0x00, 0x00};
+		ArcThread vm = new ArcThread(1024);
 
 		vm.load(data);
 		vm.setIP(0);
 		assertEquals(1, vm.instArg());
-		
-		byte data2[] = { (byte) 0xff, 0x00, 0x00, 0x00 };
+
+		byte[] data2 = {(byte) 0xff, 0x00, 0x00, 0x00};
 		vm.load(data2);
         vm.setIP(0);
 		assertEquals(255, vm.instArg());
 
-		byte data3[] = { (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff };
+		byte[] data3 = {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
 		vm.load(data3);
         vm.setIP(0);
 		assertEquals(-1, vm.instArg());
 
-		byte data4[] = { (byte) 0x5d, (byte) 0xc3, (byte) 0x1f, (byte) 0x21 };
+		byte[] data4 = {(byte) 0x5d, (byte) 0xc3, (byte) 0x1f, (byte) 0x21};
 		vm.load(data4);
         vm.setIP(0);
 		assertEquals(555729757, vm.instArg());
 		
 		// two's complement negative
-		byte data5[] = { (byte) 0xa3, (byte) 0x3c, (byte) 0xe0, (byte) 0xde };
+		byte[] data5 = {(byte) 0xa3, (byte) 0x3c, (byte) 0xe0, (byte) 0xde};
 		vm.load(data5);
         vm.setIP(0);
 		assertEquals(-555729757, vm.instArg());
@@ -45,8 +46,8 @@ public class VirtualMachineTest
 	@Test
 	public void testSmallInstArg()
 	{
-		byte data[] = { (byte) 0x12, (byte) 0xff };
-		VirtualMachine vm = new VirtualMachine(1024);
+		byte[] data = {(byte) 0x12, (byte) 0xff};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(data);
         vm.setIP(0);
 		assertEquals(0x12, vm.smallInstArg());
@@ -56,7 +57,7 @@ public class VirtualMachineTest
 	@Test
 	public void testEnv() throws NekoArcException
 	{
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 
 		try {
 			vm.getenv(0, 0);
@@ -101,7 +102,7 @@ public class VirtualMachineTest
 	@Test
 	public void testmenv() throws NekoArcException
 	{
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 
 		// New environment just as big as the old environment
 		vm.push(Fixnum.get(0));

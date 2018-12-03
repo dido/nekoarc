@@ -21,7 +21,7 @@ package com.stormwyrm.nekoarc.vm;
 import static org.junit.Assert.*;
 
 import com.stormwyrm.nekoarc.Op;
-import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Closure;
 import com.stormwyrm.nekoarc.Nil;
@@ -42,7 +42,7 @@ public class FibonacciTest
 	 */
 	@Test
 	public void test() {
-		VirtualMachine vm = new VirtualMachine(8);
+		ArcThread vm = new ArcThread(8);
 		vm.initSyms();
 
 		int codestart;
@@ -97,41 +97,41 @@ public class FibonacciTest
 		// env 1 0 0; lde0 0; push; ldi 0; is; jf xxx; ldi 1; ret; lde0 0; push ldi 1; is; jf xxx; ldi 1; ret;
 		// cont xxx; lde0 0; push; ldi 1; sub; push; ldl 0; apply 1; push;
 		// cont xxx; lde0 0; push; ldi 2; sub; push; ldl 0; apply 1; add; ret
-		byte inst[] = { (byte)0xca, 0x01, 0x00, 0x00,	// env 1 0 0
-				0x69, 0x00,								// lde0 0
-				0x01,									// push
-				0x44, 0x00, 0x00, 0x00, 0x00,			// ldi 0
-				0x1f,									// is
-				0x50, 0x06, 0x00, 0x00, 0x00,			// jf L1 (6)
-				0x44, 0x01, 0x00, 0x00, 0x00,			// ldi 1
-				0x0d,									// ret
-				0x69, 0x00,								// L1: lde0 0
-				0x01,									// push
-				0x44, 0x01, 0x00, 0x00, 0x00,			// ldi 1
-				0x1f,									// is
-				0x50, 0x06, 0x00, 0x00, 0x00,			// jf L2 (6)
-				0x44, 0x01, 0x00, 0x00, 0x00,			// ldi 1
-				0x0d,									// ret
-				(byte)0x89, 0x11, 0x00, 0x00, 0x00,		// L2: cont L3 (0x11)
-				0x69, 0x00,								// lde0 0
-				0x01,									// push
-				0x44, 0x01, 0x00, 0x00, 0x00,			// ldi 1
-				0x16,									// sub
-				0x01,									// push
-				0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
-				0x4c, 0x01,								// apply 1
-				0x01,									// L3: push
-				(byte)0x89, 0x11, 0x00, 0x00, 0x00,		// cont L4 (0x11)
-				0x69, 0x00,								// lde0 0
-				0x01,									// push
-				0x44, 0x02, 0x00, 0x00, 0x00,			// ldi 2
-				0x16,									// sub
-				0x01,									// push
-				0x43, 0x00, 0x00, 0x00, 0x00,			// ldl 0
-				0x4c, 0x01,								// apply 1
-				0x15,									// add
-				0x0d									// ret
-		};
+        byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00,    // env 1 0 0
+                0x69, 0x00,                                // lde0 0
+                0x01,                                    // push
+                0x44, 0x00, 0x00, 0x00, 0x00,            // ldi 0
+                0x1f,                                    // is
+                0x50, 0x06, 0x00, 0x00, 0x00,            // jf L1 (6)
+                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
+                0x0d,                                    // ret
+                0x69, 0x00,                                // L1: lde0 0
+                0x01,                                    // push
+                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
+                0x1f,                                    // is
+                0x50, 0x06, 0x00, 0x00, 0x00,            // jf L2 (6)
+                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
+                0x0d,                                    // ret
+                (byte) 0x89, 0x11, 0x00, 0x00, 0x00,        // L2: cont L3 (0x11)
+                0x69, 0x00,                                // lde0 0
+                0x01,                                    // push
+                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
+                0x16,                                    // sub
+                0x01,                                    // push
+                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
+                0x4c, 0x01,                                // apply 1
+                0x01,                                    // L3: push
+                (byte) 0x89, 0x11, 0x00, 0x00, 0x00,        // cont L4 (0x11)
+                0x69, 0x00,                                // lde0 0
+                0x01,                                    // push
+                0x44, 0x02, 0x00, 0x00, 0x00,            // ldi 2
+                0x16,                                    // sub
+                0x01,                                    // push
+                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
+                0x4c, 0x01,                                // apply 1
+                0x15,                                    // add
+                0x0d                                    // ret
+        };
 		assertEquals(inst.length, len);
 
 		for (int i=0; i<len; i++)

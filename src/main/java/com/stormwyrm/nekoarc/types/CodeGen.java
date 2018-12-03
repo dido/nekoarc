@@ -19,8 +19,6 @@
 
 package com.stormwyrm.nekoarc.types;
 
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
-
 import java.util.Arrays;
 
 /**
@@ -49,7 +47,7 @@ public class CodeGen extends ArcObject {
         return(tmppos);
     }
 
-    public void load(VirtualMachine vm) {
+    public void load(ArcThread vm) {
     //  if (geninst.length > pos)
     //       geninst = Arrays.copyOf(geninst, pos);
     //  if (genlits.length > litpos)

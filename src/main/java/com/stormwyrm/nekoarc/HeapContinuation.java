@@ -5,7 +5,7 @@ import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.types.Vector;
 import com.stormwyrm.nekoarc.util.Callable;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 
 public class HeapContinuation extends Vector implements Continuation
 {
@@ -22,11 +22,13 @@ public class HeapContinuation extends Vector implements Continuation
 		ipoffset = ip;
 	}
 
-	@Override
 	/**
-	 * Move heap continuation to stack for restoration.
+	 * Move continuation to stack for restoration
+	 * @param vm virtual machine thread
+	 * @param cc callable
 	 */
-	public void restore(VirtualMachine vm, Callable cc)
+	@Override
+	public void restore(ArcThread vm, Callable cc)
 	{
 		int svsize = (int)this.len();
 
@@ -48,7 +50,7 @@ public class HeapContinuation extends Vector implements Continuation
 		vm.restorecont();
 	}
 
-	public static ArcObject fromStackCont(VirtualMachine vm, ArcObject sc)
+	public static ArcObject fromStackCont(ArcThread vm, ArcObject sc)
 	{
 		return(fromStackCont(vm, sc, null));
 	}
@@ -63,7 +65,7 @@ public class HeapContinuation extends Vector implements Continuation
 	 * [cont-(5+n)] -> saved stack elements up to saved base pointer position
 	 * This function copies all of this relevant information to the a new HeapContinuation so it can later be restored
 	 */
-	public static ArcObject fromStackCont(VirtualMachine vm, ArcObject sc, int[] deepest)
+	public static ArcObject fromStackCont(ArcThread vm, ArcObject sc, int[] deepest)
 	{
 		if (sc instanceof HeapContinuation || sc.is(Nil.NIL))
 			return(sc);

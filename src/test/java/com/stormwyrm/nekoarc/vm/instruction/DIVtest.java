@@ -7,7 +7,7 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Flonum;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class DIVtest
@@ -16,12 +16,12 @@ public class DIVtest
 	public void testFixnumDivFixnum1() throws NekoArcException
 	{
 		// ldi 8; push; ldi 2; div; hlt
-		byte inst[] = { 0x44, (byte) 0x08, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+		byte[] inst = {0x44, (byte) 0x08, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x01,
 				0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x18,
 				0x14};
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -35,12 +35,12 @@ public class DIVtest
 	public void testFixnumDivFixnum2() throws NekoArcException
 	{
 		// ldi 2; push; ldi 8; div; hlt
-		byte inst[] = { 0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+		byte[] inst = {0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x01,
 				0x44, (byte) 0x08, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x18,
 				0x14};
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -54,14 +54,14 @@ public class DIVtest
 	public void testFlonumDivFixnum() throws NekoArcException
 	{
 		// ldl 0; push; ldi 2; div; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, 
+		byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x01,
 				0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x18,
 				0x14};
-		ArcObject literals[] = new ArcObject[1];
+		ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Flonum(3.14);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -75,15 +75,15 @@ public class DIVtest
 	public void testFlonumDivFlonum() throws NekoArcException
 	{
 		// ldl 0; push; ldl 1; div; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, 
+		byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x01,
 				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x18,
 				0x14};
-		ArcObject literals[] = new ArcObject[2];
+		ArcObject[] literals = new ArcObject[2];
 		literals[0] = new Flonum(3.14);
 		literals[1] = new Flonum(2.71);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());

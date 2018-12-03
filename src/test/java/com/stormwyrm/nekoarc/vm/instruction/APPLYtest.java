@@ -6,7 +6,7 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Cons;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class APPLYtest
@@ -15,15 +15,15 @@ public class APPLYtest
 	public void testCons()
 	{
 		// cont 13; ldi 2; push; ldl 0; apply 1; ret
-		byte inst[] = { (byte)0x89, 0x0d, 0x00, 0x00, 0x00,
-				0x44, 0x02, 0x00, 0x00, 0x00,
-				0x01,
-				0x43, 0x00, 0x00, 0x00, 0x00,
-				0x4c, 0x01,
-				0x0d };
-		ArcObject literals[] = new ArcObject[1];
+        byte[] inst = {(byte) 0x89, 0x0d, 0x00, 0x00, 0x00,
+                0x44, 0x02, 0x00, 0x00, 0x00,
+                0x01,
+                0x43, 0x00, 0x00, 0x00, 0x00,
+                0x4c, 0x01,
+                0x0d};
+        ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Cons(Fixnum.get(10), new Cons(Fixnum.get(11), new Cons(Fixnum.get(12), Nil.NIL)));
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -39,20 +39,20 @@ public class APPLYtest
 	{
 		// env 1 0 0; ldi 2; push; cls 3; apply 1; ret; env 1 0 0; lde0 0; push; lde 1 0; add; ret
 		// more or less the code that should be produced by compiling (fn (x) ((fn (y) (+ x y)) 2))
-		byte inst[] = { (byte)0xca, 0x01, 0x00, 0x00, 0x00,
-				0x44, 0x02, 0x00, 0x00, 0x00,
-				0x01,
-				0x4d, 0x03, 0x00, 0x00, 0x00,
-				0x4c, 0x01,
-				0x0d,
-				(byte)0xca, 0x01, 0x00, 0x00, 0x00,
-				(byte)0x69, 0x00,
-				0x01,
-				(byte)0x87, 0x01, 0x00,
-				0x15,
-				0x0d
-		};
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00, 0x00,
+                0x44, 0x02, 0x00, 0x00, 0x00,
+                0x01,
+                0x4d, 0x03, 0x00, 0x00, 0x00,
+                0x4c, 0x01,
+                0x0d,
+                (byte) 0xca, 0x01, 0x00, 0x00, 0x00,
+                (byte) 0x69, 0x00,
+                0x01,
+                (byte) 0x87, 0x01, 0x00,
+                0x15,
+                0x0d
+        };
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		vm.push(Fixnum.get(5));

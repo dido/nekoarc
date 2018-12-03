@@ -6,7 +6,7 @@ import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Symbol;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class LDLtest
@@ -15,10 +15,10 @@ public class LDLtest
 	public void test() throws NekoArcException
 	{
 		// ldl 0; hlt
-		byte inst[] = { 0x43, 0x00, 0x00, 0x00, 0x00, 0x14 };
-		ArcObject literals[] = new ArcObject[1];
+        byte[] inst = {0x43, 0x00, 0x00, 0x00, 0x00, 0x14};
+        ArcObject[] literals = new ArcObject[1];
 		literals[0] = Symbol.intern("foo");
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());

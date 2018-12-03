@@ -5,7 +5,7 @@ import com.stormwyrm.nekoarc.Op;
 import com.stormwyrm.nekoarc.types.Closure;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class CCCTest {
     @Test
     public void testCCCsimple() {
-        VirtualMachine vm = new VirtualMachine(1024);
+        ArcThread vm = new ArcThread(1024);
         vm.initSyms();
         // This is basically
         // (ccc (fn (esc) (esc 42) 21))

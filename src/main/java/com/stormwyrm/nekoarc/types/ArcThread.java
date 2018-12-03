@@ -16,7 +16,7 @@
     License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.stormwyrm.nekoarc.vm;
+package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.functions.*;
@@ -24,14 +24,15 @@ import com.stormwyrm.nekoarc.functions.arith.Add;
 import com.stormwyrm.nekoarc.functions.io.*;
 import com.stormwyrm.nekoarc.functions.list.*;
 import com.stormwyrm.nekoarc.functions.typehandling.*;
-import com.stormwyrm.nekoarc.types.*;
 import com.stormwyrm.nekoarc.util.CallSync;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.util.ObjectMap;
+import com.stormwyrm.nekoarc.vm.INVALID;
+import com.stormwyrm.nekoarc.vm.Instruction;
 import com.stormwyrm.nekoarc.vm.instruction.*;
 
-public class VirtualMachine implements Callable
-{
+public class ArcThread extends ArcObject implements Callable {
+	public final ArcObject TYPE = Symbol.intern("thread");
 	private int sp;					// stack pointer
 	private int bp;					// base pointer
 	private ArcObject env;			// environment pointer
@@ -308,7 +309,7 @@ public class VirtualMachine implements Callable
 
     private ObjectMap<Symbol, ArcObject> genv = new ObjectMap<>();
 
-	public VirtualMachine(int stacksize)
+	public ArcThread(int stacksize)
 	{
 		sp = bp = 0;
 		stack = new ArcObject[stacksize];
@@ -466,7 +467,7 @@ public class VirtualMachine implements Callable
 		return(sp);
 	}
 
-	void setSP(int sp)
+	public void setSP(int sp)
 	{
 		this.sp = sp;
 	}
@@ -711,6 +712,11 @@ public class VirtualMachine implements Callable
 	public void setCont(ArcObject cont)
 	{
 		this.cont = cont;
+	}
+
+	@Override
+	public ArcObject type() {
+		return(TYPE);
 	}
 
 	@Override

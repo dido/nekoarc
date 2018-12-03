@@ -6,7 +6,7 @@ import com.stormwyrm.nekoarc.HeapEnv;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.Closure;
 import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class CLStest
@@ -15,12 +15,12 @@ public class CLStest
 	public void test()
 	{
 		// env 1 0 0 cls 2; ret; ldi 1; ret
-		byte inst[] = { (byte)0xca, 0x01, 0x00, 0x00, 0x00,
-						0x4d, 0x02, 0x00, 0x00, 0x00,
-						0x0d,
-						0x44, 0x01, 0x00, 0x00, 0x00,
-						0x0d };
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00, 0x00,
+                0x4d, 0x02, 0x00, 0x00, 0x00,
+                0x0d,
+                0x44, 0x01, 0x00, 0x00, 0x00,
+                0x0d};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		vm.setargc(1);

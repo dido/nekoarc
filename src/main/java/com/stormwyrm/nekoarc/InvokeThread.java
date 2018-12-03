@@ -20,7 +20,7 @@ package com.stormwyrm.nekoarc;
 
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.util.Callable;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 
 /** The main reason this class exists is that Java is a weak-sauce language that doesn't have closures or true
  *  continuations. We have to emulate them using threads. */
@@ -28,9 +28,9 @@ public class InvokeThread extends Thread
 {
 	private final Callable caller;
 	private final ArcObject obj;
-	public final VirtualMachine vm;
+	public final ArcThread vm;
 
-	public InvokeThread(VirtualMachine v, Callable c, ArcObject o)
+	public InvokeThread(ArcThread v, Callable c, ArcObject o)
 	{
 		vm = v;
 		caller = c;

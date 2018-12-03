@@ -9,7 +9,7 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Flonum;
 import com.stormwyrm.nekoarc.types.Symbol;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class IStest
@@ -19,12 +19,12 @@ public class IStest
 	public void testSameFixnums()
 	{
 		// ldi 1234; push; ldi 1234; is; hlt
-		byte inst[] = { 0x44, (byte)0xd2, 0x04, 0x00, 0x00,
-				0x01,
-				0x44, (byte)0xd2, 0x04, 0x00, 0x00,
-				0x1f,
-				0x14 };
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {0x44, (byte) 0xd2, 0x04, 0x00, 0x00,
+                0x01,
+                0x44, (byte) 0xd2, 0x04, 0x00, 0x00,
+                0x1f,
+                0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -38,12 +38,12 @@ public class IStest
 	public void testDiffFixnums()
 	{
 		// ldi 1234; push; ldi 1235; is; hlt
-		byte inst[] = { 0x44, (byte)0xd2, 0x04, 0x00, 0x00,
-				0x01,
-				0x44, (byte)0xd3, 0x04, 0x00, 0x00,
-				0x1f,
-				0x14 };
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {0x44, (byte) 0xd2, 0x04, 0x00, 0x00,
+                0x01,
+                0x44, (byte) 0xd3, 0x04, 0x00, 0x00,
+                0x1f,
+                0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
@@ -57,14 +57,14 @@ public class IStest
 	public void testFixnumFlonum()
 	{
 		// ldi 1; push; ldl 0; is; hlt
-		byte inst[] = { 0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x1f,
-				0x14};
-		ArcObject literals[] = new ArcObject[1];
+        byte[] inst = {0x44, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x1f,
+                0x14};
+        ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Flonum(1.0);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
@@ -78,15 +78,15 @@ public class IStest
 	public void testSameFlonums()
 	{
 		// ldl 0; push; ldl 1; add; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x1f,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x1f,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = new Flonum(1.0);
 		literals[1] = new Flonum(1.0);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -100,15 +100,15 @@ public class IStest
 	public void testDiffFlonums()
 	{
 		// ldl 0; push; ldl 1; add; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x1f,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x1f,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = new Flonum(1.0);
 		literals[1] = new Flonum(2.0);
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
@@ -122,15 +122,15 @@ public class IStest
 	public void testSameSymbol()
 	{
 		// ldl 0; push; ldl 1; is; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x1f,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x1f,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = Symbol.intern("foo");
 		literals[1] = Symbol.intern("foo");
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
@@ -144,15 +144,15 @@ public class IStest
 	public void testDiffSymbol()
 	{
 		// ldl 0; push; ldl 1; add; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x1f,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x1f,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = Symbol.intern("foo");
 		literals[1] = Symbol.intern("bar");
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
@@ -166,15 +166,15 @@ public class IStest
 	public void testSameStrings()
 	{
 		// ldl 0; push; ldl 1; is; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x1f,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x1f,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = new AString("foo");
 		literals[1] = new AString("foo");
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());
@@ -188,15 +188,15 @@ public class IStest
 	public void testDiffStrings()
 	{
 		// ldl 0; push; ldl 1; is; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x1f,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x1f,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = new AString("foo");
 		literals[1] = new AString("bar");
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());
@@ -210,15 +210,15 @@ public class IStest
 	public void testNils()
 	{
 		// ldl 0; push; ldl 1; is; hlt
-		byte inst[] = { 0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x01,
-				0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-				0x1f,
-				0x14};
-		ArcObject literals[] = new ArcObject[2];
+        byte[] inst = {0x43, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x01,
+                0x43, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                0x1f,
+                0x14};
+        ArcObject[] literals = new ArcObject[2];
 		literals[0] = Nil.NIL;
 		literals[1] = Nil.EMPTY_LIST;
-		VirtualMachine vm = new VirtualMachine(1024);
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst, literals);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());

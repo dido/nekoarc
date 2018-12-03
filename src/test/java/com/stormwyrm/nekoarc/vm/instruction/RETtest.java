@@ -3,7 +3,7 @@ package com.stormwyrm.nekoarc.vm.instruction;
 import static org.junit.Assert.*;
 
 import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class RETtest
@@ -11,8 +11,8 @@ public class RETtest
 	@Test
 	public void testNoContinuation()
 	{
-		byte inst[] = { 0x0d };
-		VirtualMachine vm = new VirtualMachine(1024);
+		byte[] inst = { 0x0d };
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
@@ -26,8 +26,9 @@ public class RETtest
 	public void testContinuation()
 	{
 		// ret; hlt; nil; ldi 1; ret
-		byte inst[] = { 0x0d, 0x14, 0x13, 0x44, 0x01, 0x00, 0x00, 0x00, 0x14 };
-		VirtualMachine vm = new VirtualMachine(1024);
+		byte[] inst;
+		inst = new byte[]{ 0x0d, 0x14, 0x13, 0x44, 0x01, 0x00, 0x00, 0x00, 0x14 };
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		vm.makecont(3);

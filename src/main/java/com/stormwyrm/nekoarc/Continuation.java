@@ -1,9 +1,9 @@
 package com.stormwyrm.nekoarc;
 
 import com.stormwyrm.nekoarc.util.Callable;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 
 public interface Continuation
 {
-	public void restore(VirtualMachine vm, Callable caller);
+	void restore(ArcThread vm, Callable caller);
 }

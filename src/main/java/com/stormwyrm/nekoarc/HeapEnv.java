@@ -4,7 +4,7 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.types.Vector;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 
 /** Heap environment */
 public class HeapEnv extends Vector
@@ -33,14 +33,14 @@ public class HeapEnv extends Vector
 		return(setIndex(index, value));
 	}
 
-	public static ArcObject fromStackEnv(VirtualMachine vm, ArcObject sei)
+	public static ArcObject fromStackEnv(ArcThread vm, ArcObject sei)
 	{
 		return(fromStackEnv(vm, sei, null));
 	}
 
 	// Convert a stack-based environment si into a heap environment. Also affects any
 	// environments linked to it.
-	public static ArcObject fromStackEnv(VirtualMachine vm, ArcObject sei, int[] deepest)
+	public static ArcObject fromStackEnv(ArcThread vm, ArcObject sei, int[] deepest)
 	{
 		if (sei instanceof HeapEnv || sei.is(Nil.NIL))
 			return(sei);

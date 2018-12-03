@@ -22,7 +22,6 @@ import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.util.CallSync;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
 /**
  * The base class of all Arc Objects. Defines many basic methods.
@@ -168,7 +167,7 @@ public abstract class ArcObject implements Callable
 	 * @param vm The virtual machine applying the object
 	 * @param caller The function calling
 	 */
-	public void apply(VirtualMachine vm, Callable caller) {
+	public void apply(ArcThread vm, Callable caller) {
 		int minenv, dsenv, optenv;
 		minenv = requiredArgs();
 		dsenv = extraArgs();

@@ -9,7 +9,7 @@ import com.stormwyrm.nekoarc.Unbound;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Cons;
 import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
 
 public class ENVRtest
@@ -19,10 +19,10 @@ public class ENVRtest
 	public void testROR()
 	{
 		// envr 1 0 2; hlt
-		byte inst[] = {
-				(byte)0xcb, 0x01, 0x00, 0x02,
-				0x14 };
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {
+                (byte) 0xcb, 0x01, 0x00, 0x02,
+                0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setargc(6);
 		vm.setAcc(Nil.NIL);
@@ -52,10 +52,10 @@ public class ENVRtest
 	public void testRAO()
 	{
 		// envr 1 0 2; hlt
-		byte inst[] = {
-				(byte)0xcb, 0x01, 0x00, 0x02,
-				0x14 };
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {
+                (byte) 0xcb, 0x01, 0x00, 0x02,
+                0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
@@ -79,10 +79,10 @@ public class ENVRtest
 	public void testRSO()
 	{
 		// envr 1 0 2; hlt
-		byte inst[] = {
-				(byte)0xcb, 0x01, 0x00, 0x02,
-				0x14 };
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {
+                (byte) 0xcb, 0x01, 0x00, 0x02,
+                0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setargc(2);
 		vm.setAcc(Nil.NIL);
@@ -104,13 +104,13 @@ public class ENVRtest
 	public void testTooFewArgs()
 	{
 		// ldi 1; push; envr 3 1 1; hlt;
-		byte inst[] = { 0x44, 0x01, 0x00, 0x00, 0x00,
-						0x01,
-						0x44, 0x01, 0x00, 0x00, 0x00,
-						0x01,
-						(byte)0xcb, 0x03, 0x01, 0x01,
-						0x14 };
-		VirtualMachine vm = new VirtualMachine(1024);
+        byte[] inst = {0x44, 0x01, 0x00, 0x00, 0x00,
+                0x01,
+                0x44, 0x01, 0x00, 0x00, 0x00,
+                0x01,
+                (byte) 0xcb, 0x03, 0x01, 0x01,
+                0x14};
+		ArcThread vm = new ArcThread(1024);
 		vm.load(inst);
 		vm.setargc(1);
 		vm.setAcc(Nil.NIL);

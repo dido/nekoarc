@@ -5,7 +5,7 @@ import java.io.UnsupportedEncodingException;
 public class MurmurHash
 {
 	private static final String CHARSET = "UTF8";
-	private static byte tmpdata[] = new byte[8];
+    private static byte[] tmpdata = new byte[8];
 
 	static class State {
 		long h1;
@@ -63,7 +63,7 @@ public class MurmurHash
 
 	public static long getblock(byte[] data, int i)
 	{
-		return((((long) data[i + 0] & 0x00000000000000FFL) << 0)
+		return((((long) data[i] & 0x00000000000000FFL))
 				| (((long) data[i + 1] & 0x00000000000000FFL) << 8)
 				| (((long) data[i + 2] & 0x00000000000000FFL) << 16)
 				| (((long) data[i + 3] & 0x00000000000000FFL) << 24)
@@ -129,7 +129,7 @@ public class MurmurHash
 			case 12: state.k2 ^= (long) data[tail + 11] << 24;
 			case 11: state.k2 ^= (long) data[tail + 10] << 16;
 			case 10: state.k2 ^= (long) data[tail + 9] << 8;
-			case 9: state.k2 ^= (long) data[tail + 8] << 0;
+			case 9: state.k2 ^= (long) data[tail + 8];
 			state.k2 *= state.c2;
 			state.k2 = (state.k2 << 33) | (state.k2 >>> (64 - 33));
 			state.k2 *= state.c1;
@@ -141,7 +141,7 @@ public class MurmurHash
 			case 4: state.k1 ^= (long) data[tail + 3] << 24;
 			case 3: state.k1 ^= (long) data[tail + 2] << 16;
 			case 2: state.k1 ^= (long) data[tail + 1] << 8;
-			case 1: state.k1 ^= (long) data[tail + 0] << 0;
+			case 1: state.k1 ^= (long) data[tail];
 			state.k1 *= state.c1;
 			state.k1 = (state.k1 << 31) | (state.k1 >>> (64 - 31));
 			state.k1 *= state.c2;

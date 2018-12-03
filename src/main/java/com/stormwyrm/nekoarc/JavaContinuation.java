@@ -3,7 +3,7 @@ package com.stormwyrm.nekoarc;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.util.Callable;
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.types.ArcThread;
 
 public class JavaContinuation extends ArcObject implements Continuation
 {
@@ -13,7 +13,7 @@ public class JavaContinuation extends ArcObject implements Continuation
 	private final Callable caller;
 	private final ArcObject env;
 
-	public JavaContinuation(VirtualMachine vm, Callable c)
+	public JavaContinuation(ArcThread vm, Callable c)
 	{
 		prev = vm.getCont();
 		caller = c;
@@ -21,7 +21,7 @@ public class JavaContinuation extends ArcObject implements Continuation
 	}
 
 	@Override
-	public void restore(VirtualMachine vm, Callable cc)
+	public void restore(ArcThread vm, Callable cc)
 	{
 		vm.setCont(prev);
 		vm.setenvreg(env);
