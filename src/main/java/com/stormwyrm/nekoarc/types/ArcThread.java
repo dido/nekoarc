@@ -20,19 +20,16 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.functions.*;
-import com.stormwyrm.nekoarc.functions.arith.Add;
-import com.stormwyrm.nekoarc.functions.io.*;
-import com.stormwyrm.nekoarc.functions.list.*;
-import com.stormwyrm.nekoarc.functions.typehandling.*;
 import com.stormwyrm.nekoarc.util.CallSync;
 import com.stormwyrm.nekoarc.util.Callable;
-import com.stormwyrm.nekoarc.util.ObjectMap;
 import com.stormwyrm.nekoarc.vm.INVALID;
 import com.stormwyrm.nekoarc.vm.Instruction;
+import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import com.stormwyrm.nekoarc.vm.instruction.*;
 
 public class ArcThread extends ArcObject implements Callable {
 	public final ArcObject TYPE = Symbol.intern("thread");
+	public final VirtualMachine vm = new VirtualMachine();
 	private int sp;					// stack pointer
 	private int bp;					// base pointer
 	private ArcObject env;			// environment pointer
@@ -303,38 +300,28 @@ public class ArcThread extends ArcObject implements Callable {
 		NOINST,
 	};
 
-	public final CodeGen cg;
-    private byte[] code;
-    private ArcObject[] literals;
-
-    private ObjectMap<Symbol, ArcObject> genv = new ObjectMap<>();
-
-	public ArcThread(int stacksize)
-	{
+	public ArcThread(int stacksize) {
 		sp = bp = 0;
 		stack = new ArcObject[stacksize];
 		ip = 0;
-		code = null;
 		runnable = true;
 		env = Nil.NIL;
 		cont = Nil.NIL;
 		setAcc(Nil.NIL);
 		caller = new CallSync();
-		cg = new CodeGen();
 	}
 
 	public void load() {
-	    cg.load(this);
-    }
+		vm.load();
+	}
 
 	public void load(final byte[] instructions, final ArcObject[] literals) {
-		this.code = instructions;
-		this.literals = literals;
+		vm.load(instructions, literals);
 	}
 
 	public void load(final byte[] instructions)
 	{
-		load(instructions, null);
+		vm.load(instructions);
 	}
 
 	public void halt()
@@ -404,7 +391,7 @@ public class ArcThread extends ArcObject implements Callable {
 		throws NekoArcException
 	{
 		while (runnable) {
-			jmptbl[(int)code[ip++] & 0xff].invoke(this);
+			jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
 		}
 	}
 
@@ -414,7 +401,7 @@ public class ArcThread extends ArcObject implements Callable {
 		long val = 0;
 		int data;
 		for (int i=0; i<4; i++) {
-			data = (((int)code[ip++]) & 0xff);
+			data = (((int) vm.code()[ip++]) & 0xff);
 			val |= data << i*8;
 		}
 		return((int)((val << 1) >> 1));
@@ -423,7 +410,7 @@ public class ArcThread extends ArcObject implements Callable {
 	// one-byte instruction arguments (LDE/STE/ENV, etc.)
 	public byte smallInstArg()
 	{
-		return(code[ip++]);
+		return(vm.code()[ip++]);
 	}
 
 	public ArcObject getAcc()
@@ -449,7 +436,7 @@ public class ArcThread extends ArcObject implements Callable {
 
 	public ArcObject literal(int offset)
 	{
-		return(literals[offset]);
+		return vm.literal(offset);
 	}
 
 	public int getIP()
@@ -475,21 +462,17 @@ public class ArcThread extends ArcObject implements Callable {
 	// add or replace a global binding
 	public ArcObject bind(Symbol sym, ArcObject binding)
 	{
-		genv.put(sym, binding);
-		return(binding);
+		return vm.bind(sym, binding);
 	}
 
 	public ArcObject defbuiltin(Builtin builtin)
     {
-        bind((Symbol)Symbol.intern(builtin.getName()), builtin);
-        return(builtin);
-    }
+		return vm.defbuiltin(builtin);
+	}
 
 	public ArcObject value(Symbol sym)
 	{
-		if (!genv.containsKey(sym))
-			throw new NekoArcException("Unbound symbol " + sym);
-		return(genv.get(sym));
+		return vm.value(sym);
 	}
 
 	public int argc()
@@ -725,61 +708,6 @@ public class ArcThread extends ArcObject implements Callable {
 		return(caller);
 	}
 
-	public void initSyms()
-    {
-
-    	// Type handling (5/5)
-		defbuiltin(Type.getInstance());
-		defbuiltin(Annotate.getInstance());
-		defbuiltin(Rep.getInstance());
-		defbuiltin(Sym.getInstance());
-        defbuiltin(Coerce.getInstance());
-
-        // Predicates
-        defbuiltin(LessThan.getInstance());
-        defbuiltin(GreaterThan.getInstance());
-		defbuiltin(LessThanOrEqual.getInstance());
-		defbuiltin(GreaterThanOrEqual.getInstance());
-		defbuiltin(Spaceship.getInstance());
-		defbuiltin(Exact.getInstance());
-		defbuiltin(Is.getInstance());
-		defbuiltin((Iso.getInstance()));
-
-		// List Operations (7/7)
-		defbuiltin(Car.getInstance());
-		defbuiltin(Cdr.getInstance());
-		defbuiltin(Cadr.getInstance());
-		defbuiltin(Cddr.getInstance());
-		defbuiltin(FCons.getInstance());
-		defbuiltin(Scar.getInstance());
-		defbuiltin(Scdr.getInstance());
-
-		// Math Operations
-		defbuiltin(Add.getInstance());
-
-		// Tables
-		defbuiltin(FTable.getInstance());
-		defbuiltin(MapTable.getInstance());
-
-		// Strings
-		defbuiltin(NewString.getInstance());
-
-		// Miscellaneous
-		defbuiltin(Len.getInstance());
-		defbuiltin(SRef.getInstance());
-		defbuiltin(Bound.getInstance());
-
-		// Basic I/O primitives
-		defbuiltin(ReadB.getInstance());
-		defbuiltin(ReadC.getInstance());
-		defbuiltin(UngetC.getInstance());
-		defbuiltin(PeekC.getInstance());
-		defbuiltin(FInString.getInstance());
-
-		// Error handling and continuations
-		defbuiltin(CCC.getInstance());
-	}
-
 	/**
 	 * Move n elements from the top of stack, overwriting the current
 	 * environment.  Points the stack pointer to just above the last
@@ -824,10 +752,6 @@ public class ArcThread extends ArcObject implements Callable {
 	}
 
     public ArcObject boundP(ArcObject arg) {
-		if (!(arg instanceof Symbol))
-			throw new NekoArcException("bound expected symbol, given " + arg);
-		if (genv.containsKey((Symbol)arg))
-			return(True.T);
-		return(Nil.NIL);
-    }
+		return vm.boundP(arg);
+	}
 }

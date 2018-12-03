@@ -26,42 +26,42 @@ import static org.junit.Assert.*;
 public class AStringTest {
     @Test
     public void testApply() {
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
-        Op.ENV.emits(vm, 0, 0, 0);
-        Op.LDI.emit(vm, 1);
-        Op.PUSH.emit(vm);
-        Op.LDL.emit(vm, 0);
-        Op.APPLY.emit(vm, 1);
-        Op.RET.emit(vm);
-        vm.cg.literal(new AString("日本語"));
-        vm.load();
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(0x672c, ((Rune)vm.getAcc()).rune);
-        assertEquals("#\\本", vm.getAcc().toString());
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
+        Op.ENV.emits(thr, 0, 0, 0);
+        Op.LDI.emit(thr, 1);
+        Op.PUSH.emit(thr);
+        Op.LDL.emit(thr, 0);
+        Op.APPLY.emit(thr, 1);
+        Op.RET.emit(thr);
+        thr.vm.cg.literal(new AString("日本語"));
+        thr.load();
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(0x672c, ((Rune)thr.getAcc()).rune);
+        assertEquals("#\\本", thr.getAcc().toString());
     }
 
     @Test
     public void testUnicodeApply() {
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
-        Op.ENV.emits(vm, 0, 0, 0);
-        Op.LDI.emit(vm, 0);
-        Op.PUSH.emit(vm);
-        Op.LDL.emit(vm, 0);
-        Op.APPLY.emit(vm, 1);
-        Op.RET.emit(vm);
-        vm.cg.literal(new AString("\uD83D\uDE1D\uD83D\uDE0E"));
-        vm.load();
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(0x1f61d, ((Rune)vm.getAcc()).rune);
-        assertEquals("#\\\uD83D\uDE1D", vm.getAcc().toString());
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
+        Op.ENV.emits(thr, 0, 0, 0);
+        Op.LDI.emit(thr, 0);
+        Op.PUSH.emit(thr);
+        Op.LDL.emit(thr, 0);
+        Op.APPLY.emit(thr, 1);
+        Op.RET.emit(thr);
+        thr.vm.cg.literal(new AString("\uD83D\uDE1D\uD83D\uDE0E"));
+        thr.load();
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(0x1f61d, ((Rune)thr.getAcc()).rune);
+        assertEquals("#\\\uD83D\uDE1D", thr.getAcc().toString());
 
     }
 

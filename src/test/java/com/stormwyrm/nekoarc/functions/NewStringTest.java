@@ -18,15 +18,15 @@ public class NewStringTest {
                 0x4c, 0x01,                             // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern("newstring");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertEquals("\u0000\u0000\u0000\u0000\u0000", vm.getAcc().toString());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertEquals("\u0000\u0000\u0000\u0000\u0000", thr.getAcc().toString());
     }
 
     @Test
@@ -40,15 +40,15 @@ public class NewStringTest {
                 0x4c, 0x02,                             // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = Symbol.intern("newstring");
         literals[1] = Rune.get(0x41);
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertEquals("AAAAA", vm.getAcc().toString());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertEquals("AAAAA", thr.getAcc().toString());
     }
 }

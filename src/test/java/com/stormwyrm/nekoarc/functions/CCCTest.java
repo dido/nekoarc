@@ -13,37 +13,37 @@ import static org.junit.Assert.*;
 public class CCCTest {
     @Test
     public void testCCCsimple() {
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         // This is basically
         // (ccc (fn (esc) (esc 42) 21))
 
-        Op.ENV.emits(vm, 0, 0, 0);
-        int contpos = Op.CONT.emit(vm, 0);
-        Op.LDL.emit(vm, 1);
-        Op.PUSH.emit(vm);
-        Op.LDG.emit(vm, 0);
-        Op.APPLY.emits(vm, 1);
-        int contdest = Op.RET.emit(vm);
-        vm.cg.patchRelativeBranch(contpos, contdest);
+        Op.ENV.emits(thr, 0, 0, 0);
+        int contpos = Op.CONT.emit(thr, 0);
+        Op.LDL.emit(thr, 1);
+        Op.PUSH.emit(thr);
+        Op.LDG.emit(thr, 0);
+        Op.APPLY.emits(thr, 1);
+        int contdest = Op.RET.emit(thr);
+        thr.vm.cg.patchRelativeBranch(contpos, contdest);
 
         // (fn (esc) (esc 42) 21)
-        int func = Op.ENV.emits(vm, 1, 0, 0);
-        Op.LDI.emit(vm, 42);
-        Op.PUSH.emit(vm);
-        Op.LDE0.emits(vm, 0);
-        Op.APPLY.emits(vm, 1);
-        Op.LDI.emit(vm, 21);
-        Op.RET.emit(vm);
+        int func = Op.ENV.emits(thr, 1, 0, 0);
+        Op.LDI.emit(thr, 42);
+        Op.PUSH.emit(thr);
+        Op.LDE0.emits(thr, 0);
+        Op.APPLY.emits(thr, 1);
+        Op.LDI.emit(thr, 21);
+        Op.RET.emit(thr);
 
-        vm.cg.literal(Symbol.intern("ccc"));
-        vm.cg.literal(new Closure(Nil.NIL, Fixnum.get(func)));
-        vm.load();
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(42, ((Fixnum)vm.getAcc()).fixnum);
+        thr.vm.cg.literal(Symbol.intern("ccc"));
+        thr.vm.cg.literal(new Closure(Nil.NIL, Fixnum.get(func)));
+        thr.vm.load();
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(42, ((Fixnum)thr.getAcc()).fixnum);
     }
 
 }

@@ -19,15 +19,15 @@ public class BoundTest {
                 0x4c, 0x01,                             // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern("bound");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertEquals(True.T, thr.getAcc());
     }
 
     @Test
@@ -39,16 +39,16 @@ public class BoundTest {
                 0x4c, 0x01,                             // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = Symbol.intern("bound");
         literals[1] = Symbol.intern("gs1722");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertEquals(Nil.NIL, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertEquals(Nil.NIL, thr.getAcc());
     }
 
 }

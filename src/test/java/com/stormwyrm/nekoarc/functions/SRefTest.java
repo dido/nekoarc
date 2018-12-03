@@ -56,17 +56,17 @@ public class SRefTest {
                 0x4c, 0x03,                                // apply 3
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = v;
         literals[1] = Symbol.intern("sref");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(5, ((Fixnum)vm.getAcc()).fixnum);
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(5, ((Fixnum)thr.getAcc()).fixnum);
         assertEquals(1, ((Fixnum)v.index(0)).fixnum);
         assertEquals(2, ((Fixnum)v.index(1)).fixnum);
         assertEquals(5, ((Fixnum)v.index(2)).fixnum);

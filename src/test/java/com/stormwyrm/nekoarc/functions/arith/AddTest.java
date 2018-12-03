@@ -12,20 +12,20 @@ import static org.junit.Assert.*;
 public class AddTest {
     @Test
     public void test0() {
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
-        Op.ENV.emits(vm, 0, 0, 0);
-        Op.LDG.emit(vm, 0);
-        Op.APPLY.emit(vm, 0);
-        Op.RET.emit(vm);
-        vm.cg.literal(Symbol.intern("+"));
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
+        Op.ENV.emits(thr, 0, 0, 0);
+        Op.LDG.emit(thr, 0);
+        Op.APPLY.emit(thr, 0);
+        Op.RET.emit(thr);
+        thr.vm.cg.literal(Symbol.intern("+"));
 
-        vm.load();
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(0, ((Fixnum)vm.getAcc()).fixnum);
+        thr.load();
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(0, ((Fixnum)thr.getAcc()).fixnum);
     }
 
     @Test
@@ -37,16 +37,16 @@ public class AddTest {
                 0x4c, 0x01,                                // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(1, ((Fixnum)thr.getAcc()).fixnum);
     }
 
     @Test
@@ -60,16 +60,16 @@ public class AddTest {
                 0x4c, 0x02,                                // apply 2
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(3, ((Fixnum)vm.getAcc()).fixnum);
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(3, ((Fixnum)thr.getAcc()).fixnum);
     }
 
     @Test
@@ -85,15 +85,15 @@ public class AddTest {
                 0x4c, 0x03,                                // apply 3
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern("+");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(6, ((Fixnum)vm.getAcc()).fixnum);
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(6, ((Fixnum)thr.getAcc()).fixnum);
     }
 }

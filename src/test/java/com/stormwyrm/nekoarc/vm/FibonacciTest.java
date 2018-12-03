@@ -42,57 +42,57 @@ public class FibonacciTest
 	 */
 	@Test
 	public void test() {
-		ArcThread vm = new ArcThread(8);
-		vm.initSyms();
+		ArcThread thr = new ArcThread(8);
+		thr.vm.initSyms();
 
 		int codestart;
 
-		assertEquals(0x00, codestart = Op.ENV.emits(vm, 1, 0, 0));
-		assertEquals(0x04, Op.LDE0.emits(vm, 0));
-		assertEquals(0x06, Op.PUSH.emit(vm));
-		assertEquals(0x07, Op.LDI.emit(vm, 0));
-		assertEquals(0x0c, Op.IS.emit(vm));
+		assertEquals(0x00, codestart = Op.ENV.emits(thr, 1, 0, 0));
+		assertEquals(0x04, Op.LDE0.emits(thr, 0));
+		assertEquals(0x06, Op.PUSH.emit(thr));
+		assertEquals(0x07, Op.LDI.emit(thr, 0));
+		assertEquals(0x0c, Op.IS.emit(thr));
 		int setl1;
-		assertEquals(0x0d, setl1 = Op.JF.emit(vm, 0));
-		assertEquals(0x12, Op.LDI.emit(vm, 1));
-		assertEquals(0x17, Op.RET.emit(vm));
+		assertEquals(0x0d, setl1 = Op.JF.emit(thr, 0));
+		assertEquals(0x12, Op.LDI.emit(thr, 1));
+		assertEquals(0x17, Op.RET.emit(thr));
 		int l1;
-		assertEquals(0x18, l1 = Op.LDE0.emits(vm, 0));
-		assertEquals(6, vm.cg.patchRelativeBranch(setl1, l1));
-		assertEquals(Op.JF.opcode(), vm.cg.getAtPos(setl1));
-		assertEquals(6, vm.cg.getAtPos(setl1+1));
-		assertEquals(0, vm.cg.getAtPos(setl1+2));
-		assertEquals(0, vm.cg.getAtPos(setl1+3));
-		assertEquals(0, vm.cg.getAtPos(setl1+4));
+		assertEquals(0x18, l1 = Op.LDE0.emits(thr, 0));
+		assertEquals(6, thr.vm.cg.patchRelativeBranch(setl1, l1));
+		assertEquals(Op.JF.opcode(), thr.vm.cg.getAtPos(setl1));
+		assertEquals(6, thr.vm.cg.getAtPos(setl1+1));
+		assertEquals(0, thr.vm.cg.getAtPos(setl1+2));
+		assertEquals(0, thr.vm.cg.getAtPos(setl1+3));
+		assertEquals(0, thr.vm.cg.getAtPos(setl1+4));
 
-		Op.PUSH.emit(vm);
-		Op.LDI.emit(vm, 1);
-		Op.IS.emit(vm);
-		int setl2 = Op.JF.emit(vm, 0);
-		Op.LDI.emit(vm, 1);
-		Op.RET.emit(vm);
-		int l2 = Op.CONT.emit(vm, 0);
-		assertEquals(6, vm.cg.patchRelativeBranch(setl2, l2));
-		Op.LDE0.emits(vm, 0);
-		Op.PUSH.emit(vm);
-		Op.LDI.emit(vm, 1);
-		Op.SUB.emit(vm);
-		Op.PUSH.emit(vm);
-		Op.LDL.emit(vm, 0);
-		Op.APPLY.emits(vm, 1);
-		int l3 = Op.PUSH.emit(vm);
-		assertEquals(0x11, vm.cg.patchRelativeBranch(l2, l3));
-		int setl4 = Op.CONT.emit(vm, 0);
-		Op.LDE0.emits(vm, 0);
-		Op.PUSH.emit(vm);
-		Op.LDI.emit(vm, 2);
-		Op.SUB.emit(vm);
-		Op.PUSH.emit(vm);
-		Op.LDL.emit(vm, 0);
-		Op.APPLY.emits(vm, 1);
-		int l4 = Op.ADD.emit(vm);
-		assertEquals(0x11, vm.cg.patchRelativeBranch(setl4, l4));
-		int len = Op.RET.emit(vm) + 1;
+		Op.PUSH.emit(thr);
+		Op.LDI.emit(thr, 1);
+		Op.IS.emit(thr);
+		int setl2 = Op.JF.emit(thr, 0);
+		Op.LDI.emit(thr, 1);
+		Op.RET.emit(thr);
+		int l2 = Op.CONT.emit(thr, 0);
+		assertEquals(6, thr.vm.cg.patchRelativeBranch(setl2, l2));
+		Op.LDE0.emits(thr, 0);
+		Op.PUSH.emit(thr);
+		Op.LDI.emit(thr, 1);
+		Op.SUB.emit(thr);
+		Op.PUSH.emit(thr);
+		Op.LDL.emit(thr, 0);
+		Op.APPLY.emits(thr, 1);
+		int l3 = Op.PUSH.emit(thr);
+		assertEquals(0x11, thr.vm.cg.patchRelativeBranch(l2, l3));
+		int setl4 = Op.CONT.emit(thr, 0);
+		Op.LDE0.emits(thr, 0);
+		Op.PUSH.emit(thr);
+		Op.LDI.emit(thr, 2);
+		Op.SUB.emit(thr);
+		Op.PUSH.emit(thr);
+		Op.LDL.emit(thr, 0);
+		Op.APPLY.emits(thr, 1);
+		int l4 = Op.ADD.emit(thr);
+		assertEquals(0x11, thr.vm.cg.patchRelativeBranch(setl4, l4));
+		int len = Op.RET.emit(thr) + 1;
 
 		// env 1 0 0; lde0 0; push; ldi 0; is; jf xxx; ldi 1; ret; lde0 0; push ldi 1; is; jf xxx; ldi 1; ret;
 		// cont xxx; lde0 0; push; ldi 1; sub; push; ldl 0; apply 1; push;
@@ -135,17 +135,17 @@ public class FibonacciTest
 		assertEquals(inst.length, len);
 
 		for (int i=0; i<len; i++)
-			assertEquals(inst[i], vm.cg.getAtPos(i));
-		vm.cg.literal(new Closure(Nil.NIL, Fixnum.get(codestart)));
+			assertEquals(inst[i], thr.vm.cg.getAtPos(i));
+		thr.vm.cg.literal(new Closure(Nil.NIL, Fixnum.get(codestart)));
 
-		vm.load();
-		vm.setargc(1);
-		vm.push(Fixnum.get(25));
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(121393, ((Fixnum)vm.getAcc()).fixnum);
+		thr.load();
+		thr.setargc(1);
+		thr.push(Fixnum.get(25));
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(121393, ((Fixnum)thr.getAcc()).fixnum);
 	}
 
 }

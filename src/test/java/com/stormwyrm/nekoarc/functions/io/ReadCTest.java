@@ -16,16 +16,16 @@ public class ReadCTest {
                 0x4c, 0x01,                             // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = Symbol.intern("readc");
         literals[1] = new InString("蛟龍");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertTrue(vm.getAcc() instanceof Rune);
-        assertEquals(0x86df, ((Rune)vm.getAcc()).rune);
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertTrue(thr.getAcc() instanceof Rune);
+        assertEquals(0x86df, ((Rune)thr.getAcc()).rune);
     }
 }

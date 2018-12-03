@@ -19,16 +19,16 @@ public class ReadBTest {
                 0x4c, 0x01,                             // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = Symbol.intern("readb");
         literals[1] = new InString("abc");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertEquals(0x61, ((Fixnum)vm.getAcc()).fixnum);
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertEquals(0x61, ((Fixnum)thr.getAcc()).fixnum);
     }
 
 }

@@ -17,13 +17,13 @@ public class TypeTest {
                 0x4c, 0x01,                             // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern("type");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertEquals("fixnum", vm.getAcc().toString());    }
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertEquals("fixnum", thr.getAcc().toString());    }
 }

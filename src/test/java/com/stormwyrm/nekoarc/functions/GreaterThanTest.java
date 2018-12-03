@@ -18,16 +18,16 @@ public class GreaterThanTest {
                 0x4c, 0x00,                                // apply 0
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(True.T, thr.getAcc());
     }
 
     @Test
@@ -39,16 +39,16 @@ public class GreaterThanTest {
                 0x4c, 0x01,                                // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(True.T, thr.getAcc());
     }
 
     @Test
@@ -60,17 +60,17 @@ public class GreaterThanTest {
                 0x4c, 0x01,                                // apply 1
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(3.14159);
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(True.T, thr.getAcc());
     }
 
     @Test
@@ -84,16 +84,16 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 2
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(Nil.NIL, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(Nil.NIL, thr.getAcc());
     }
 
     @Test
@@ -107,16 +107,16 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 2
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(True.T, thr.getAcc());
     }
 
     @Test
@@ -130,17 +130,17 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 2
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(Nil.NIL, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(Nil.NIL, thr.getAcc());
     }
 
     @Test
@@ -154,17 +154,17 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 2
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[2];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(0.31831);
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(True.T, thr.getAcc());
     }
 
     @Test
@@ -178,18 +178,18 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 2
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[3];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
         literals[2] = new Flonum(1e101);
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(Nil.NIL, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(Nil.NIL, thr.getAcc());
     }
 
     @Test
@@ -203,18 +203,18 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 2
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[3];
         literals[0] = Symbol.intern(">");
         literals[1] = new Flonum(1e100);
         literals[2] = new Flonum(1e-100);
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(True.T, thr.getAcc());
     }
 
     @Test
@@ -230,16 +230,16 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 3
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(Nil.NIL, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(Nil.NIL, thr.getAcc());
     }
 
     @Test
@@ -255,16 +255,16 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 3
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(True.T, thr.getAcc());
     }
 
     @Test
@@ -280,16 +280,16 @@ public class GreaterThanTest {
                 0x4c, 0x02,                                // apply 3
                 0x0d                                    // ret
         };
-        ArcThread vm = new ArcThread(1024);
-        vm.initSyms();
+        ArcThread thr = new ArcThread(1024);
+        thr.vm.initSyms();
         ArcObject[] literals = new ArcObject[1];
         literals[0] = Symbol.intern(">");
-        vm.load(inst, literals);
-        vm.setargc(0);
-        assertTrue(vm.runnable());
-        vm.run();
-        assertFalse(vm.runnable());
-        assertEquals(True.T, vm.getAcc());
+        thr.load(inst, literals);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(True.T, thr.getAcc());
     }
 
 }
