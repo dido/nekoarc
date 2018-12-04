@@ -24,30 +24,30 @@ public class HeapContinuation extends Vector implements Continuation
 
 	/**
 	 * Move continuation to stack for restoration
-	 * @param vm virtual machine thread
+	 * @param thr virtual machine thread
 	 * @param cc callable
 	 */
 	@Override
-	public void restore(ArcThread vm, Callable cc)
+	public void restore(ArcThread thr, Callable cc)
 	{
 		int svsize = (int)this.len();
 
-		vm.stackcheck(svsize + 4, "stack overflow while restoring heap continuation");
+		thr.stackcheck(svsize + 4, "stack overflow while restoring heap continuation");
 
-		int bp = vm.getSP();
+		int bp = thr.getSP();
 		// push the saved stack values back to the stack
 		for (int i=0; i<svsize; i++)
-			vm.push(index(i));
+			thr.push(index(i));
 		// push the saved instruction pointer
-		vm.push(Fixnum.get(ipoffset));
+		thr.push(Fixnum.get(ipoffset));
 		// push the new base pointer
-		vm.push(Fixnum.get(bp));
+		thr.push(Fixnum.get(bp));
 		// push the saved environment
-		vm.push(env);
+		thr.push(env);
 		// push the previous continuation
-		vm.push(prevcont);
-		vm.setCont(Fixnum.get(vm.getSP()));
-		vm.restorecont();
+		thr.push(prevcont);
+		thr.setCont(Fixnum.get(thr.getSP()));
+		thr.restorecont();
 	}
 
 	public static ArcObject fromStackCont(ArcThread vm, ArcObject sc)
@@ -97,7 +97,7 @@ public class HeapContinuation extends Vector implements Continuation
 	@Override
 	public ArcObject invoke(InvokeThread thr)
 	{
-		thr.vm.setCont(this);
+		thr.thr.setCont(this);
 		return(thr.getenv(0, 0));
 	}
 }
