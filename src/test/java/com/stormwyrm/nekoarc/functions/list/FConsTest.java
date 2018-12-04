@@ -28,7 +28,7 @@ public class FConsTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.run();
+        vm.main();
         assertFalse(vm.runnable());
         assertEquals(1, ((Fixnum)(vm.getAcc()).car()).fixnum);
         assertEquals(2, ((Fixnum)(vm.getAcc()).cdr()).fixnum);

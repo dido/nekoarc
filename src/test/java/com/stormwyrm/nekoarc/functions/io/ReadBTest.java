@@ -27,7 +27,7 @@ public class ReadBTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertEquals(0x61, ((Fixnum)thr.getAcc()).fixnum);
     }
 

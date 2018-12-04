@@ -38,7 +38,7 @@ public class AStringTest {
         thr.load();
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(0x672c, ((Rune)thr.getAcc()).rune);
         assertEquals("#\\本", thr.getAcc().toString());
@@ -58,7 +58,7 @@ public class AStringTest {
         thr.load();
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(0x1f61d, ((Rune)thr.getAcc()).rune);
         assertEquals("#\\\uD83D\uDE1D", thr.getAcc().toString());

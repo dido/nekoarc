@@ -1,3 +1,20 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
 package com.stormwyrm.nekoarc.types;
 
 import static org.junit.Assert.*;
@@ -7,57 +24,69 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Unbound;
 import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.Fixnum;
+import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
-public class ArcThreadTest
-{	
+/**
+ * Tests of various functions in virtual machine threads
+ */
+public class ArcThreadTest {
+    /**
+     * Test for instArgs
+     */
 	@Test
-	public void testInstArg()
-	{
-		byte[] data = {0x01, 0x00, 0x00, 0x00};
-		ArcThread thr = new ArcThread(1024);
+	public void testInstArg() {
+	    VirtualMachine vm = new VirtualMachine();
+        byte[] data = {0x01, 0x00, 0x00, 0x00};
+        vm.load(data);
 
-		thr.load(data);
+        ArcThread thr = new ArcThread(vm);
 		thr.setIP(0);
 		assertEquals(1, thr.instArg());
 
 		byte[] data2 = {(byte) 0xff, 0x00, 0x00, 0x00};
-		thr.load(data2);
+		vm.load(data2);
         thr.setIP(0);
 		assertEquals(255, thr.instArg());
 
 		byte[] data3 = {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
-		thr.load(data3);
+		vm.load(data3);
         thr.setIP(0);
 		assertEquals(-1, thr.instArg());
 
 		byte[] data4 = {(byte) 0x5d, (byte) 0xc3, (byte) 0x1f, (byte) 0x21};
-		thr.load(data4);
+		vm.load(data4);
         thr.setIP(0);
 		assertEquals(555729757, thr.instArg());
 		
 		// two's complement negative
 		byte[] data5 = {(byte) 0xa3, (byte) 0x3c, (byte) 0xe0, (byte) 0xde};
-		thr.load(data5);
+		vm.load(data5);
         thr.setIP(0);
 		assertEquals(-555729757, thr.instArg());
 	}
 
+	/**
+     * Test for small instruction arguments
+	 */
 	@Test
-	public void testSmallInstArg()
-	{
+	public void testSmallInstArg() {
+        VirtualMachine vm = new VirtualMachine();
 		byte[] data = {(byte) 0x12, (byte) 0xff};
-		ArcThread thr = new ArcThread(1024);
-		thr.load(data);
+		vm.load(data);
+		ArcThread thr = new ArcThread(vm);
         thr.setIP(0);
 		assertEquals(0x12, thr.smallInstArg());
 		assertEquals(-1, thr.smallInstArg());
 	}
 
+    /**
+     * Test for environments
+     * @throws NekoArcException
+     */
 	@Test
-	public void testEnv() throws NekoArcException
-	{
-		ArcThread thr = new ArcThread(1024);
+	public void testEnv() throws NekoArcException {
+		ArcThread thr = new ArcThread(new VirtualMachine());
 
 		try {
 			thr.getenv(0, 0);
@@ -99,10 +128,13 @@ public class ArcThreadTest
 		assertTrue(thr.getenv(0, 5).is(Unbound.UNBOUND));
 	}
 
+    /**
+     * Test for moving environments
+     * @throws NekoArcException
+     */
 	@Test
-	public void testmenv() throws NekoArcException
-	{
-		ArcThread thr = new ArcThread(1024);
+	public void testmenv() throws NekoArcException {
+		ArcThread thr = new ArcThread(new VirtualMachine());
 
 		// New environment just as big as the old environment
 		thr.push(Fixnum.get(0));

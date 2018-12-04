@@ -25,7 +25,7 @@ public class DIVtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(4, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(13, vm.getIP());
@@ -44,7 +44,7 @@ public class DIVtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(0, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(13, vm.getIP());
@@ -65,7 +65,7 @@ public class DIVtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(1.57, ((Flonum)vm.getAcc()).flonum, 1e-6);
 		assertEquals(13, vm.getIP());
@@ -87,7 +87,7 @@ public class DIVtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(1.158671586715867, ((Flonum)vm.getAcc()).flonum, 1e-6);
 		assertEquals(13, vm.getIP());

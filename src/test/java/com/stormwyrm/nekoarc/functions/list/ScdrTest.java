@@ -31,7 +31,7 @@ public class ScdrTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.run();
+        vm.main();
         assertFalse(vm.runnable());
         assertEquals(Nil.NIL, vm.getAcc());
         assertEquals(1, ((Fixnum) cons.car()).fixnum);

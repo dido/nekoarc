@@ -19,7 +19,7 @@ public class LDItest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getAcc());
 		assertEquals(6, vm.getIP());

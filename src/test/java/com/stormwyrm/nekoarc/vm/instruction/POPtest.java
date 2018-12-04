@@ -20,7 +20,7 @@ public class POPtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(555729757), vm.getAcc());
 		assertEquals(0, vm.getSP());

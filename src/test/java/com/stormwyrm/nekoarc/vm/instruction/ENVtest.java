@@ -28,7 +28,7 @@ public class ENVtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(0, 0));
 		assertEquals(Fixnum.get(2), vm.getenv(0, 1));
@@ -52,7 +52,7 @@ public class ENVtest
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		try {
-			vm.run();
+			vm.main();
 			fail("exception not thrown");
 		} catch (NekoArcException e) {
 			assertEquals("too few arguments, at least 3 required, 1 passed", e.getMessage());
@@ -81,7 +81,7 @@ public class ENVtest
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		try {
-			vm.run();
+			vm.main();
 			fail("exception not thrown");
 		} catch (NekoArcException e) {
 			assertEquals("too many arguments, at most 4 allowed, 5 passed", e.getMessage());

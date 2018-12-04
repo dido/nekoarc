@@ -17,7 +17,7 @@ public class HLTtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(1234, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(1, vm.getIP());

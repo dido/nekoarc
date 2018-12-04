@@ -25,7 +25,7 @@ public class SUBtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(13, vm.getIP());
@@ -44,7 +44,7 @@ public class SUBtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(-1, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(13, vm.getIP());
@@ -65,7 +65,7 @@ public class SUBtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(-2.14, ((Flonum)vm.getAcc()).flonum, 1e-6);
 		assertEquals(13, vm.getIP());
@@ -86,7 +86,7 @@ public class SUBtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(2.14, ((Flonum)vm.getAcc()).flonum, 1e-6);
 		assertEquals(13, vm.getIP());
@@ -108,7 +108,7 @@ public class SUBtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(0.43, ((Flonum)vm.getAcc()).flonum, 1e-6);
 		assertEquals(13, vm.getIP());

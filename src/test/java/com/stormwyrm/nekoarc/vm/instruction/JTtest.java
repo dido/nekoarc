@@ -21,7 +21,7 @@ public class JTtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(12, vm.getIP());
@@ -40,7 +40,7 @@ public class JTtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(8, vm.getIP());
@@ -58,7 +58,7 @@ public class JTtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(3, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(12, vm.getIP());

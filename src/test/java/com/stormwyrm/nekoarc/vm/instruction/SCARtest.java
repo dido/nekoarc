@@ -26,7 +26,7 @@ public class SCARtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(3, ((Fixnum) vm.getAcc().car()).fixnum);
 		assertEquals(2, ((Fixnum) vm.getAcc().cdr()).fixnum);

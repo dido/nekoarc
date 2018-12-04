@@ -26,7 +26,7 @@ public class STGtest
 		vm.setAcc(Nil.NIL);
 		vm.bind(sym, Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(0x7f, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(0x7f, ((Fixnum)vm.value(sym)).fixnum);

@@ -27,7 +27,7 @@ public class LenTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.run();
+        vm.main();
         assertFalse(vm.runnable());
         assertEquals(3, ((Fixnum)vm.getAcc()).fixnum);
     }
@@ -50,7 +50,7 @@ public class LenTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.run();
+        vm.main();
         assertFalse(vm.runnable());
         assertEquals(5, ((Fixnum)vm.getAcc()).fixnum);
     }
@@ -73,7 +73,7 @@ public class LenTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.run();
+        vm.main();
         assertFalse(vm.runnable());
         assertEquals(4, ((Fixnum)vm.getAcc()).fixnum);
     }

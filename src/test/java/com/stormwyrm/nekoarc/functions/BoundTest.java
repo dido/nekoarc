@@ -26,7 +26,7 @@ public class BoundTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertEquals(True.T, thr.getAcc());
     }
 
@@ -47,7 +47,7 @@ public class BoundTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertEquals(Nil.NIL, thr.getAcc());
     }
 

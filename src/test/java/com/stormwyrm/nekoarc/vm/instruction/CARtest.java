@@ -23,7 +23,7 @@ public class CARtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(2, ((Fixnum)(vm.getAcc())).fixnum);
 		assertEquals(14, vm.getIP());

@@ -32,7 +32,7 @@ public class ScarTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.run();
+        vm.main();
         assertFalse(vm.runnable());
         assertEquals(5, ((Fixnum)vm.getAcc()).fixnum);
         assertEquals(5, ((Fixnum)cons.car()).fixnum);

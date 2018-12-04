@@ -30,7 +30,7 @@ public class CarTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.run();
+        vm.main();
         assertFalse(vm.runnable());
         assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
     }

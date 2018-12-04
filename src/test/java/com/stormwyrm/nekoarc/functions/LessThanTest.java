@@ -25,7 +25,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(True.T, thr.getAcc());
     }
@@ -46,7 +46,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(True.T, thr.getAcc());
     }
@@ -68,7 +68,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(True.T, thr.getAcc());
     }
@@ -91,7 +91,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(True.T, thr.getAcc());
     }
@@ -114,7 +114,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(Nil.NIL, thr.getAcc());
     }
@@ -138,7 +138,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(True.T, thr.getAcc());
     }
@@ -162,7 +162,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(Nil.NIL, thr.getAcc());
     }
@@ -187,7 +187,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(True.T, thr.getAcc());
     }
@@ -212,7 +212,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(Nil.NIL, thr.getAcc());
     }
@@ -237,7 +237,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(True.T, thr.getAcc());
     }
@@ -262,7 +262,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(Nil.NIL, thr.getAcc());
     }
@@ -287,7 +287,7 @@ public class LessThanTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertFalse(thr.runnable());
         assertEquals(Nil.NIL, thr.getAcc());
     }

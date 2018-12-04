@@ -43,7 +43,7 @@ public class ADDtest {
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(3, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(13, vm.getIP());
@@ -64,7 +64,7 @@ public class ADDtest {
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(4.14, ((Flonum)vm.getAcc()).flonum, 1e-6);
 		assertEquals(13, vm.getIP());
@@ -85,7 +85,7 @@ public class ADDtest {
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(4.14, ((Flonum)vm.getAcc()).flonum, 1e-6);
 		assertEquals(13, vm.getIP());
@@ -107,7 +107,7 @@ public class ADDtest {
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(5.85, ((Flonum)vm.getAcc()).flonum, 1e-6);
 		assertEquals(13, vm.getIP());
@@ -129,7 +129,7 @@ public class ADDtest {
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals("abcdef", vm.getAcc().toString());
 		assertEquals(13, vm.getIP());
@@ -150,7 +150,7 @@ public class ADDtest {
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals("foo1", vm.getAcc().toString());
 		assertEquals(13, vm.getIP());
@@ -172,7 +172,7 @@ public class ADDtest {
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals("foo1.1", vm.getAcc().toString());
 		assertEquals(13, vm.getIP());

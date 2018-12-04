@@ -24,7 +24,7 @@ public class LDGtest
 		vm.setAcc(Nil.NIL);
 		vm.bind(sym, Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(1234, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(6, vm.getIP());

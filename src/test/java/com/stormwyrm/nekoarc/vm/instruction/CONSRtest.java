@@ -3,7 +3,6 @@ package com.stormwyrm.nekoarc.vm.instruction;
 import static org.junit.Assert.*;
 
 import com.stormwyrm.nekoarc.Nil;
-import com.stormwyrm.nekoarc.types.Cons;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.ArcThread;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class CONSRtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum) vm.getAcc().car()).fixnum);
 		assertEquals(2, ((Fixnum) vm.getAcc().cdr()).fixnum);

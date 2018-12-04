@@ -20,7 +20,7 @@ public class TRUEtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(2, vm.getIP());

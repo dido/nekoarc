@@ -30,7 +30,7 @@ public class CadrTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.run();
+        vm.main();
         assertFalse(vm.runnable());
         assertEquals(2, ((Fixnum)vm.getAcc()).fixnum);
     }

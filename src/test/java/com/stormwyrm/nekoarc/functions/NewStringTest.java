@@ -25,7 +25,7 @@ public class NewStringTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertEquals("\u0000\u0000\u0000\u0000\u0000", thr.getAcc().toString());
     }
 
@@ -48,7 +48,7 @@ public class NewStringTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertEquals("AAAAA", thr.getAcc().toString());
     }
 }

@@ -24,7 +24,7 @@ public class ReadCTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.run();
+        thr.main();
         assertTrue(thr.getAcc() instanceof Rune);
         assertEquals(0x86df, ((Rune)thr.getAcc()).rune);
     }

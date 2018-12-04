@@ -12,7 +12,7 @@ public class CONTtest
 	public void test()
 	{
 		// cont 3; ret; hlt; nil; ldi 1; ret
-        byte[] inst = {(byte) 0x89, 0x03, 0x00, 0x00, 0x00,
+        byte[] inst = {(byte) 0x52, 0x03, 0x00, 0x00, 0x00,
                 0x0d,
                 0x14,
                 0x13,
@@ -22,7 +22,7 @@ public class CONTtest
 		vm.setAcc(Fixnum.get(1234));
 		vm.makecont(3);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
 	}

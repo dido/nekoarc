@@ -15,7 +15,7 @@ public class APPLYtest
 	public void testCons()
 	{
 		// cont 13; ldi 2; push; ldl 0; apply 1; ret
-        byte[] inst = {(byte) 0x89, 0x0d, 0x00, 0x00, 0x00,
+        byte[] inst = {(byte) 0x52, 0x0d, 0x00, 0x00, 0x00,
                 0x44, 0x02, 0x00, 0x00, 0x00,
                 0x01,
                 0x43, 0x00, 0x00, 0x00, 0x00,
@@ -27,7 +27,7 @@ public class APPLYtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(12, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(19, vm.getIP());
@@ -58,7 +58,7 @@ public class APPLYtest
 		vm.push(Fixnum.get(5));
 		vm.setargc(1);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(7, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(32, vm.getIP());
