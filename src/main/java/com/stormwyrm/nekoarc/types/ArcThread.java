@@ -15,11 +15,9 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.*;
-import com.stormwyrm.nekoarc.functions.*;
 import com.stormwyrm.nekoarc.util.CallSync;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.vm.INVALID;
@@ -27,14 +25,18 @@ import com.stormwyrm.nekoarc.vm.Instruction;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import com.stormwyrm.nekoarc.vm.instruction.*;
 
-public class ArcThread extends ArcObject implements Callable {
+/**
+ * An Arc Thread.
+ */
+public class ArcThread extends ArcObject implements Callable, Runnable {
+	private final static int DEFAULT_STACKSIZE = 1024;
 	public final ArcObject TYPE = Symbol.intern("thread");
-	public final VirtualMachine vm = new VirtualMachine();
+	public final VirtualMachine vm;
 	private int sp;					// stack pointer
 	private int bp;					// base pointer
 	private ArcObject env;			// environment pointer
 	private ArcObject cont;			// continuation pointer
-	private ArcObject[] stack;		// stack
+	private final ArcObject[] stack;		// stack
 	private final CallSync caller;
 	private int ip;					// instruction pointer
 	private boolean runnable;
@@ -118,13 +120,13 @@ public class ArcThread extends ArcObject implements Callable {
 		NOINST,
 		NOINST,
 		NOINST,
-		new APPLY(),		// 0x4c
+		new APPLY(),	// 0x4c
 		new CLS(),		// 0x4d,
 		new JMP(),		// 0x4e
 		new JT(),		// 0x4f
 		new JF(),		// 0x50
 		new JBND(),		// 0x51
-		NOINST,
+        new CONT(),		// 0x52 -- new CONT
 		NOINST,
 		NOINST,
 		NOINST,
@@ -179,7 +181,7 @@ public class ArcThread extends ArcObject implements Callable {
 		NOINST,
 		new LDE(),		// 0x87
 		new STE(),		// 0x88
-		new CONT(),		// 0x89
+		NOINST,		    // 0x89 -- formerly CONT()
 		NOINST,
 		NOINST,
 		NOINST,
@@ -300,7 +302,13 @@ public class ArcThread extends ArcObject implements Callable {
 		NOINST,
 	};
 
-	public ArcThread(int stacksize) {
+	/**
+	 * Create a new Arc thread
+	 * @param vm The virtual machine to create this thread under
+	 * @param stacksize The stack size of the thread
+	 */
+	public ArcThread(VirtualMachine vm, int stacksize) {
+		this.vm = vm;
 		sp = bp = 0;
 		stack = new ArcObject[stacksize];
 		ip = 0;
@@ -311,24 +319,50 @@ public class ArcThread extends ArcObject implements Callable {
 		caller = new CallSync();
 	}
 
+	/**
+	 * Create a new Arc thread with the default stack size
+	 * @param vm The virtual machine to create the thread under
+	 */
+	public ArcThread(VirtualMachine vm) {
+		this(vm, DEFAULT_STACKSIZE);
+	}
+
+	/**
+	 * Create a new Arc thread under a self-initialised virtual machine
+	 * @deprecated
+	 * @param stacksize Stack size for the thread
+	 */
+	@Deprecated
+	public ArcThread(int stacksize) {
+		this(new VirtualMachine(), stacksize);
+	}
+
+	@Deprecated
 	public void load() {
 		vm.load();
 	}
 
+	@Deprecated
 	public void load(final byte[] instructions, final ArcObject[] literals) {
 		vm.load(instructions, literals);
 	}
 
+	@Deprecated
 	public void load(final byte[] instructions)
 	{
 		vm.load(instructions);
 	}
 
-	public void halt()
-	{
+	/**
+	 * Halt the execution of this thread
+	 */
+	public void halt() {
 		runnable = false;
 	}
 
+	/**
+	 * Advance to the next instruction
+	 */
 	public void nextI()
 	{
 		ip++;
@@ -366,6 +400,10 @@ public class ArcThread extends ArcObject implements Callable {
 		bp = 0;
 	}
 
+	/**
+	 * Push an object into the thread stack
+	 * @param obj the object to push
+	 */
 	public void push(ArcObject obj)
 	{
 		for (;;) {
@@ -387,15 +425,27 @@ public class ArcThread extends ArcObject implements Callable {
 		return(stack[--sp]);
 	}
 
-	public void run()
-		throws NekoArcException
-	{
+	/**
+	 * Main method of the thread.
+	 * @throws NekoArcException on errors
+	 */
+	public void main() throws NekoArcException {
 		while (runnable) {
 			jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
 		}
 	}
 
-	// Four-byte instruction arguments (most everything else). Little endian.
+    /**
+     * Run the thread as a Java thread.
+     */
+	public void run() {
+	    main();
+    }
+
+    /**
+     * Four-byte instruction arguments (most everything else). Little endian.
+     * @return Next four-byte instruction argument at the current IP
+     */
 	public int instArg()
 	{
 		long val = 0;
@@ -463,11 +513,6 @@ public class ArcThread extends ArcObject implements Callable {
 	public ArcObject bind(Symbol sym, ArcObject binding)
 	{
 		return vm.bind(sym, binding);
-	}
-
-	public ArcObject defbuiltin(Builtin builtin)
-    {
-		return vm.defbuiltin(builtin);
 	}
 
 	public ArcObject value(Symbol sym)
