@@ -1,3 +1,20 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
 package com.stormwyrm.nekoarc.vm;
 
 import com.stormwyrm.nekoarc.NekoArcException;
@@ -19,6 +36,11 @@ public class VirtualMachine {
     private  ArcObject[] literals;
     public ObjectMap<Symbol, ArcObject> genv = new ObjectMap<>();
 
+    public VirtualMachine(CodeGen cg) {
+        this.cg = cg;
+        cg.load(this);
+    }
+
     public VirtualMachine() {
         cg = new CodeGen();
         code = null;
@@ -28,26 +50,27 @@ public class VirtualMachine {
         return(code);
     }
 
-    public void load() {
-        cg.load(this);
-    }
-
     public void load(final byte[] instructions, final ArcObject[] literals) {
         this.code = instructions;
         this.literals = literals;
-    }
-
-    public void load(final byte[] instructions) {
-        load(instructions, null);
     }
 
     public ArcObject literal(int offset) {
         return (literals[offset]);
     }// add or replace a global binding
 
+    public void load() {
+        cg.load(this);
+    }
+
+    public void load(final byte[] instructions) {
+        load(instructions, null);
+    }
+
+
     public ArcObject bind(Symbol sym, ArcObject binding) {
         genv.put(sym, binding);
-        return (binding);
+        return(binding);
     }
 
     public ArcObject defbuiltin(Builtin builtin) {
