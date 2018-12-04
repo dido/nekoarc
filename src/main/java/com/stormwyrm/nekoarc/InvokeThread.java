@@ -1,4 +1,3 @@
-
 /*  Copyright (C) 2018 Rafael R. Sevilla
 
     This file is part of NekoArc
@@ -22,28 +21,36 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.types.ArcThread;
 
-/** The main reason this class exists is that Java is a weak-sauce language that doesn't have closures or true
- *  continuations. We have to emulate them using threads. */
-public class InvokeThread extends Thread
-{
+/**
+ * The main reason this class exists is that Java is a weak-sauce language that doesn't have closures or true
+ * continuations. We have to emulate them using threads.  When Java code needs to be executed by a virtual machine
+ * thread, an InvokeThread is created that runs the code in the ArcObject containing the code (usually a Builtin),
+ * while the calling thread is suspended on the Caller sync.
+ *
+ */
+public class InvokeThread extends Thread {
 	private final Callable caller;
 	private final ArcObject obj;
-	public final ArcThread vm;
+	public final ArcThread thr;
 
-	public InvokeThread(ArcThread v, Callable c, ArcObject o)
-	{
-		vm = v;
+	/**
+	 * Create an invocation thread
+	 * @param t the thread for which this InvokeThread is to run under
+	 * @param c The caller
+	 * @param o The object to be called
+	 */
+	public InvokeThread(ArcThread t, Callable c, ArcObject o) {
+		thr = t;
 		caller = c;
 		obj = o;
 	}
 
 	@Override
-	public void run()
-	{
+	public void run() {
 		// Perform our function's thing
 		ArcObject ret = obj.invoke(this);
 		// Restore the continuation created by the caller
-		vm.restorecont(caller);
+		thr.restorecont(caller);
 		// Return the result to our caller's thread, waking them up
 		caller.sync().ret(ret);
 		// and this invoke thread's work is ended
@@ -51,32 +58,36 @@ public class InvokeThread extends Thread
 
 	public ArcObject getenv(int i, int j)
 	{
-		return(vm.getenv(i, j));
+		return(thr.getenv(i, j));
 	}
 
     public ArcObject getenv(int j) {
         return(getenv(0, j));
     }
 
-	/** Perform a call to some Arc object. This should prolly work for ANY ArcObject that has a proper invoke method
-     *  defined.  If it is a built-in or some function defined in Java, that function will run in its own thread while
-     *  the current object's thread is suspended. */
-	public ArcObject apply(ArcObject fn, ArcObject...args)
-	{
+	/**
+	 * Perform a call to some Arc object. This should prolly work for ANY ArcObject that has a proper invoke method
+	 * defined.  If it is a built-in or some function defined in Java, that function will main in its own thread while
+	 * the current object's thread is suspended.
+	 * @param fn The object to be applied
+	 * @param args the arguments
+	 * @return the return value of the application
+	 */
+	public ArcObject apply(ArcObject fn, ArcObject...args) {
 		// First, push all of the arguments to the stack
 		for (ArcObject arg : args)
-			vm.push(arg);
+			thr.push(arg);
 
 		// new continuation
-		vm.setCont(new JavaContinuation(vm, obj));
+		thr.setCont(new JavaContinuation(thr, obj));
 
 		// Apply the function.
-		fn.apply(vm, obj);
+		fn.apply(thr, obj);
 
-		return(vm.getAcc());
+		return(thr.getAcc());
 	}
 
     public int argc() {
-		return(vm.argc());
+		return(thr.argc());
     }
 }
