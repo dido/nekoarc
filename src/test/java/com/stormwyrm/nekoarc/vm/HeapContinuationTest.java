@@ -75,7 +75,7 @@ public class HeapContinuationTest
 		vm.push(hc);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(28, ((Fixnum)vm.getAcc()).fixnum);
 	}
@@ -98,7 +98,7 @@ public class HeapContinuationTest
                 0x50, 0x06, 0x00, 0x00, 0x00,            // jf L1 (6)
                 0x44, 0x00, 0x00, 0x00, 0x00,            // ldi 0
                 0x0d,                                    // ret
-                (byte) 0x89, 0x11, 0x00, 0x00, 0x00,        // L1: cont L2 (0x11)
+                (byte) 0x52, 0x11, 0x00, 0x00, 0x00,        // L1: cont L2 (0x11)
                 0x69, 0x00,                                // lde0 0
                 0x01,                                    // push
                 0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
@@ -119,7 +119,7 @@ public class HeapContinuationTest
 		vm.push(Fixnum.get(100));
 		vm.setAcc(literals[0]);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(200, ((Fixnum)vm.getAcc()).fixnum);
 	}
@@ -142,7 +142,7 @@ public class HeapContinuationTest
                 0x0d,                                    // ret
                 0x44, 0x02, 0x00, 0x00, 0x00,            // L1: ldi 2
                 0x01,                                    // push
-                (byte) 0x89, 0x11, 0x00, 0x00, 0x00,        // cont L2 (0x11)
+                (byte) 0x52, 0x11, 0x00, 0x00, 0x00,        // cont L2 (0x11)
                 0x69, 0x00,                                // lde0 0
                 0x01,                                    // push
                 0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
@@ -161,7 +161,7 @@ public class HeapContinuationTest
 		vm.push(Fixnum.get(1));
 		vm.setAcc(literals[0]);
 		assertTrue(vm.runnable());
-		vm.run();
+		vm.main();
 		assertFalse(vm.runnable());
 		assertEquals(2, ((Fixnum)vm.getAcc()).fixnum);
 	}
