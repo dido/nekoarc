@@ -21,9 +21,9 @@ public class CCC extends Builtin
 	@Override
 	public ArcObject invoke(InvokeThread thr)
 	{
-		ArcObject continuation = thr.vm.getCont();
+		ArcObject continuation = thr.thr.getCont();
 		if (continuation instanceof Fixnum)
-			continuation = HeapContinuation.fromStackCont(thr.vm, continuation);
+			continuation = HeapContinuation.fromStackCont(thr.thr, continuation);
 		if (!(continuation instanceof HeapContinuation))
 			throw new NekoArcException("Invalid continuation type " + continuation.type().toString());
 		return(thr.apply(thr.getenv(0,  0), continuation));

@@ -18,7 +18,7 @@ public class ReadB extends Builtin {
     @Override
     public ArcObject invoke(InvokeThread vm) {
         InputPort fp;
-        fp = (InputPort)((vm.argc() < 1) ? vm.vm.value((Symbol)Symbol.intern("stdin")) :
+        fp = (InputPort)((vm.argc() < 1) ? vm.thr.value((Symbol)Symbol.intern("stdin")) :
                 vm.getenv(0, 0)).car();
         return(Fixnum.get(fp.readb()));
     }

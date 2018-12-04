@@ -22,7 +22,7 @@ public class UngetC extends Builtin {
     public ArcObject invoke(InvokeThread vm) {
         Rune r = (Rune) vm.getenv(0, 0);
         ArcObject f = vm.getenv(0, 1).car();
-        InputPort fp = (f instanceof InputPort) ? ((InputPort)f) : ((InputPort)vm.vm.value((Symbol)Symbol.intern("stdin")));
+        InputPort fp = (f instanceof InputPort) ? ((InputPort)f) : ((InputPort)vm.thr.value((Symbol)Symbol.intern("stdin")));
         return(fp.ungetc(r));
     }
 }

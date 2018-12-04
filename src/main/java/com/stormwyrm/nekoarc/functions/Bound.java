@@ -16,6 +16,6 @@ public class Bound extends Builtin {
 
     @Override
     public ArcObject invoke(InvokeThread vm) {
-        return(vm.vm.boundP(vm.getenv(0, 0)));
+        return(vm.thr.boundP(vm.getenv(0, 0)));
     }
 }
