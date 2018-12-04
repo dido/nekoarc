@@ -160,38 +160,38 @@ public abstract class ArcObject implements Callable
 	public boolean exactP() { return(false); }
 
 	/**
-	 * The basic apply. This should normally not be overridden.
-	 * Only Closure should probably override it because it runs
-	 * completely within the vm.
+	 * The basic apply. This should normally not be overridden. Only Closure should probably override it
+	 * because it runs completely within its ArcThread. This will create an invoke thread to run the Java
+	 * code, suspending the thread that called it until the invoke thread terminates and returns its value.
 	 *
-	 * @param vm The virtual machine applying the object
+	 * @param thr The thread applying the object
 	 * @param caller The function calling
 	 */
-	public void apply(ArcThread vm, Callable caller) {
+	public void apply(ArcThread thr, Callable caller) {
 		int minenv, dsenv, optenv;
 		minenv = requiredArgs();
 		dsenv = extraArgs();
 		optenv = optionalArgs();
 		if (variadicP()) {
 			int i;
-			vm.argcheck(minenv, -1);
+			thr.argcheck(minenv, -1);
 			ArcObject rest = Nil.NIL;
-			for (i = vm.argc(); i>(minenv + optenv); i--)
-				rest = new Cons(vm.pop(), rest);
-			vm.mkenv(i, minenv + optenv - i + dsenv + 1);
+			for (i = thr.argc(); i>(minenv + optenv); i--)
+				rest = new Cons(thr.pop(), rest);
+			thr.mkenv(i, minenv + optenv - i + dsenv + 1);
 			/* store the rest parameter */
-			vm.setenv(0, minenv + optenv + dsenv, rest);
+			thr.setenv(0, minenv + optenv + dsenv, rest);
 		} else {
-			vm.argcheck(minenv, minenv + optenv);
-			vm.mkenv(vm.argc(), minenv + optenv - vm.argc() + dsenv);
+			thr.argcheck(minenv, minenv + optenv);
+			thr.mkenv(thr.argc(), minenv + optenv - thr.argc() + dsenv);
 		}
 
 		// Start the invoke thread
-		InvokeThread thr = new InvokeThread(vm, caller, this);
-		new Thread(thr).start();
+		InvokeThread ithr = new InvokeThread(thr, caller, this);
+		new Thread(ithr).start();
 
 		// Suspend the caller's thread until the invoke thread returns
-		vm.setAcc(caller.sync().retval());
+		thr.setAcc(caller.sync().retval());
 	}
 
 	/**
