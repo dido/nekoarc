@@ -122,8 +122,26 @@ public class VirtualMachine {
     }
 
     /**
+     * Check the binding of a global symbol
+     * @param arg the symbol to check binding of
+     * @return t if symbol is bound, nil if not bound
+     */
+    public ArcObject boundP(ArcObject arg) {
+        genvlock.readLock().lock();
+        try {
+            if (!(arg instanceof Symbol))
+                throw new NekoArcException("bound expected symbol, given " + arg);
+            if (genv.containsKey((Symbol) arg))
+                return (True.T);
+            return (Nil.NIL);
+        } finally {
+            genvlock.readLock().unlock();
+        }
+    }
+
+    /**
      * Get the binding of a global symbol
-     * @param sym
+     * @param sym the symbol get value of
      * @return the binding
      */
     public ArcObject value(Symbol sym) {
@@ -200,13 +218,5 @@ public class VirtualMachine {
 
         // Error handling and continuations
         defbuiltin(CCC.getInstance());
-    }
-
-    public ArcObject boundP(ArcObject arg) {
-        if (!(arg instanceof Symbol))
-            throw new NekoArcException("bound expected symbol, given " + arg);
-        if (genv.containsKey((Symbol) arg))
-            return (True.T);
-        return (Nil.NIL);
     }
 }
