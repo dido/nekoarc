@@ -26,6 +26,7 @@ import com.stormwyrm.nekoarc.functions.io.*;
 import com.stormwyrm.nekoarc.functions.list.*;
 import com.stormwyrm.nekoarc.functions.typehandling.*;
 import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.util.ObjectMap;
@@ -218,5 +219,17 @@ public class VirtualMachine {
 
         // Error handling and continuations
         defbuiltin(CCC.getInstance());
+    }
+
+    public ArcThread spawn(ArcThread t) {
+        t.thread = new Thread(t);
+        t.thread.start();
+        return(t);
+    }
+
+    public ArcThread spawn(int ip) {
+        ArcThread t = new ArcThread(this);
+        t.setIP(ip);
+        return(spawn(t));
     }
 }
