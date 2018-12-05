@@ -63,4 +63,39 @@ public class CCCTest {
         assertEquals(42, ((Fixnum)thr.getAcc()).fixnum);
     }
 
+    @Test
+    public void testCCCTail() {
+        CodeGen cg = new CodeGen();
+        // This is basically also
+        // (ccc [(_42) 21])
+        // but there is no continuation, as would be generated with ccc in a tail position
+
+        Op.ENV.emit(cg, 0, 0, 0);
+        Op.LDL.emit(cg, 1);         // function [(_ 42) 21]
+        Op.PUSH.emit(cg);
+        Op.LDG.emit(cg, 0);         // symbol ccc
+        Op.APPLY.emit(cg, 1);
+
+        // [(_ 42) 21]
+        int func = Op.ENV.emit(cg, 1, 0, 0);
+        Op.LDI.emit(cg, 42);
+        Op.PUSH.emit(cg);
+        Op.LDE0.emit(cg, 0);
+        Op.APPLY.emit(cg, 1);
+        Op.LDI.emit(cg, 21);
+        Op.RET.emit(cg);
+
+        cg.literal(Symbol.intern("ccc"));
+        cg.literal(new Closure(Nil.NIL, Fixnum.get(func)));
+
+        VirtualMachine vm = new VirtualMachine(cg);
+        ArcThread thr = new ArcThread(vm);
+        vm.initSyms();
+
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.main();
+        assertFalse(thr.runnable());
+        assertEquals(42, ((Fixnum)thr.getAcc()).fixnum);
+    }
 }
