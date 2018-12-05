@@ -30,58 +30,122 @@ import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.util.ObjectMap;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+/**
+ * NekoArc virtual machine.
+ */
 public class VirtualMachine {
     public final CodeGen cg;
     private byte[] code;
     private  ArcObject[] literals;
-    public ObjectMap<Symbol, ArcObject> genv = new ObjectMap<>();
+    /**
+     * Lock protecting the global environment
+     */
+    private final ReentrantReadWriteLock genvlock = new ReentrantReadWriteLock(true);
+    private final ObjectMap<Symbol, ArcObject> genv = new ObjectMap<>();
 
+    /**
+     * Create a new virtual machine from a code generator
+     * @param cg the code generator to load from
+     */
     public VirtualMachine(CodeGen cg) {
         this.cg = cg;
         cg.load(this);
     }
 
+    /**
+     * Create a new virtual machine with an empty code generator
+     */
     public VirtualMachine() {
         cg = new CodeGen();
         code = null;
     }
 
+    /**
+     * Get the bytecode in this virtual machine
+     * @return the code
+     */
     public byte[] code() {
         return(code);
     }
 
+    /**
+     * Load bytecode and literals into the virtual machine
+     * @param instructions bytecode to load
+     * @param literals literal data to load
+     */
     public void load(final byte[] instructions, final ArcObject[] literals) {
         this.code = instructions;
         this.literals = literals;
     }
 
-    public ArcObject literal(int offset) {
-        return (literals[offset]);
-    }// add or replace a global binding
-
+    /**
+     * Load the vm from the internal code generator
+     */
     public void load() {
         cg.load(this);
     }
 
+    /**
+     * Load explicit bytecode into the virtual machine
+     * @param instructions the bytecode to load
+     */
     public void load(final byte[] instructions) {
         load(instructions, null);
     }
 
 
+    /**
+     * Get a literal from the data section of the virtual machine
+     * @param offset the offset to get the data from
+     * @return the data object at the offset
+     */
+    public ArcObject literal(int offset) {
+        return (literals[offset]);
+    }
+
+    /**
+     * Bind a global symbol in the virtual machine
+     * @param sym the symbol to bind
+     * @param binding the value to bind to the symbol
+     * @return the binding value
+     */
     public ArcObject bind(Symbol sym, ArcObject binding) {
-        genv.put(sym, binding);
+        genvlock.writeLock().lock();
+        try {
+            genv.put(sym, binding);
+        } finally {
+            genvlock.writeLock().unlock();
+        }
         return(binding);
     }
 
-    public ArcObject defbuiltin(Builtin builtin) {
-        bind((Symbol) Symbol.intern(builtin.getName()), builtin);
-        return (builtin);
+    /**
+     * Get the binding of a global symbol
+     * @param sym
+     * @return the binding
+     */
+    public ArcObject value(Symbol sym) {
+        genvlock.readLock().lock();
+        try {
+            if (!genv.containsKey(sym))
+                throw new NekoArcException("Unbound symbol " + sym);
+            return(genv.get(sym));
+        } finally {
+            genvlock.readLock().unlock();
+        }
     }
 
-    public ArcObject value(Symbol sym) {
-        if (!genv.containsKey(sym))
-            throw new NekoArcException("Unbound symbol " + sym);
-        return (genv.get(sym));
+
+    /**
+     * Define a builtin
+     * @param builtin the builtin to define
+     * @return the builtin bound
+     */
+    public ArcObject defbuiltin(Builtin builtin) {
+        bind((Symbol) Symbol.intern(builtin.getName()), builtin);
+        return(builtin);
     }
 
     public void initSyms() {
