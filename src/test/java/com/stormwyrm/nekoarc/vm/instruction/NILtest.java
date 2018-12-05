@@ -18,7 +18,7 @@ public class NILtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Nil.NIL, vm.getAcc());
 		assertEquals(2, vm.getIP());

@@ -22,7 +22,7 @@ public class CONTtest
 		vm.setAcc(Fixnum.get(1234));
 		vm.makecont(3);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
 	}

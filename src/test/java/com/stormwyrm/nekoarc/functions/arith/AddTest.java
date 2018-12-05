@@ -23,7 +23,7 @@ public class AddTest {
         thr.load();
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.main();
+        thr.run();
         assertFalse(thr.runnable());
         assertEquals(0, ((Fixnum)thr.getAcc()).fixnum);
     }
@@ -44,7 +44,7 @@ public class AddTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.main();
+        thr.run();
         assertFalse(thr.runnable());
         assertEquals(1, ((Fixnum)thr.getAcc()).fixnum);
     }
@@ -67,7 +67,7 @@ public class AddTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.main();
+        thr.run();
         assertFalse(thr.runnable());
         assertEquals(3, ((Fixnum)thr.getAcc()).fixnum);
     }
@@ -92,7 +92,7 @@ public class AddTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.main();
+        thr.run();
         assertFalse(thr.runnable());
         assertEquals(6, ((Fixnum)thr.getAcc()).fixnum);
     }

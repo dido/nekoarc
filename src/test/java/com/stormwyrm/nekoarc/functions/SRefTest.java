@@ -48,7 +48,7 @@ public class SRefTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.main();
+        vm.run();
         assertFalse(vm.runnable());
         assertEquals(5, ((Fixnum)vm.getAcc()).fixnum);
         assertEquals(1, ((Fixnum)cons.car()).fixnum);
@@ -81,7 +81,7 @@ public class SRefTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.main();
+        thr.run();
         assertFalse(thr.runnable());
         assertEquals(5, ((Fixnum)thr.getAcc()).fixnum);
         assertEquals(1, ((Fixnum)v.index(0)).fixnum);

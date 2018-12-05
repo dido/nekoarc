@@ -28,7 +28,7 @@ public class IStest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -47,7 +47,7 @@ public class IStest
 		vm.load(inst);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Nil.NIL, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -68,7 +68,7 @@ public class IStest
 		vm.load(inst, literals);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Nil.NIL, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -90,7 +90,7 @@ public class IStest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -112,7 +112,7 @@ public class IStest
 		vm.load(inst, literals);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Nil.NIL, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -134,7 +134,7 @@ public class IStest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -156,7 +156,7 @@ public class IStest
 		vm.load(inst, literals);
 		vm.setAcc(True.T);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Nil.NIL, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -178,7 +178,7 @@ public class IStest
 		vm.load(inst, literals);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -200,7 +200,7 @@ public class IStest
 		vm.load(inst, literals);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Nil.NIL, vm.getAcc());
 		assertEquals(13, vm.getIP());
@@ -222,7 +222,7 @@ public class IStest
 		vm.load(inst, literals);
 		vm.setAcc(Fixnum.get(0));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(13, vm.getIP());

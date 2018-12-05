@@ -34,7 +34,7 @@ public class ENVRtest
 		vm.push(Fixnum.get(1));
 		vm.push(Fixnum.get(2));
 		vm.push(Fixnum.get(3));
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getenv(0, 0).is(True.T));
 		assertEquals(Fixnum.get(31337), vm.getenv(0, 1));
@@ -64,7 +64,7 @@ public class ENVRtest
 		vm.push(True.T);
 		vm.push(Fixnum.get(7839));
 		vm.push(Fixnum.get(646));
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getenv(0, 0).is(True.T));
 		assertEquals(Fixnum.get(7839), vm.getenv(0, 1));
@@ -90,7 +90,7 @@ public class ENVRtest
 		// three parameters
 		vm.push(True.T);
 		vm.push(Fixnum.get(3838));
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getenv(0, 0).is(True.T));
 		assertEquals(Fixnum.get(3838), vm.getenv(0, 1));
@@ -116,7 +116,7 @@ public class ENVRtest
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
 		try {
-			vm.main();
+			vm.run();
 			fail("exception not thrown");
 		} catch (NekoArcException e) {
 			assertEquals("too few arguments, at least 3 required, 1 passed", e.getMessage());

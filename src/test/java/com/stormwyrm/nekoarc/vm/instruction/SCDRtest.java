@@ -26,7 +26,7 @@ public class SCDRtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum) vm.getAcc().car()).fixnum);
 		assertEquals(3, ((Fixnum) vm.getAcc().cdr()).fixnum);

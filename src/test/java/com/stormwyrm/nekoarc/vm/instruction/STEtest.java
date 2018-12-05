@@ -36,7 +36,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
 		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
@@ -77,7 +77,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
 		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
@@ -117,7 +117,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
 		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
@@ -157,7 +157,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
 		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
@@ -197,7 +197,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getenv(1, 0).is(Nil.NIL));
 		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
@@ -237,7 +237,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
 		assertTrue(vm.getenv(1, 1).is(Nil.NIL));
@@ -277,7 +277,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
 		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
@@ -317,7 +317,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
 		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
@@ -357,7 +357,7 @@ public class STEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
 		assertEquals(Fixnum.get(2), vm.getenv(1, 1));

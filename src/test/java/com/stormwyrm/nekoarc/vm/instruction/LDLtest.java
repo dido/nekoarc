@@ -22,7 +22,7 @@ public class LDLtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Symbol.intern("foo"), vm.getAcc());
 		assertEquals(6, vm.getIP());		

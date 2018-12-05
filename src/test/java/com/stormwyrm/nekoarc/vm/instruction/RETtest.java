@@ -16,7 +16,7 @@ public class RETtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(1234, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(1, vm.getIP());
@@ -33,7 +33,7 @@ public class RETtest
 		vm.setAcc(Fixnum.get(1234));
 		vm.makecont(3);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
 	}

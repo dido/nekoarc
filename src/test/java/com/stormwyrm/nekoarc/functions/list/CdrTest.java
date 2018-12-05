@@ -29,7 +29,7 @@ public class CdrTest {
         vm.load(inst, literals);
         vm.setargc(0);
         assertTrue(vm.runnable());
-        vm.main();
+        vm.run();
         assertFalse(vm.runnable());
         assertEquals(2, ((Fixnum)vm.getAcc()).fixnum);
     }

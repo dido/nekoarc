@@ -26,7 +26,7 @@ public class CLStest
 		vm.setargc(1);
 		vm.push(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc() instanceof Closure);
 		assertTrue(vm.getAcc().car() instanceof HeapEnv);

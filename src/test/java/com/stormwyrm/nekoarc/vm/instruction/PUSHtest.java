@@ -20,7 +20,7 @@ public class PUSHtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(-555729757), vm.getAcc());
 		assertEquals(1, vm.getSP());

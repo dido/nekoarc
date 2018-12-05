@@ -23,7 +23,7 @@ public class CONStest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(2, ((Fixnum) vm.getAcc().car()).fixnum);
 		assertEquals(1, ((Fixnum) vm.getAcc().cdr()).fixnum);

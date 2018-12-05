@@ -21,7 +21,7 @@ public class JMPtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(12, vm.getIP());
@@ -43,7 +43,7 @@ public class JMPtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(12, vm.getIP());

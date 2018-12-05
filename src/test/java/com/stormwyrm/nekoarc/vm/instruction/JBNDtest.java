@@ -24,7 +24,7 @@ public class JBNDtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1).fixnum, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(12, vm.getIP());
@@ -42,7 +42,7 @@ public class JBNDtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(8, vm.getIP());
@@ -60,7 +60,7 @@ public class JBNDtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Nil.NIL, vm.getAcc());
 		assertEquals(8, vm.getIP());
@@ -80,7 +80,7 @@ public class JBNDtest
 		vm.load(inst, literals);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(True.T, vm.getAcc());
 		assertEquals(12, vm.getIP());

@@ -19,7 +19,7 @@ public class NOtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc() instanceof True);
 		assertEquals(3, vm.getIP());
@@ -34,7 +34,7 @@ public class NOtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc() instanceof Nil);
 		assertEquals(3, vm.getIP());
@@ -50,7 +50,7 @@ public class NOtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc() instanceof Nil);
 		assertEquals(7, vm.getIP());

@@ -24,6 +24,6 @@ public class TypeTest {
         thr.load(inst, literals);
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.main();
+        thr.run();
         assertEquals("fixnum", thr.getAcc().toString());    }
 }

@@ -23,7 +23,7 @@ public class CDRtest {
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)(vm.getAcc())).fixnum);
 		assertEquals(14, vm.getIP());

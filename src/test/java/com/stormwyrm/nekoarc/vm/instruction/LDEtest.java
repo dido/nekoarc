@@ -28,7 +28,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getAcc());
 		assertEquals(26, vm.getIP());
@@ -52,7 +52,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(2), vm.getAcc());
 		assertEquals(26, vm.getIP());
@@ -76,7 +76,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(3), vm.getAcc());
 		assertEquals(26, vm.getIP());
@@ -100,7 +100,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc().is(Unbound.UNBOUND));
 		assertEquals(26, vm.getIP());
@@ -124,7 +124,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc().is(Unbound.UNBOUND));
 		assertEquals(26, vm.getIP());
@@ -151,7 +151,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(1), vm.getAcc());
 		assertEquals(36, vm.getIP());
@@ -178,7 +178,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(2), vm.getAcc());
 		assertEquals(36, vm.getIP());
@@ -205,7 +205,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(3), vm.getAcc());
 		assertEquals(36, vm.getIP());
@@ -232,7 +232,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc().is(Unbound.UNBOUND));
 		assertEquals(36, vm.getIP());
@@ -259,7 +259,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc().is(Unbound.UNBOUND));
 		assertEquals(36, vm.getIP());
@@ -290,7 +290,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(4), vm.getAcc());
 		assertEquals(48, vm.getIP());
@@ -321,7 +321,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(5), vm.getAcc());
 		assertEquals(48, vm.getIP());
@@ -352,7 +352,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(Fixnum.get(6), vm.getAcc());
 		assertEquals(48, vm.getIP());
@@ -383,7 +383,7 @@ public class LDEtest
 		vm.setargc(3);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc().is(Unbound.UNBOUND));
 		assertEquals(48, vm.getIP());

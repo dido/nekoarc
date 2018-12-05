@@ -25,7 +25,7 @@ public class DCDRtest
 		vm.load(inst);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(1, ((Fixnum)(vm.getAcc())).fixnum);
 		assertEquals(14, vm.getIP());
@@ -40,7 +40,7 @@ public class DCDRtest
 		vm.load(inst);
 		vm.setAcc(Fixnum.get(1234));
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc().is(Unbound.UNBOUND));
 		assertEquals(3, vm.getIP());
@@ -57,7 +57,7 @@ public class DCDRtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertTrue(vm.getAcc().is(Unbound.UNBOUND));
 		assertEquals(7, vm.getIP());

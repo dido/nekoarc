@@ -144,7 +144,7 @@ public class FibonacciTest {
 		thr.push(Fixnum.get(25));
 		thr.setAcc(Nil.NIL);
 		assertTrue(thr.runnable());
-		thr.main();
+		thr.run();
 		assertFalse(thr.runnable());
 		assertEquals(121393, ((Fixnum)thr.getAcc()).fixnum);
 	}

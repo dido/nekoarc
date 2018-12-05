@@ -27,7 +27,7 @@ public class APPLYtest
 		vm.load(inst, literals);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(12, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(19, vm.getIP());
@@ -58,7 +58,7 @@ public class APPLYtest
 		vm.push(Fixnum.get(5));
 		vm.setargc(1);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(7, ((Fixnum)vm.getAcc()).fixnum);
 		assertEquals(32, vm.getIP());

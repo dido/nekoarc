@@ -75,7 +75,7 @@ public class HeapContinuationTest
 		vm.push(hc);
 		vm.setAcc(Nil.NIL);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(28, ((Fixnum)vm.getAcc()).fixnum);
 	}
@@ -119,7 +119,7 @@ public class HeapContinuationTest
 		vm.push(Fixnum.get(100));
 		vm.setAcc(literals[0]);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(200, ((Fixnum)vm.getAcc()).fixnum);
 	}
@@ -161,7 +161,7 @@ public class HeapContinuationTest
 		vm.push(Fixnum.get(1));
 		vm.setAcc(literals[0]);
 		assertTrue(vm.runnable());
-		vm.main();
+		vm.run();
 		assertFalse(vm.runnable());
 		assertEquals(2, ((Fixnum)vm.getAcc()).fixnum);
 	}

@@ -60,7 +60,7 @@ public class TailRecursionTest
 		thr.push(Fixnum.get(1));							// t
 		thr.setAcc(Nil.NIL);
 		assertTrue(thr.runnable());
-		thr.main();
+		thr.run();
 		assertFalse(thr.runnable());
 		assertEquals(50001, ((Fixnum)thr.getAcc()).fixnum);
 	}

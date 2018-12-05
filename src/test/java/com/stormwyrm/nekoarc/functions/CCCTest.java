@@ -53,14 +53,11 @@ public class CCCTest {
         cg.literal(new Closure(Nil.NIL, Fixnum.get(func)));
 
         VirtualMachine vm = new VirtualMachine(cg);
-        ArcThread thr = new ArcThread(vm);
         vm.initSyms();
 
-        thr.setargc(0);
-        assertTrue(thr.runnable());
-        thr.main();
-        assertFalse(thr.runnable());
-        assertEquals(42, ((Fixnum)thr.getAcc()).fixnum);
+        ArcThread thr = vm.spawn(0);
+        ArcObject retval = thr.join();
+        assertEquals(42, ((Fixnum)retval).fixnum);
     }
 
     @Test
@@ -94,7 +91,7 @@ public class CCCTest {
 
         thr.setargc(0);
         assertTrue(thr.runnable());
-        thr.main();
+        thr.run();
         assertFalse(thr.runnable());
         assertEquals(42, ((Fixnum)thr.getAcc()).fixnum);
     }
