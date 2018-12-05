@@ -43,6 +43,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	private ArcObject acc;			// accumulator
 	private int argc;				// argument counter for current function
 	private static final INVALID NOINST = new INVALID();
+	public Thread thread;			// Java thread running this
 	private static final Instruction[] jmptbl = {
 		new NOP(),		// 0x00
 		new PUSH(),		// 0x01
@@ -425,23 +426,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return(stack[--sp]);
 	}
 
-	/**
-	 * Main method of the thread.
-	 * @throws NekoArcException on errors
-	 */
-	public void main() throws NekoArcException {
-		while (runnable) {
-			jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
-		}
-	}
-
-    /**
-     * Run the thread as a Java thread.
-     */
-	public void run() {
-	    main();
-    }
-
     /**
      * Four-byte instruction arguments (most everything else). Little endian.
      * @return Next four-byte instruction argument at the current IP
@@ -798,5 +782,29 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 
     public ArcObject boundP(ArcObject arg) {
 		return vm.boundP(arg);
+	}
+
+	/**
+	 * Main entry point of the thread.
+	 * @throws NekoArcException on errors
+	 */
+	public void run() throws NekoArcException {
+		while (runnable) {
+			jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
+		}
+	}
+
+
+	/**
+	 * Wait for the thread to terminate and return the last value of the accumulator
+	 * @return last value of accumulator when thread finished execution
+	 */
+	public ArcObject join() {
+		try {
+			thread.join();
+			return(acc);
+		} catch (InterruptedException e) {
+			throw new NekoArcException("thread join interrupted");
+		}
 	}
 }
