@@ -1,3 +1,20 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
 package com.stormwyrm.nekoarc.vm;
 
 import static org.junit.Assert.*;
@@ -24,16 +41,6 @@ public class HeapContinuationTest
 		env.setEnv(0, Fixnum.get(4));
 		env.setEnv(1, Fixnum.get(5));
 		env.setEnv(2, Fixnum.get(6));
-
-		// Synthetic HeapContinuation
-		hc = new HeapContinuation(3,		// 3 stack elements
-				Nil.NIL,					// previous continuation
-				env,						// environment
-				20);						// saved IP
-		// Stack elements
-		hc.setIndex(0, Fixnum.get(1));
-		hc.setIndex(1, Fixnum.get(2));
-		hc.setIndex(2, Fixnum.get(3));
 
 		// CodeGen:
 		// env 2 0 0; lde0 0; push; lde0 1; apply 1; ret; hlt; hlt; hlt; hlt; hlt;
@@ -68,16 +75,31 @@ public class HeapContinuationTest
                 0x15,                                    // add
                 0x0d,                                    // ret
         };
-		ArcThread vm = new ArcThread(1024);
+        VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm,1024);
 		vm.load(inst);
-		vm.setargc(2);
-		vm.push(Fixnum.get(7));
-		vm.push(hc);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(28, ((Fixnum)vm.getAcc()).fixnum);
+
+		// Synthetic HeapContinuation
+		hc = new HeapContinuation(3,		// 3 stack elements
+				Nil.NIL,					// previous continuation
+				env,						// environment
+				20,
+				thr.here);						// saved IP
+		// Stack elements
+		hc.setIndex(0, Fixnum.get(1));
+		hc.setIndex(1, Fixnum.get(2));
+		hc.setIndex(2, Fixnum.get(3));
+
+
+		thr.setargc(2);
+		thr.push(Fixnum.get(7));
+
+		thr.push(hc);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(28, ((Fixnum)thr.getAcc()).fixnum);
 	}
 
 	/** Next, we make a function that recurses several times, essentially
@@ -86,8 +108,7 @@ public class HeapContinuationTest
 	 *  eventually migrate from the stack to the heap.
 	 */
 	@Test
-	public void test2()
-	{
+	public void test2() {
 		// env 1 0 0; lde0 0; push; ldi 0; is; jf L1; ldi 2; ret;
 		// L1: cont L2; lde0 0; push; ldi 1; sub; push; ldl 0; apply 1; L2: push; ldi 2; add; ret
         byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00,    // env 1 0 0
@@ -111,17 +132,19 @@ public class HeapContinuationTest
                 0x15,                                    // add
                 0x0d                                    // ret
         };
-		ArcThread vm = new ArcThread(4);
+
+        VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm,4);
         ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
 		vm.load(inst, literals);
-		vm.setargc(1);
-		vm.push(Fixnum.get(100));
-		vm.setAcc(literals[0]);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(200, ((Fixnum)vm.getAcc()).fixnum);
+		thr.setargc(1);
+		thr.push(Fixnum.get(100));
+		thr.setAcc(literals[0]);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(200, ((Fixnum)thr.getAcc()).fixnum);
 	}
 
 	/** Next, we make a slight variation
@@ -153,17 +176,18 @@ public class HeapContinuationTest
                 0x15,                                    // L2: add
                 0x0d                                    // ret
         };
-		ArcThread vm = new ArcThread(5);
+        VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm,5);
         ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
 		vm.load(inst, literals);
-		vm.setargc(1);
-		vm.push(Fixnum.get(1));
-		vm.setAcc(literals[0]);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(2, ((Fixnum)vm.getAcc()).fixnum);
+		thr.setargc(1);
+		thr.push(Fixnum.get(1));
+		thr.setAcc(literals[0]);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(2, ((Fixnum)thr.getAcc()).fixnum);
 	}
 
 }
