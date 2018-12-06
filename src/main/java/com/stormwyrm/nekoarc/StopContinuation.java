@@ -44,6 +44,6 @@ public class StopContinuation extends HeapContinuation {
      */
     @Override
     public void restore(ArcThread thr, Callable caller) {
-        thr.setrunnable(false);
+        thr.halt();
     }
 }
