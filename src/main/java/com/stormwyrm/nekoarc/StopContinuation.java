@@ -33,8 +33,8 @@ public class StopContinuation extends HeapContinuation {
         return(TYPE);
     }
 
-    public StopContinuation() {
-        super(0, Nil.NIL, Nil.NIL, 0);
+    public StopContinuation(ArcObject here) {
+        super(0, Nil.NIL, Nil.NIL, 0, here);
     }
 
     /**
