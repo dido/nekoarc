@@ -1,3 +1,20 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
 package com.stormwyrm.nekoarc.vm;
 
 import static org.junit.Assert.*;
@@ -21,10 +38,10 @@ public class Java2ArcTest
 		Builtin builtin = new Builtin("test", 1, 0, 0, false)
 		{
 			@Override
-			public ArcObject invoke(InvokeThread thr)
+			public ArcObject invoke(InvokeThread ithr)
 			{
-				ArcObject arg = thr.getenv(0, 0);
-				return(thr.apply(arg, Fixnum.get(1)));
+				ArcObject arg = ithr.getenv(0, 0);
+				return(ithr.apply(arg, Fixnum.get(1)));
 			}
 		};
 		// Apply the above builtin
@@ -44,16 +61,19 @@ public class Java2ArcTest
                 0x15,                                    // add
                 0x0d                                    // ret
         };
-		ArcThread vm = new ArcThread(1024);
+
         ArcObject[] literals = new ArcObject[2];
-		literals[0] = new Closure(Nil.NIL, Fixnum.get(18));	// position of second
-		literals[1] = builtin;
-		vm.load(inst, literals);
-		vm.setargc(0);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(2, ((Fixnum)vm.getAcc()).fixnum);
+        literals[0] = new Closure(Nil.NIL, Fixnum.get(18));	// position of second
+        literals[1] = builtin;
+        VirtualMachine vm = new VirtualMachine();
+        ArcThread thr = new ArcThread(vm, 1024);
+
+        vm.load(inst, literals);
+        thr.setargc(0);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(2, ((Fixnum)thr.getAcc()).fixnum);
 	}
 
 }
