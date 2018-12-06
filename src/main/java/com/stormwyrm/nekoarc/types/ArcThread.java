@@ -44,6 +44,12 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	private int argc;				// argument counter for current function
 	private static final INVALID NOINST = new INVALID();
 	public Thread thread;			// Java thread running this
+	public ArcObject here;			// "here" value used for Hanson-Lamping
+	private static final Symbol noBeforesOrAfters = (Symbol) Symbol.intern("no-befores-or-afters");
+
+	/**
+	 * The instruction jump table.
+	 */
 	private static final Instruction[] jmptbl = {
 		new NOP(),		// 0x00
 		new PUSH(),		// 0x01
@@ -318,6 +324,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		cont = Nil.NIL;
 		setAcc(Nil.NIL);
 		caller = new CallSync();
+		here = new Cons(noBeforesOrAfters, Nil.NIL);
 	}
 
 	/**
@@ -502,6 +509,10 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	public ArcObject value(Symbol sym)
 	{
 		return vm.value(sym);
+	}
+
+	public ArcObject boundP(ArcObject arg) {
+		return vm.boundP(arg);
 	}
 
 	public int argc()
@@ -752,8 +763,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	 * When control is transferred to the tail called function the call
 	 * to mkenv will turn the stuff on the stack into a new environment.
 	*/
-	public void menv(int n)
-	{
+	public void menv(int n) {
 		// do nothing if we have no env
 		if (env.is(Nil.NIL))
 			return;
@@ -780,10 +790,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		setenvreg(parentenv);
 	}
 
-    public ArcObject boundP(ArcObject arg) {
-		return vm.boundP(arg);
-	}
-
 	/**
 	 * Main entry point of the thread.
 	 * @throws NekoArcException on errors
@@ -794,6 +800,25 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		}
 	}
 
+	/**
+	 * Hanson-Lamping reroot
+	 * @param ithr Invoke thread
+	 * @param there where to reroot
+	 */
+	public ArcObject reroot(InvokeThread ithr, ArcObject there) {
+		ArcObject before, after;
+
+		if (here.is(there))
+			return(Nil.NIL);
+		reroot(ithr, there.cdr());
+		before = there.car().car();
+		after = there.cdr().car();
+		here.scar(new Cons(after, before));
+		here.scdr(there);
+		there.scar(noBeforesOrAfters);
+		there.scdr(Nil.NIL);
+		return(ithr.apply(before));
+	}
 
 	/**
 	 * Wait for the thread to terminate and return the last value of the accumulator
