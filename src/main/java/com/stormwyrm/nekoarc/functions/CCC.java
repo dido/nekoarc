@@ -31,8 +31,8 @@ public class CCC extends Builtin {
 	}
 
 	/**
-	 * Get the instance of this.
-	 * @return
+	 * Get the instance of CCC.
+	 * @return the unique instance of CCC
 	 */
 	public static Builtin getInstance() {
 		return(INSTANCE);
@@ -40,19 +40,19 @@ public class CCC extends Builtin {
 
 	/**
 	 * Invoke ccc.
-	 * @param thr The thread executing ccc
+	 * @param ithr The thread executing ccc
 	 * @return The return value of the closure passed to it.
 	 */
 	@Override
-	public ArcObject invoke(InvokeThread thr) {
-		ArcObject continuation = thr.thr.getCont();
+	public ArcObject invoke(InvokeThread ithr) {
+		ArcObject continuation = ithr.thr.getCont();
 		if (continuation instanceof Fixnum)
-			continuation = HeapContinuation.fromStackCont(thr.thr, continuation);
+			continuation = HeapContinuation.fromStackCont(ithr.thr, continuation);
 		if (Nil.NIL.is(continuation))
-			continuation = new StopContinuation();
+			continuation = new StopContinuation(ithr.thr.here);
 		if (!(continuation instanceof HeapContinuation))
 			throw new NekoArcException("Invalid continuation type " + continuation.type().toString());
-		return(thr.apply(thr.getenv(0,  0), continuation));
+		return(ithr.apply(ithr.getenv(0,  0), continuation));
 	}
 
 }
