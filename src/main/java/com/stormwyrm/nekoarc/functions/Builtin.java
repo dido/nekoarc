@@ -52,7 +52,7 @@ public abstract class Builtin extends ArcObject
 		return(variadic);
 	}
 
-	public abstract ArcObject invoke(InvokeThread vm);
+	public abstract ArcObject invoke(InvokeThread ithr);
 
 	public ArcObject type()
 	{
