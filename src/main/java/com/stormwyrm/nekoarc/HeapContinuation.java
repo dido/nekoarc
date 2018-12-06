@@ -32,12 +32,14 @@ public class HeapContinuation extends Vector implements Continuation {
 	private final ArcObject prevcont;
 	private final ArcObject env;
 	private final int ipoffset;
+	protected final ArcObject myHere;
 
-	public HeapContinuation(int size, ArcObject pcont, ArcObject e, int ip) {
+	public HeapContinuation(int size, ArcObject pcont, ArcObject e, int ip, ArcObject myHere) {
 		super(size);
 		prevcont = pcont;
 		env = e;
 		ipoffset = ip;
+		this.myHere = myHere;
 	}
 
 	/**
@@ -99,7 +101,7 @@ public class HeapContinuation extends Vector implements Continuation {
 		pco = fromStackCont(thr, pco, deepest);
 		ArcObject senv = HeapEnv.fromStackEnv(thr, thr.stackIndex(cc-2), deepest);
 		HeapContinuation c = new HeapContinuation(svsize, pco, senv,
-				(int)((Fixnum)thr.stackIndex(cc-4)).fixnum);
+				(int)((Fixnum)thr.stackIndex(cc-4)).fixnum, thr.here);
 
 		for (int i=0; i<svsize; i++)
 			c.setIndex(i, thr.stackIndex(bp + i));
@@ -117,6 +119,8 @@ public class HeapContinuation extends Vector implements Continuation {
 	 */
 	@Override
 	public ArcObject invoke(InvokeThread ithr) {
+		// Perform rerooting first before restoring the continuation
+		ithr.thr.reroot(ithr, myHere);
 		ithr.thr.setCont(this);
 		return(ithr.getenv(0, 0));
 	}
