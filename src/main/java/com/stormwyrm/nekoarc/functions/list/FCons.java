@@ -16,7 +16,7 @@ public class FCons extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        return(new com.stormwyrm.nekoarc.types.Cons(vm.getenv(0,0), vm.getenv(0,1)));
+    public ArcObject invoke(InvokeThread ithr) {
+        return(new com.stormwyrm.nekoarc.types.Cons(ithr.getenv(0,0), ithr.getenv(0,1)));
     }
 }

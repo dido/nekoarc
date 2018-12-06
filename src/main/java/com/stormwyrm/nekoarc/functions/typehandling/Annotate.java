@@ -16,7 +16,7 @@ public class Annotate extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
+    public ArcObject invoke(InvokeThread ithr) {
         return null;
     }
 }

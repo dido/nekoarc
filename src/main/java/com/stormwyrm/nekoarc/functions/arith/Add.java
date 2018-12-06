@@ -20,11 +20,11 @@ public class Add extends Builtin
     }
 
     @Override
-	public ArcObject invoke(InvokeThread vm)
+	public ArcObject invoke(InvokeThread ithr)
 	{
-		if (vm.argc() == 0)
+		if (ithr.argc() == 0)
 			return(Fixnum.get(0));
-		ArcObject x = vm.getenv(0, 0);
+		ArcObject x = ithr.getenv(0, 0);
 		ArcObject sum = x.car();
 		x = x.cdr();
 		while (!x.is(Nil.NIL)) {

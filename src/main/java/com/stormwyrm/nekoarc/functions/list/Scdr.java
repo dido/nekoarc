@@ -16,7 +16,7 @@ public class Scdr extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        return(vm.getenv(0, 0).scdr(vm.getenv(0, 1)));
+    public ArcObject invoke(InvokeThread ithr) {
+        return(ithr.getenv(0, 0).scdr(ithr.getenv(0, 1)));
     }
 }

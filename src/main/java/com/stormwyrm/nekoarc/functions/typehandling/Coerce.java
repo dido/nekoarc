@@ -16,10 +16,10 @@ public class Coerce extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        ArcObject val = vm.getenv(0);
-        ArcObject newtype = vm.getenv(1);
-        ArcObject extra = vm.getenv(3);
+    public ArcObject invoke(InvokeThread ithr) {
+        ArcObject val = ithr.getenv(0);
+        ArcObject newtype = ithr.getenv(1);
+        ArcObject extra = ithr.getenv(3);
         return(val.coerce(newtype, extra));
     }
 }

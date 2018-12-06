@@ -16,7 +16,7 @@ public class Scar extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        return(vm.getenv(0, 0).scar(vm.getenv(0, 1)));
+    public ArcObject invoke(InvokeThread ithr) {
+        return(ithr.getenv(0, 0).scar(ithr.getenv(0, 1)));
     }
 }

@@ -18,9 +18,9 @@ public class Spaceship extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        ArcObject left = vm.getenv(0,0);
-        ArcObject right = vm.getenv(0,1);
+    public ArcObject invoke(InvokeThread ithr) {
+        ArcObject left = ithr.getenv(0,0);
+        ArcObject right = ithr.getenv(0,1);
         if (!(left instanceof Orderable))
             throw new NekoArcException("invalid comparison, " + left + " does not have order");
         return((((Orderable) left).lessThan(right) ? Fixnum.get(-1) : ((left.is(right)) ? Fixnum.ZERO : Fixnum.ONE)));

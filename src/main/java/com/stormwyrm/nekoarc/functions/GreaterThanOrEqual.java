@@ -19,10 +19,10 @@ public class GreaterThanOrEqual extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        if (vm.argc() < 2)
+    public ArcObject invoke(InvokeThread ithr) {
+        if (ithr.argc() < 2)
             return(True.T);
-        ArcObject args = vm.getenv(0, 0);
+        ArcObject args = ithr.getenv(0, 0);
         ArcObject x = args.car();
         args = args.cdr();
         if (!(x instanceof Orderable))

@@ -15,10 +15,10 @@ public class SRef extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        ArcObject x = vm.getenv(0, 0);
-        ArcObject val = vm.getenv(0, 1);
-        ArcObject idx = vm.getenv(0, 2);
+    public ArcObject invoke(InvokeThread ithr) {
+        ArcObject x = ithr.getenv(0, 0);
+        ArcObject val = ithr.getenv(0, 1);
+        ArcObject idx = ithr.getenv(0, 2);
         return(x.sref(val, idx));
     }
 }

@@ -19,10 +19,10 @@ public class UngetC extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        Rune r = (Rune) vm.getenv(0, 0);
-        ArcObject f = vm.getenv(0, 1).car();
-        InputPort fp = (f instanceof InputPort) ? ((InputPort)f) : ((InputPort)vm.thr.value((Symbol)Symbol.intern("stdin")));
+    public ArcObject invoke(InvokeThread ithr) {
+        Rune r = (Rune) ithr.getenv(0, 0);
+        ArcObject f = ithr.getenv(0, 1).car();
+        InputPort fp = (f instanceof InputPort) ? ((InputPort)f) : ((InputPort) ithr.thr.value((Symbol)Symbol.intern("stdin")));
         return(fp.ungetc(r));
     }
 }

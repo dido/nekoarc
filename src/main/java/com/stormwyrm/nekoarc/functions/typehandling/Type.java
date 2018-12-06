@@ -16,7 +16,7 @@ public class Type extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        return(vm.getenv(0,0).type());
+    public ArcObject invoke(InvokeThread ithr) {
+        return(ithr.getenv(0,0).type());
     }
 }

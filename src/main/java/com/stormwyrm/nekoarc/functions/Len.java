@@ -16,7 +16,7 @@ public class Len extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        return(Fixnum.get(vm.getenv(0,0).len()));
+    public ArcObject invoke(InvokeThread ithr) {
+        return(Fixnum.get(ithr.getenv(0,0).len()));
     }
 }

@@ -16,7 +16,7 @@ public class Cadr extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        return(vm.getenv(0,0).cdr().car());
+    public ArcObject invoke(InvokeThread ithr) {
+        return(ithr.getenv(0,0).cdr().car());
     }
 }

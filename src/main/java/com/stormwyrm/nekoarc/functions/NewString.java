@@ -20,9 +20,9 @@ public class NewString extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        long count = (Fixnum.cast(vm.getenv(0, 0), this)).fixnum;
-        Rune r = (Unbound.UNBOUND.is(vm.getenv(0, 1))) ? Rune.get(0) : (Rune)vm.getenv(0, 1);
+    public ArcObject invoke(InvokeThread ithr) {
+        long count = (Fixnum.cast(ithr.getenv(0, 0), this)).fixnum;
+        Rune r = (Unbound.UNBOUND.is(ithr.getenv(0, 1))) ? Rune.get(0) : (Rune) ithr.getenv(0, 1);
         return(new AString(count, r));
     }
 }

@@ -20,8 +20,8 @@ public class Sym extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        ArcObject obj = vm.getenv(0,0);
+    public ArcObject invoke(InvokeThread ithr) {
+        ArcObject obj = ithr.getenv(0,0);
         if (obj instanceof AString)
             return(Symbol.intern(obj.toString()));
         if (obj instanceof Rune) {
