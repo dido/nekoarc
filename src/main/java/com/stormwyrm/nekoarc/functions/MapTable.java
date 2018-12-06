@@ -16,11 +16,11 @@ public class MapTable extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread vm) {
-        ArcObject proc = vm.getenv(0, 0);
-        Table tbl = (Table)vm.getenv(0, 1);
+    public ArcObject invoke(InvokeThread ithr) {
+        ArcObject proc = ithr.getenv(0, 0);
+        Table tbl = (Table) ithr.getenv(0, 1);
         for (ArcObject k : tbl)
-            vm.apply(proc, k, tbl.get(k));
+            ithr.apply(proc, k, tbl.get(k));
         return(this);
     }
 }
