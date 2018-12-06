@@ -120,4 +120,13 @@ public class HeapContinuation extends Vector implements Continuation {
 		ithr.thr.setCont(this);
 		return(ithr.getenv(0, 0));
 	}
+
+	/**
+	 * Convert to string
+	 * @return continuation
+	 */
+	@Override
+	public String toString() {
+		return("#<continuation>");
+	}
 }
