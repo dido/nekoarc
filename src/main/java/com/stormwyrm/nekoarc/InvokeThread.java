@@ -75,6 +75,7 @@ public class InvokeThread extends Thread {
 	 */
 	public ArcObject apply(ArcObject fn, ArcObject...args) {
 		// First, push all of the arguments to the stack
+		thr.setargc(args.length);
 		for (ArcObject arg : args)
 			thr.push(arg);
 
