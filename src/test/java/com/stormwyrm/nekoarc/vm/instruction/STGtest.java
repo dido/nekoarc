@@ -7,6 +7,7 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.types.ArcThread;
+import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
 public class STGtest
@@ -21,16 +22,17 @@ public class STGtest
 		ArcObject[] literals = new ArcObject[1];
 		Symbol sym = (Symbol)Symbol.intern("foo");
 		literals[0] = sym;
-		ArcThread vm = new ArcThread(1024);
+		VirtualMachine vm = new VirtualMachine();
 		vm.load(inst, literals);
-		vm.setAcc(Nil.NIL);
+		ArcThread thr = new ArcThread(vm,1024);
+		thr.setAcc(Nil.NIL);
 		vm.bind(sym, Fixnum.get(1234));
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(0x7f, ((Fixnum)vm.getAcc()).fixnum);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(0x7f, ((Fixnum)thr.getAcc()).fixnum);
 		assertEquals(0x7f, ((Fixnum)vm.value(sym)).fixnum);
-		assertEquals(11, vm.getIP());
+		assertEquals(11, thr.getIP());
 	}
 
 }
