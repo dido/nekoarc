@@ -158,9 +158,9 @@ public class Cons extends ArcObject implements Iterable<ArcObject>
 	}
 
 	@Override
-	public ArcObject invoke(InvokeThread thr)
+	public ArcObject invoke(InvokeThread ithr)
 	{
-		Fixnum idx = Fixnum.cast(thr.getenv(0, 0), this);
+		Fixnum idx = Fixnum.cast(ithr.getenv(0, 0), this);
 		return(this.nth(idx.fixnum).car());
 	}
 

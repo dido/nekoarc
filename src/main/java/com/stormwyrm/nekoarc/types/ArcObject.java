@@ -196,10 +196,10 @@ public abstract class ArcObject implements Callable
 
 	/**
 	 * Invoke the object.
-	 * @param vm The invocation thread.
+	 * @param ithr The invocation thread.
 	 * @return The return value
 	 */
-	public ArcObject invoke(InvokeThread vm) {
+	public ArcObject invoke(InvokeThread ithr) {
 		throw new NekoArcException("Cannot invoke object of type " + type());
 
 	}

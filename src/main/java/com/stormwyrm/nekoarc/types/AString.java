@@ -81,8 +81,8 @@ public class AString extends ArcObject
 	}
 
 	@Override
-	public ArcObject invoke(InvokeThread thr) {
-		Fixnum idx = Fixnum.cast(thr.getenv(0, 0), this);
+	public ArcObject invoke(InvokeThread ithr) {
+		Fixnum idx = Fixnum.cast(ithr.getenv(0, 0), this);
 		if (idx.fixnum < 0)
 			throw new NekoArcException("negative string index");
 		if (idx.fixnum >= string.length())

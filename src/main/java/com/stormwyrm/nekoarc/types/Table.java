@@ -41,8 +41,8 @@ public class Table extends ArcObject implements Iterable<ArcObject> {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread thr) {
-        return(this.get(thr.getenv(0, 0)));
+    public ArcObject invoke(InvokeThread ithr) {
+        return(this.get(ithr.getenv(0, 0)));
     }
 
     @Override

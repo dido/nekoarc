@@ -85,9 +85,9 @@ public class Vector extends ArcObject implements Iterable<ArcObject>
     }
 
     @Override
-	public ArcObject invoke(InvokeThread thr)
+	public ArcObject invoke(InvokeThread ithr)
 	{
-		Fixnum idx = Fixnum.cast(thr.getenv(0, 0), this);
+		Fixnum idx = Fixnum.cast(ithr.getenv(0, 0), this);
 		if (idx.fixnum < 0)
 			throw new NekoArcException("negative vector index");
 		if (idx.fixnum >= this.len())
