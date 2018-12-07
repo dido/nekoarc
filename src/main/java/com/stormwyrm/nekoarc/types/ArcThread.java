@@ -128,7 +128,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		NOINST,
 		NOINST,
 		new APPLY(),	// 0x4c
-		new CLS(),		// 0x4d,
+		new CLS(),		// 0x4d
 		new JMP(),		// 0x4e
 		new JT(),		// 0x4f
 		new JF(),		// 0x50
@@ -689,8 +689,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 
 	/** Make a continuation on the stack. The new continuation is
 		saved in the continuation register. */
-	public void makecont(int ipoffset)
-	{
+	public void makecont(int ipoffset) {
 		stackcheck(4, "stack overflow while creating continuation");
 		int newip = ip + ipoffset;
 		push(Fixnum.get(newip));
@@ -701,6 +700,9 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		bp = sp;
 	}
 
+	/**
+	 * Restore continuation from this thread.
+	 */
 	public void restorecont()
 	{
 		restorecont(this);
@@ -815,7 +817,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 
 	/**
 	 * Hanson-Lamping reroot
-	 * @param ithr Invoke thread
 	 * @param there where to reroot
 	 */
 	public ArcObject reroot(InvokeThread ithr, ArcObject there) {
@@ -825,11 +826,12 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 			return(Nil.NIL);
 		reroot(ithr, there.cdr());
 		before = there.car().car();
-		after = there.cdr().car();
+		after = there.car().cdr();
 		here.scar(new Cons(after, before));
 		here.scdr(there);
 		there.scar(noBeforesOrAfters);
 		there.scdr(Nil.NIL);
+		here = there;
 		return(ithr.apply(before));
 	}
 
