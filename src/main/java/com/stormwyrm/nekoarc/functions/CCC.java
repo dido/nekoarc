@@ -19,7 +19,10 @@ package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.Fixnum;
+import com.stormwyrm.nekoarc.types.Symbol;
+import com.stormwyrm.nekoarc.util.Callable;
 
 /**
  * Builtin function ccc - Call with Current Continuation. Accepts one parameter, which is a closure.
@@ -38,6 +41,39 @@ public class CCC extends Builtin {
 		return(INSTANCE);
 	}
 
+	class ContWrapper extends ArcObject implements Continuation {
+		private final ArcObject TYPE = Symbol.intern("continuation");
+		private final ArcObject here;
+		private final Continuation origcont;
+
+		public ContWrapper(ArcObject here, Continuation origcont) {
+			this.here = here;
+			this.origcont = origcont;
+		}
+
+		@Override
+		public void restore(ArcThread thr, Callable caller) {
+			thr.reroot(new InvokeThread(thr, caller, this), here);
+			origcont.restore(thr, caller);
+		}
+
+		@Override
+		public ArcObject type() {
+			return(TYPE);
+		}
+
+		@Override
+		public int requiredArgs() {
+			return(1);
+		}
+
+		@Override
+		public ArcObject invoke(InvokeThread ithr) {
+			ithr.thr.setCont(this);
+			return(ithr.getenv(0));
+		}
+	}
+
 	/**
 	 * Invoke ccc.
 	 * @param ithr The thread executing ccc
@@ -52,7 +88,7 @@ public class CCC extends Builtin {
 			continuation = new StopContinuation(ithr.thr.here);
 		if (!(continuation instanceof HeapContinuation))
 			throw new NekoArcException("Invalid continuation type " + continuation.type().toString());
-		return(ithr.apply(ithr.getenv(0,  0), continuation));
+		return(ithr.apply(ithr.getenv(0,  0), new ContWrapper(ithr.thr.here, (Continuation)continuation)));
 	}
 
 }
