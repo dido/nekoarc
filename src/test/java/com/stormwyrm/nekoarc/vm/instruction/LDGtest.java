@@ -1,3 +1,20 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
 package com.stormwyrm.nekoarc.vm.instruction;
 
 import static org.junit.Assert.*;
@@ -7,27 +24,29 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
 import com.stormwyrm.nekoarc.types.ArcThread;
+import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
 public class LDGtest
 {
 	@Test
-	public void test()
-	{
+	public void test() {
 		// ldg 0; hlt
 		byte[] inst = {0x45, 0x00, 0x00, 0x00, 0x00, 0x14};
 		ArcObject[] literals = new ArcObject[1];
 		Symbol sym = (Symbol)Symbol.intern("foo");
 		literals[0] = sym;
-		ArcThread vm = new ArcThread(1024);
+		VirtualMachine vm = new VirtualMachine();
 		vm.load(inst, literals);
-		vm.setAcc(Nil.NIL);
+
+		ArcThread thr = new ArcThread(vm, 1024);
+		thr.setAcc(Nil.NIL);
 		vm.bind(sym, Fixnum.get(1234));
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(1234, ((Fixnum)vm.getAcc()).fixnum);
-		assertEquals(6, vm.getIP());
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(1234, ((Fixnum)thr.getAcc()).fixnum);
+		assertEquals(6, thr.getIP());
 	}
 
 }
