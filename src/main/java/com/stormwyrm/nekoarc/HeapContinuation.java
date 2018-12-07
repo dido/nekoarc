@@ -119,8 +119,6 @@ public class HeapContinuation extends Vector implements Continuation {
 	 */
 	@Override
 	public ArcObject invoke(InvokeThread ithr) {
-		// Perform rerooting first before restoring the continuation
-		ithr.thr.reroot(ithr, myHere);
 		ithr.thr.setCont(this);
 		return(ithr.getenv(0, 0));
 	}
