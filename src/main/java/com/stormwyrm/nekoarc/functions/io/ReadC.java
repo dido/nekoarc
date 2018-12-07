@@ -20,7 +20,7 @@ public class ReadC extends Builtin {
     @Override
     public ArcObject invoke(InvokeThread ithr) {
         InputPort fp;
-        fp = (InputPort)((ithr.argc() < 1) ? ithr.thr.value((Symbol)Symbol.intern("stdin")) :
+        fp = (InputPort)((ithr.argc() < 1) ? ithr.thr.vm.value((Symbol)Symbol.intern("stdin")) :
                 ithr.getenv(0, 0)).car();
         return(fp.readc());
     }
