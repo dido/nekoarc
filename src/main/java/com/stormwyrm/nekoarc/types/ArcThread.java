@@ -377,21 +377,16 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	}
 
 	/**
-	 * Attempt to garbage collect the stack, after Richard A. Kelsey,
-	 * "Tail Recursive Stack Disciplines for an Interpreter" Basically, the only
-	 * things on the stack that are garbage collected are environments and
-	 * continuations. The algorithm here works by copying all environments and
-	 * continuations from the stack to the heap. When that's done it will move
-	 * the stack pointer to the top of the stack.
-	 * 1. Start with the environment register. Move that environment and all of
-	 *    its children to the heap.
-	 * 2. Continue with the continuation register. Copy the current continuation
-	 * 	  into the heap.
-	 * 3. Compact the stack by moving the remainder of the non-stack /
-	 *    non-continuation elements down.
+	 * Attempt to garbage collect the stack, after Richard A. Kelsey, "Tail Recursive Stack Disciplines for an
+	 * Interpreter" Basically, the only things on the stack that are garbage collected are environments and
+	 * continuations. The algorithm here works by copying all environments and continuations from the stack to
+	 * the heap. When that's done it will move the stack pointer to the top of the stack.
+	 * *
+	 * 1. Start with the environment register. Move that environment and all of its children to the heap.
+	 * 2. Continue with the continuation register. Copy the current continuation into the heap.
+	 * 3. Compact the stack by moving the remainder of the non-stack / non-continuation elements down.
 	 */
-	private void stackgc()
-	{
+	private void stackgc() {
 		int[] deepest = {sp};
 		if (env instanceof Fixnum)
 			env = HeapEnv.fromStackEnv(this, env, deepest);
@@ -412,8 +407,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	 * Push an object into the thread stack
 	 * @param obj the object to push
 	 */
-	public void push(ArcObject obj)
-	{
+	public void push(ArcObject obj) {
 		for (;;) {
 			try {
 				stack[sp++] = obj;
@@ -437,8 +431,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
      * Four-byte instruction arguments (most everything else). Little endian.
      * @return Next four-byte instruction argument at the current IP
      */
-	public int instArg()
-	{
+	public int instArg() {
 		long val = 0;
 		int data;
 		for (int i=0; i<4; i++) {
@@ -500,23 +493,11 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		this.sp = sp;
 	}
 
-	// add or replace a global binding
-	public ArcObject bind(Symbol sym, ArcObject binding)
-	{
-		return vm.bind(sym, binding);
-	}
-
-	public ArcObject value(Symbol sym)
-	{
-		return vm.value(sym);
-	}
-
-	public ArcObject boundP(ArcObject arg) {
-		return vm.boundP(arg);
-	}
-
-	public int argc()
-	{
+	/**
+	 * Number of arguments passed to the current function
+	 * @return argc
+	 */
+	public int argc() {
 		return(argc);
 	}
 
@@ -525,8 +506,12 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return(argc = ac);
 	}
 
-	public void argcheck(int minarg, int maxarg)
-	{
+	/**
+	 * Check the number of arguments passed to a function. Throws exception if not enough or too many have been passed.
+	 * @param minarg Minimum number of arguments to the function
+	 * @param maxarg Maximum number of arguments to the function, or -1 if this is a variadic function with no maximum
+	 */
+	public void argcheck(int minarg, int maxarg) {
 		if (argc() < minarg)
 			throw new NekoArcException("too few arguments, at least " + minarg +
 					" required, " + argc() + " passed");
@@ -540,10 +525,13 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		argcheck(arg, arg);
 	}
 
-	/** Create an environment. If there is enough space on the stack, that
-	 * environment will be there, if not, it will be created in the heap. */
-	public void mkenv(int prevsize, int extrasize)
-	{
+	/**
+	 * Create an environment. If there is enough space on the stack, that environment will be there, if not,
+	 * it will be created in the heap.
+	 * @param prevsize Number of elements already on the stack that will become part of the new environment
+	 * @param extrasize Additional elements that need to be created for the new environment
+	 */
+	public void mkenv(int prevsize, int extrasize) {
 		// Do a check for the space on the stack. If there is not enough,
 		// make the environment in the heap */
 		if (sp + extrasize + 3 > stack.length) {
@@ -566,9 +554,12 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		bp = sp;
 	}
 
-	/** Create a new heap environment ab initio */
-	private void mkheapenv(int prevsize, int extrasize)
-	{
+	/**
+	 * Create a new heap environment ab initio
+	 * @param prevsize The previous size of elements on the stack that are to become part of the environment
+	 * @param extrasize Additional elements that are to become part of the new environment
+	 */
+	private void mkheapenv(int prevsize, int extrasize) {
 		// First, convert what will become the parent environment to a
 		// heap environment if it is not already one
 		env = HeapEnv.fromStackEnv(this, env);
@@ -585,15 +576,20 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		env = nenv;
 	}
 
-	/** move current environment to heap if needed */
-	public ArcObject heapenv()
-	{
+	/**
+	 * Move the current environment to the heap if needed
+	 * @return The new environment in the heap
+	 */
+	public ArcObject heapenv() {
 		env = HeapEnv.fromStackEnv(this, env);
 		return(env);
 	}
 
-	private ArcObject nextenv()
-	{
+	/**
+	 * Get the next environment
+	 * @return The next environment after
+	 */
+	private ArcObject nextenv() {
 		if (env.is(Nil.NIL))
 			return(Nil.NIL);
 		if (env instanceof Fixnum) {
@@ -604,8 +600,12 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return(e.prevEnv());
 	}
 
-	private ArcObject findenv(int depth)
-	{
+	/**
+	 * Find the environment at depth by traversing the list of environments
+	 * @param depth The depth of environment to find
+	 * @return The environment
+	 */
+	private ArcObject findenv(int depth) {
 		ArcObject cenv = env;
 
 		while (depth-- > 0 && !cenv.is(Nil.NIL)) {
@@ -620,8 +620,13 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return(cenv);
 	}
 
-	public ArcObject getenv(int depth, int index)
-	{
+	/**
+	 * Get the value of an environment variable
+	 * @param depth The depth of the environment to look up (0 for the function's own env)
+	 * @param index The index of the variable
+	 * @return The value of the variable
+	 */
+	public ArcObject getenv(int depth, int index) {
 		ArcObject cenv = findenv(depth);
 		if (cenv == Nil.NIL)
 			throw new NekoArcException("environment depth exceeded");
@@ -636,8 +641,14 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return(((HeapEnv)cenv).getEnv(index));
 	}
 
-	public ArcObject setenv(int depth, int index, ArcObject value)
-	{
+	/**
+	 * Set an environment variable
+	 * @param depth The depth of the environment variable (0 for the function's own env)
+	 * @param index The index of the environment variable
+	 * @param value The value to set the environment variable to
+	 * @return the value that was set
+	 */
+	public ArcObject setenv(int depth, int index, ArcObject value) {
 		ArcObject cenv = findenv(depth);
 		if (cenv == Nil.NIL)
 			throw new NekoArcException("environment depth exceeded");
@@ -662,8 +673,12 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return(stack[index] = value);
 	}
 
-	public void stackcheck(int required, final String message)
-	{
+	/**
+	 * Check for stack overflow
+	 * @param required How much stack space is needed to check
+	 * @param message Error message to give if necessary stack space is unavailable
+	 */
+	public void stackcheck(int required, final String message) {
 		if (sp + required > stack.length) {
 			// Try to do stack gc first. If it fails, nothing for it
 			stackgc();
@@ -691,9 +706,11 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		restorecont(this);
 	}
 
-	// Restore continuation
-	public void restorecont(Callable caller)
-	{
+	/**
+	 * Restore the current continuation
+	 * @param caller the caller
+	 */
+	public void restorecont(Callable caller) {
 		if (cont instanceof Fixnum) {
 			sp = (int)((Fixnum)cont).fixnum;
 			cont = pop();
@@ -743,10 +760,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	}
 
 	@Override
-	public CallSync sync()
-	{
-		return(caller);
-	}
+	public CallSync sync() { return(caller); }
 
 	/**
 	 * Move n elements from the top of stack, overwriting the current
@@ -792,9 +806,8 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 
 	/**
 	 * Main entry point of the thread.
-	 * @throws NekoArcException on errors
 	 */
-	public void run() throws NekoArcException {
+	public void run() {
 		while (runnable) {
 			jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
 		}
@@ -831,5 +844,10 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		} catch (InterruptedException e) {
 			throw new NekoArcException("thread join interrupted");
 		}
+	}
+
+	@Override
+	public String toString() {
+		return("#<thread>");
 	}
 }
