@@ -41,20 +41,22 @@ public class CCC extends Builtin {
 		return(INSTANCE);
 	}
 
-	class ContWrapper extends ArcObject implements Continuation {
+	/**
+	 * Continuation wrapper used by CCC
+	 */
+	class ContWrapper extends ArcObject {
 		private final ArcObject TYPE = Symbol.intern("continuation");
 		private final ArcObject here;
-		private final Continuation origcont;
+		private final ArcObject origcont;
 
-		public ContWrapper(ArcObject here, Continuation origcont) {
+		/**
+		 * Create a new continuation wrapper
+		 * @param here Value of here to reroot to.
+		 * @param origcont The original continuation this is supposed to wrap.
+		 */
+		public ContWrapper(ArcObject here, ArcObject origcont) {
 			this.here = here;
 			this.origcont = origcont;
-		}
-
-		@Override
-		public void restore(ArcThread thr, Callable caller) {
-			thr.reroot(new InvokeThread(thr, caller, this), here);
-			origcont.restore(thr, caller);
 		}
 
 		@Override
@@ -67,9 +69,18 @@ public class CCC extends Builtin {
 			return(1);
 		}
 
+		/**
+		 * Invoking the continuation sets the wrapped continuation to the current continuation, after
+		 * rerooting.
+		 * @param ithr The invocation thread.
+		 * @return the parameter passed to the continuation when it was invoked
+		 */
 		@Override
 		public ArcObject invoke(InvokeThread ithr) {
-			ithr.thr.setCont(this);
+			// Hanson-Lamping reroot first
+			ithr.thr.reroot(ithr, here);
+			// Set original continuation as current continuation
+			ithr.thr.setCont(origcont);
 			return(ithr.getenv(0));
 		}
 	}
@@ -84,11 +95,7 @@ public class CCC extends Builtin {
 		ArcObject continuation = ithr.thr.getCont();
 		if (continuation instanceof Fixnum)
 			continuation = HeapContinuation.fromStackCont(ithr.thr, continuation);
-		if (Nil.NIL.is(continuation))
-			continuation = new StopContinuation(ithr.thr.here);
-		if (!(continuation instanceof HeapContinuation))
-			throw new NekoArcException("Invalid continuation type " + continuation.type().toString());
-		return(ithr.apply(ithr.getenv(0,  0), new ContWrapper(ithr.thr.here, (Continuation)continuation)));
+		return(ithr.apply(ithr.getenv(0,  0), new ContWrapper(ithr.thr.here, continuation)));
 	}
 
 }
