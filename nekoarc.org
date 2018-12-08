@@ -367,13 +367,13 @@ notice and this notice are preserved.
      - [ ] file-exists
      - [ ] rmfile
      - [ ] mvfile
-   - [-] Error handling and continuations [1/8]
+   - [-] Error handling and continuations [2/8]
      - [ ] details
      - [ ] err
      - [ ] on-err
      - [X] ccc
      - [ ] protect
-     - [ ] dynamic-wind
+     - [X] dynamic-wind
      - [ ] ccmark
      - [ ] scmark
    - [X] Strings [1/1]
