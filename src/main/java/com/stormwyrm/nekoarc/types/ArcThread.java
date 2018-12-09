@@ -122,7 +122,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		new LDI(),		// 0x44
 		new LDG(),		// 0x45
 		new STG(),		// 0x46
-		NOINST,
+		new LDLP(),		// 0x47
 		NOINST,
 		NOINST,
 		NOINST,
@@ -444,9 +444,9 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return acc;
 	}
 
-	public void setAcc(ArcObject acc)
+	public ArcObject setAcc(ArcObject acc)
 	{
-		this.acc = acc;
+		return(this.acc = acc);
 	}
 
 	public boolean runnable()
@@ -806,11 +806,11 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	 * Hanson-Lamping reroot
 	 * @param there where to reroot
 	 */
-	public ArcObject reroot(InvokeThread ithr, ArcObject there) {
+	public void reroot(InvokeThread ithr, ArcObject there) {
 		ArcObject before, after;
 
 		if (here.is(there))
-			return(Nil.NIL);
+			return;
 		reroot(ithr, there.cdr());
 		before = there.car().car();
 		after = there.car().cdr();
@@ -819,7 +819,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		there.scar(noBeforesOrAfters);
 		there.scdr(Nil.NIL);
 		here = there;
-		return(ithr.apply(before));
+		ithr.apply(before);
 	}
 
 	/**
