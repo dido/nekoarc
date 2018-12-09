@@ -49,6 +49,8 @@ public enum Op {
     LDI(0x44, ArgType.REG_ARGS),
     LDG(0x45, ArgType.REG_ARGS),
     STG(0x46, ArgType.REG_ARGS),
+    LDLP(0x47, ArgType.REG_ARGS),
+    LDIP(0x48, ArgType.REG_ARGS),
     APPLY(0x4c, ArgType.SMALL_ARGS),
     CLS(0x4d, ArgType.REG_ARGS),
     JMP(0x4e, ArgType.REG_ARGS),
