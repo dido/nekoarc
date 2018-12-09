@@ -216,6 +216,8 @@ public class VirtualMachine {
         defbuiltin(UngetC.getInstance());
         defbuiltin(PeekC.getInstance());
         defbuiltin(FInString.getInstance());
+        defbuiltin(FOutString.getInstance());
+        defbuiltin(Inside.getInstance());
 
         // Error handling and continuations
         defbuiltin(CCC.getInstance());
