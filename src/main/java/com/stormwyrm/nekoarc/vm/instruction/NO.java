@@ -9,12 +9,12 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class NO implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		if (vm.getAcc() instanceof Nil)
-			vm.setAcc(True.T);
+		if (thr.getAcc() instanceof Nil)
+			thr.setAcc(True.T);
 		else
-			vm.setAcc(Nil.NIL);
+			thr.setAcc(Nil.NIL);
 	}
 
 }

@@ -7,9 +7,9 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class LDI implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm)
+	public void invoke(ArcThread thr)
 	{
-		long value = vm.instArg();
-		vm.setAcc(Fixnum.get(value));
+		long value = thr.instArg();
+		thr.setAcc(Fixnum.get(value));
 	}
 }

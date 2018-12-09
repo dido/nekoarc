@@ -6,9 +6,9 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class INVALID implements Instruction {
 
 	@Override
-	public void invoke(ArcThread vm) throws InvalidInstructionException
+	public void invoke(ArcThread thr) throws InvalidInstructionException
 	{
-		throw new InvalidInstructionException(vm.getIP());
+		throw new InvalidInstructionException(thr.getIP());
 	}
 
 }

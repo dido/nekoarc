@@ -7,9 +7,9 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class MENV implements Instruction {
 
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		vm.menv((int)(vm.smallInstArg()));
+		thr.menv((int)(thr.smallInstArg()));
 	}
 
 }

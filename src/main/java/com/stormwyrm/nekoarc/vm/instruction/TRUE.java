@@ -8,9 +8,9 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class TRUE implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		vm.setAcc(True.T);
+		thr.setAcc(True.T);
 	}
 
 }

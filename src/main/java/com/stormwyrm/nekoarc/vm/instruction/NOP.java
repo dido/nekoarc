@@ -6,7 +6,7 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class NOP implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm)
+	public void invoke(ArcThread thr)
 	{
 		// No operation!
 

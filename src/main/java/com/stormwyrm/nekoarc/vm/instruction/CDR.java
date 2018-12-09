@@ -7,9 +7,9 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class CDR implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		vm.setAcc(vm.getAcc().cdr());
+		thr.setAcc(thr.getAcc().cdr());
 	}
 
 }

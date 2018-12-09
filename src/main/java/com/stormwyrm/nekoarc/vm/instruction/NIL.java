@@ -7,8 +7,8 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class NIL implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm)
+	public void invoke(ArcThread thr)
 	{
-		vm.setAcc(Nil.NIL);
+		thr.setAcc(Nil.NIL);
 	}
 }

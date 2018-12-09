@@ -9,12 +9,12 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class DCDR implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		if (vm.getAcc().is(Nil.NIL) || vm.getAcc().is(Unbound.UNBOUND))
-			vm.setAcc(Unbound.UNBOUND);
+		if (thr.getAcc().is(Nil.NIL) || thr.getAcc().is(Unbound.UNBOUND))
+			thr.setAcc(Unbound.UNBOUND);
 		else
-			vm.setAcc(vm.getAcc().cdr());
+			thr.setAcc(thr.getAcc().cdr());
 	}
 
 }

@@ -8,11 +8,11 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class MUL implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
 		Numeric arg1, arg2;
-		arg1 = (Numeric)vm.pop();
-		arg2 = (Numeric)vm.getAcc();
-		vm.setAcc(arg1.mul(arg2));
+		arg1 = (Numeric) thr.pop();
+		arg2 = (Numeric) thr.getAcc();
+		thr.setAcc(arg1.mul(arg2));
 	}
 }

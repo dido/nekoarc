@@ -7,10 +7,10 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class LDL implements Instruction {
 
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		int offset = vm.instArg();
-		vm.setAcc(vm.literal(offset));
+		int offset = thr.instArg();
+		thr.setAcc(thr.literal(offset));
 	}
 
 }

@@ -8,13 +8,13 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class SCAR implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
 		ArcObject arg1, arg2;
-		arg1 = vm.pop();
-		arg2 = vm.getAcc();
+		arg1 = thr.pop();
+		arg2 = thr.getAcc();
 		arg1.scar(arg2);
-		vm.setAcc(arg1);
+		thr.setAcc(arg1);
 	}
 
 }

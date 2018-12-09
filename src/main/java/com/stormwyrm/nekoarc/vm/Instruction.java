@@ -4,5 +4,5 @@ import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.types.ArcThread;
 
 public interface Instruction {
-	void invoke(ArcThread vm) throws NekoArcException;
+	void invoke(ArcThread thr) throws NekoArcException;
 }
