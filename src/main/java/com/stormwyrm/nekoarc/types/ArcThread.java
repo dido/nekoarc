@@ -123,7 +123,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		new LDG(),		// 0x45
 		new STG(),		// 0x46
 		new LDLP(),		// 0x47
-		NOINST,
+		new LDIP(),		// 0x48
 		NOINST,
 		NOINST,
 		NOINST,
