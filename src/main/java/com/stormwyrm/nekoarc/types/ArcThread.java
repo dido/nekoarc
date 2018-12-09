@@ -30,7 +30,7 @@ import com.stormwyrm.nekoarc.vm.instruction.*;
  */
 public class ArcThread extends ArcObject implements Callable, Runnable {
 	private final static int DEFAULT_STACKSIZE = 1024;
-	public final ArcObject TYPE = Symbol.intern("thread");
+	public final static ArcObject TYPE = Symbol.intern("thread");
 	public final VirtualMachine vm;
 	private int sp;					// stack pointer
 	private int bp;					// base pointer
@@ -45,7 +45,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	private static final INVALID NOINST = new INVALID();
 	public Thread thread;			// Java thread running this
 	public ArcObject here;			// "here" value used for Hanson-Lamping
-	private static final Symbol noBeforesOrAfters = (Symbol) Symbol.intern("no-befores-or-afters");
+	private final static Symbol noBeforesOrAfters = (Symbol) Symbol.intern("no-befores-or-afters");
 
 	/**
 	 * The instruction jump table.
@@ -369,14 +369,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	}
 
 	/**
-	 * Advance to the next instruction
-	 */
-	public void nextI()
-	{
-		ip++;
-	}
-
-	/**
 	 * Attempt to garbage collect the stack, after Richard A. Kelsey, "Tail Recursive Stack Disciplines for an
 	 * Interpreter" Basically, the only things on the stack that are garbage collected are environments and
 	 * continuations. The algorithm here works by copying all environments and continuations from the stack to
@@ -462,12 +454,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return(this.runnable);
 	}
 
-	public boolean setrunnable(boolean runstate)
-	{
-		this.runnable = runstate;
-		return(runstate);
-	}
-
 	public ArcObject literal(int offset)
 	{
 		return vm.literal(offset);
@@ -518,11 +504,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		if (maxarg >= 0 && argc() > maxarg)
 			throw new NekoArcException("too many arguments, at most " + maxarg +
 					" allowed, " + argc() + " passed");
-	}
-
-	public void argcheck(int arg)
-	{
-		argcheck(arg, arg);
 	}
 
 	/**
@@ -717,7 +698,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 			sp = (int)((Fixnum)cont).fixnum;
 			cont = pop();
 			setenvreg(pop());
-			setBP((int)((Fixnum)pop()).fixnum);
+			bp = (int)((Fixnum)pop()).fixnum;
 			setIP((int)((Fixnum)pop()).fixnum);
 		} else if (cont instanceof Continuation) {
 			Continuation ct = (Continuation)cont;
@@ -731,31 +712,37 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		}
 	}
 
+	/**
+	 * Set the environment register.
+	 * @param env New environment
+	 */
 	public void setenvreg(ArcObject env)
 	{
 		this.env = env; 
 	}
 
-	public int getBP()
-	{
-		return bp;
-	}
-
-	private void setBP(int bp)
-	{
-		this.bp = bp;
-	}
-
+	/**
+	 * Get the current continuation
+	 * @return continuation register
+	 */
 	public ArcObject getCont()
 	{
 		return cont;
 	}
 
+	/**
+	 * Set the continuation register
+	 * @param cont the new continuation
+	 */
 	public void setCont(ArcObject cont)
 	{
 		this.cont = cont;
 	}
 
+	/**
+	 * Get the type of this object
+	 * @return symbol 'thread'
+	 */
 	@Override
 	public ArcObject type() {
 		return(TYPE);
