@@ -34,8 +34,7 @@ public class CCCTest {
 
         Op.ENV.emit(cg, 0, 0, 0);
         int contpos = Op.CONT.emit(cg, 0);
-        Op.LDL.emit(cg, 1);
-        Op.PUSH.emit(cg);
+        Op.LDLP.emit(cg, 1);
         Op.LDG.emit(cg, 0);
         Op.APPLY.emit(cg, 1);
         int contdest = Op.RET.emit(cg);
@@ -43,8 +42,7 @@ public class CCCTest {
 
         // (fn (esc) (esc 42) 21)
         int func = Op.ENV.emit(cg, 1, 0, 0);
-        Op.LDI.emit(cg, 42);
-        Op.PUSH.emit(cg);
+        Op.LDIP.emit(cg, 42);
         Op.LDE0.emit(cg, 0);
         Op.APPLY.emit(cg, 1);
         Op.LDI.emit(cg, 21);
@@ -68,15 +66,13 @@ public class CCCTest {
         // but there is no continuation, as would be generated with ccc in a tail position
 
         Op.ENV.emit(cg, 0, 0, 0);
-        Op.LDL.emit(cg, 1);         // function [(_ 42) 21]
-        Op.PUSH.emit(cg);
+        Op.LDLP.emit(cg, 1);         // function [(_ 42) 21]
         Op.LDG.emit(cg, 0);         // symbol ccc
         Op.APPLY.emit(cg, 1);
 
         // [(_ 42) 21]
         int func = Op.ENV.emit(cg, 1, 0, 0);
-        Op.LDI.emit(cg, 42);
-        Op.PUSH.emit(cg);
+        Op.LDIP.emit(cg, 42);
         Op.LDE0.emit(cg, 0);
         Op.APPLY.emit(cg, 1);
         Op.LDI.emit(cg, 21);
