@@ -33,6 +33,6 @@ public class LDLP implements Instruction {
     @Override
     public void invoke(ArcThread thr) throws NekoArcException {
         int offset = thr.instArg();
-        thr.setAcc(thr.literal(offset));
+        thr.push(thr.setAcc(thr.literal(offset)));
     }
 }
