@@ -20,24 +20,29 @@ package com.stormwyrm.nekoarc.vm.instruction;
 import static org.junit.Assert.*;
 
 import com.stormwyrm.nekoarc.Nil;
-import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.types.Symbol;
-import com.stormwyrm.nekoarc.types.ArcThread;
+import com.stormwyrm.nekoarc.Op;
+import com.stormwyrm.nekoarc.types.*;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
-public class LDGtest
-{
+public class LDGtest {
 	@Test
 	public void test() {
 		// ldg 0; hlt
 		byte[] inst = {0x45, 0x00, 0x00, 0x00, 0x00, 0x14};
-		ArcObject[] literals = new ArcObject[1];
+
+		CodeGen cg = new CodeGen();
+		Op.LDG.emit(cg, 0);
+		Op.HLT.emit(cg);
+
 		Symbol sym = (Symbol)Symbol.intern("foo");
-		literals[0] = sym;
-		VirtualMachine vm = new VirtualMachine();
-		vm.load(inst, literals);
+		cg.literal(sym);
+		assertEquals(cg.pos(), inst.length);
+		for (int i=0; i<inst.length; i++)
+			assertEquals(inst[i], cg.getAtPos(i));
+
+		VirtualMachine vm = new VirtualMachine(cg);
+		vm.load();
 
 		ArcThread thr = new ArcThread(vm, 1024);
 		thr.setAcc(Nil.NIL);
