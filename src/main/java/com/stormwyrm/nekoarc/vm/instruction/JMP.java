@@ -7,10 +7,10 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class JMP implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		int target = vm.instArg();
-		vm.setIP(vm.getIP() + target);
+		int target = thr.instArg();
+		thr.setIP(thr.getIP() + target);
 	}
 
 }

@@ -6,6 +6,7 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Unbound;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.ArcThread;
+import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
 public class STEtest
@@ -31,24 +32,25 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x00, 0x00,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+		VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm, 1024);
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
-		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
-		assertEquals(Fixnum.get(3), vm.getenv(1, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 3)));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 4)));
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(Fixnum.get(1), thr.getenv(1, 0));
+		assertEquals(Fixnum.get(2), thr.getenv(1, 1));
+		assertEquals(Fixnum.get(3), thr.getenv(1, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 3)));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 4)));
 //		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
-		assertTrue(vm.getenv(0, 0).is(Nil.NIL));
-		assertEquals(Fixnum.get(5), vm.getenv(0, 1));
-		assertEquals(Fixnum.get(6), vm.getenv(0, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(0, 3)));
-		assertEquals(49, vm.getIP());
+		assertTrue(thr.getenv(0, 0).is(Nil.NIL));
+		assertEquals(Fixnum.get(5), thr.getenv(0, 1));
+		assertEquals(Fixnum.get(6), thr.getenv(0, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(0, 3)));
+		assertEquals(49, thr.getIP());
 	}
 
 	@Test
@@ -72,23 +74,24 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x00, 0x01,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+        VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm, 1024);
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
-		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
-		assertEquals(Fixnum.get(3), vm.getenv(1, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 3)));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 4)));
-		assertEquals(Fixnum.get(4), vm.getenv(0, 0));
-		assertTrue(vm.getenv(0, 1).is(Nil.NIL));
-		assertEquals(Fixnum.get(6), vm.getenv(0, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(0, 3)));
-		assertEquals(49, vm.getIP());
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(Fixnum.get(1), thr.getenv(1, 0));
+		assertEquals(Fixnum.get(2), thr.getenv(1, 1));
+		assertEquals(Fixnum.get(3), thr.getenv(1, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 3)));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 4)));
+		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
+		assertTrue(thr.getenv(0, 1).is(Nil.NIL));
+		assertEquals(Fixnum.get(6), thr.getenv(0, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(0, 3)));
+		assertEquals(49, thr.getIP());
 	}
 
 	@Test
@@ -112,23 +115,24 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x00, 0x02,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+		VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm, 1024);
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
-		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
-		assertEquals(Fixnum.get(3), vm.getenv(1, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 3)));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 4)));
-		assertEquals(Fixnum.get(4), vm.getenv(0, 0));
-		assertEquals(Fixnum.get(5), vm.getenv(0, 1));
-		assertTrue(vm.getenv(0, 2).is(Nil.NIL));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(0, 3)));
-		assertEquals(49, vm.getIP());
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(Fixnum.get(1), thr.getenv(1, 0));
+		assertEquals(Fixnum.get(2), thr.getenv(1, 1));
+		assertEquals(Fixnum.get(3), thr.getenv(1, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 3)));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 4)));
+		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
+		assertEquals(Fixnum.get(5), thr.getenv(0, 1));
+		assertTrue(thr.getenv(0, 2).is(Nil.NIL));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(0, 3)));
+		assertEquals(49, thr.getIP());
 	}
 
 	@Test
@@ -152,23 +156,24 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x00, 0x03,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+        VirtualMachine vm = new VirtualMachine();
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
-		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
-		assertEquals(Fixnum.get(3), vm.getenv(1, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 3)));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 4)));
-		assertEquals(Fixnum.get(4), vm.getenv(0, 0));
-		assertEquals(Fixnum.get(5), vm.getenv(0, 1));
-		assertEquals(Fixnum.get(6), vm.getenv(0, 2));
-		assertTrue(vm.getenv(0, 3).is(Nil.NIL));
-		assertEquals(49, vm.getIP());
+		ArcThread thr = new ArcThread(vm,1024);
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(Fixnum.get(1), thr.getenv(1, 0));
+		assertEquals(Fixnum.get(2), thr.getenv(1, 1));
+		assertEquals(Fixnum.get(3), thr.getenv(1, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 3)));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 4)));
+		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
+		assertEquals(Fixnum.get(5), thr.getenv(0, 1));
+		assertEquals(Fixnum.get(6), thr.getenv(0, 2));
+		assertTrue(thr.getenv(0, 3).is(Nil.NIL));
+		assertEquals(49, thr.getIP());
 	}
 
 	@Test
@@ -192,23 +197,24 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x01, 0x00,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+        VirtualMachine vm = new VirtualMachine();
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertTrue(vm.getenv(1, 0).is(Nil.NIL));
-		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
-		assertEquals(Fixnum.get(3), vm.getenv(1, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 3)));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 4)));
-		assertEquals(Fixnum.get(4), vm.getenv(0, 0));
-		assertEquals(Fixnum.get(5), vm.getenv(0, 1));
-		assertEquals(Fixnum.get(6), vm.getenv(0, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(0, 3)));
-		assertEquals(49, vm.getIP());
+		ArcThread thr = new ArcThread(vm,1024);
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertTrue(thr.getenv(1, 0).is(Nil.NIL));
+		assertEquals(Fixnum.get(2), thr.getenv(1, 1));
+		assertEquals(Fixnum.get(3), thr.getenv(1, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 3)));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 4)));
+		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
+		assertEquals(Fixnum.get(5), thr.getenv(0, 1));
+		assertEquals(Fixnum.get(6), thr.getenv(0, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(0, 3)));
+		assertEquals(49, thr.getIP());
 	}
 
 	@Test
@@ -232,23 +238,24 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x01, 0x01,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+        VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm,1024);
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
-		assertTrue(vm.getenv(1, 1).is(Nil.NIL));
-		assertEquals(Fixnum.get(3), vm.getenv(1, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 3)));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 4)));
-		assertEquals(Fixnum.get(4), vm.getenv(0, 0));
-		assertEquals(Fixnum.get(5), vm.getenv(0, 1));
-		assertEquals(Fixnum.get(6), vm.getenv(0, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(0, 3)));
-		assertEquals(49, vm.getIP());
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(Fixnum.get(1), thr.getenv(1, 0));
+		assertTrue(thr.getenv(1, 1).is(Nil.NIL));
+		assertEquals(Fixnum.get(3), thr.getenv(1, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 3)));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 4)));
+		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
+		assertEquals(Fixnum.get(5), thr.getenv(0, 1));
+		assertEquals(Fixnum.get(6), thr.getenv(0, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(0, 3)));
+		assertEquals(49, thr.getIP());
 	}
 
 	@Test
@@ -272,23 +279,24 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x01, 0x02,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+        VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm,1024);
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
-		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
-		assertTrue(vm.getenv(1, 2).is(Nil.NIL));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 3)));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 4)));
-		assertEquals(Fixnum.get(4), vm.getenv(0, 0));
-		assertEquals(Fixnum.get(5), vm.getenv(0, 1));
-		assertEquals(Fixnum.get(6), vm.getenv(0, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(0, 3)));
-		assertEquals(49, vm.getIP());
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(Fixnum.get(1), thr.getenv(1, 0));
+		assertEquals(Fixnum.get(2), thr.getenv(1, 1));
+		assertTrue(thr.getenv(1, 2).is(Nil.NIL));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 3)));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 4)));
+		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
+		assertEquals(Fixnum.get(5), thr.getenv(0, 1));
+		assertEquals(Fixnum.get(6), thr.getenv(0, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(0, 3)));
+		assertEquals(49, thr.getIP());
 	}
 
 	@Test
@@ -312,23 +320,24 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x01, 0x03,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+        VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm,1024);
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
-		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
-		assertEquals(Fixnum.get(3), vm.getenv(1, 2));
-		assertTrue(vm.getenv(1, 3).is(Nil.NIL));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 4)));
-		assertEquals(Fixnum.get(4), vm.getenv(0, 0));
-		assertEquals(Fixnum.get(5), vm.getenv(0, 1));
-		assertEquals(Fixnum.get(6), vm.getenv(0, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(0, 3)));
-		assertEquals(49, vm.getIP());
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(Fixnum.get(1), thr.getenv(1, 0));
+		assertEquals(Fixnum.get(2), thr.getenv(1, 1));
+		assertEquals(Fixnum.get(3), thr.getenv(1, 2));
+		assertTrue(thr.getenv(1, 3).is(Nil.NIL));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 4)));
+		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
+		assertEquals(Fixnum.get(5), thr.getenv(0, 1));
+		assertEquals(Fixnum.get(6), thr.getenv(0, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(0, 3)));
+		assertEquals(49, thr.getIP());
 	}
 
 	@Test
@@ -352,23 +361,24 @@ public class STEtest
                 0x13,
                 (byte) 0x88, 0x01, 0x04,
                 0x14};
-		ArcThread vm = new ArcThread(1024);
+        VirtualMachine vm = new VirtualMachine();
+		ArcThread thr = new ArcThread(vm,1024);
 		vm.load(inst);
-		vm.setargc(3);
-		vm.setAcc(Nil.NIL);
-		assertTrue(vm.runnable());
-		vm.run();
-		assertFalse(vm.runnable());
-		assertEquals(Fixnum.get(1), vm.getenv(1, 0));
-		assertEquals(Fixnum.get(2), vm.getenv(1, 1));
-		assertEquals(Fixnum.get(3), vm.getenv(1, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(1, 3)));
-		assertTrue(vm.getenv(1, 4).is(Nil.NIL));
-		assertEquals(Fixnum.get(4), vm.getenv(0, 0));
-		assertEquals(Fixnum.get(5), vm.getenv(0, 1));
-		assertEquals(Fixnum.get(6), vm.getenv(0, 2));
-		assertTrue(Unbound.UNBOUND.is(vm.getenv(0, 3)));
-		assertEquals(49, vm.getIP());
+		thr.setargc(3);
+		thr.setAcc(Nil.NIL);
+		assertTrue(thr.runnable());
+		thr.run();
+		assertFalse(thr.runnable());
+		assertEquals(Fixnum.get(1), thr.getenv(1, 0));
+		assertEquals(Fixnum.get(2), thr.getenv(1, 1));
+		assertEquals(Fixnum.get(3), thr.getenv(1, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(1, 3)));
+		assertTrue(thr.getenv(1, 4).is(Nil.NIL));
+		assertEquals(Fixnum.get(4), thr.getenv(0, 0));
+		assertEquals(Fixnum.get(5), thr.getenv(0, 1));
+		assertEquals(Fixnum.get(6), thr.getenv(0, 2));
+		assertTrue(Unbound.UNBOUND.is(thr.getenv(0, 3)));
+		assertEquals(49, thr.getIP());
 	}
 
 }

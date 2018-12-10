@@ -10,21 +10,21 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class ENVR implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
 		int minenv, dsenv, optenv, i;
-		minenv = vm.smallInstArg() & 0xff;
-		dsenv = vm.smallInstArg() & 0xff;
-		optenv = vm.smallInstArg() & 0xff;
-		vm.argcheck(minenv, -1);
+		minenv = thr.smallInstArg() & 0xff;
+		dsenv = thr.smallInstArg() & 0xff;
+		optenv = thr.smallInstArg() & 0xff;
+		thr.argcheck(minenv, -1);
 		ArcObject rest = Nil.NIL;
 		/* Swallow as many extra arguments as are available into the rest parameter,
 		 * up to the minimum + optional number of arguments. */
-		for (i = vm.argc(); i>(minenv + optenv); i--)
-			rest = new Cons(vm.pop(), rest);
-		vm.mkenv(i, minenv + optenv - i + dsenv + 1);
+		for (i = thr.argc(); i>(minenv + optenv); i--)
+			rest = new Cons(thr.pop(), rest);
+		thr.mkenv(i, minenv + optenv - i + dsenv + 1);
 		/* store the rest parameter */
-		vm.setenv(0, minenv +optenv + dsenv, rest);
+		thr.setenv(0, minenv +optenv + dsenv, rest);
 	}
 
 }

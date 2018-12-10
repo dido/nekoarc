@@ -7,20 +7,27 @@ notice and this notice are preserved.
 ----------------------------------------------------------------------
 
 * The Arc Runtime
-** DONE base virtual machine [8/8]
+** TODO base virtual machine [7/8]
     - [X] Define virtual machine architecture
     - [X] Design interpreter core
     - [X] Build code generation infrastructure
-    - [X] Implement virtual machine instructions [36/36]
+    - [-] Implement virtual machine instructions [40/43]
       - [X] nop
       - [X] push
       - [X] pop
       - [X] ldl
       - [X] ldi
       - [X] ldg
+      - [X] ldlp
+      - [X] ldip
+      - [ ] ldgp
       - [X] stg
       - [X] lde
+      - [X] lde0
+      - [ ] ldep
+      - [ ] lde0p
       - [X] ste
+      - [X] ste0
       - [X] cont
       - [X] env
       - [X] envr
@@ -47,7 +54,7 @@ notice and this notice are preserved.
       - [X] dup
       - [X] cls
       - [X] consr
-      - [X] imenv
+      - [X] menv
     - [X] Environments [2/2]
       - [X] Stack-based
       - [X] Heap-based
@@ -135,7 +142,7 @@ notice and this notice are preserved.
      - [ ] Complement (~)
      - [ ] Structure access (. and !)
      - [ ] And (&)
-** TODO basic data types [12/18]
+** TODO basic data types [14/18]
     - [X] Nil
     - [X] True
     - [X] Numeric Types [2/2]
@@ -157,8 +164,8 @@ notice and this notice are preserved.
       - [ ] outfile
     - [X] Threads
     - [ ] Exceptions
-    - [ ] Channels
-    - [ ] Code
+    - [X] Channels
+    - [X] Closures (code)
     - [ ] Objects
 ** TODO Runtime Built-In Functions [6/19]
    Consider whether or not to provide instructions for the asterisked
@@ -298,7 +305,7 @@ notice and this notice are preserved.
 	   This is actually a global variable, and needs to be
 	   assigned at initialization.	   
      - [ ] uniq
-   - [-] Basic I/O primitives [1/5]
+   - [-] Basic I/O primitives [3/5]
          These are the base I/O functions provided by the Arcueid C
          runtime.
      - [X] Input [4/4]
@@ -315,21 +322,21 @@ notice and this notice are preserved.
 	   CHARACTER.  This saves us the trouble of decoding UTF-8
 	   all over again, and reinforces the maxim of never mixing
 	   the b functions with the c functions.
-     - [ ] Output [0/2]
-       - [ ] writeb
-       - [ ] writec
+     - [X] Output [2/2]
+       - [X] writeb
+       - [X] writec
      - [ ] File I/O [0/3]
        - [ ] infile
        - [ ] outfile
        - [ ] close
-     - [-] String port I/O [1/3]
+     - [X] String port I/O [3/3]
 	   Note that doing readb/writeb or readc/writec on a string
 	   port have the same effect.  Strings are made up of Unicode
 	   characters so it would be quite messy to implement a
 	   separate 'byte index' into what is made up of characters.
        - [X] instring
-       - [ ] outstring
-       - [ ] inside
+       - [X] outstring
+       - [X] inside
      - [ ] Seeking / telling [0/2]
              Note that these essential functions are not available in
              PG-Arc for some reason but will probably be necessary to

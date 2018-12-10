@@ -15,19 +15,23 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
-package com.stormwyrm.nekoarc.vm;
+package com.stormwyrm.nekoarc.vm.instruction;
 
-import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.types.ArcThread;
+import com.stormwyrm.nekoarc.types.Fixnum;
+import com.stormwyrm.nekoarc.vm.Instruction;
 
 /**
- * Interface for basic instructions
+ * LDIP - Load Immediate and Push
  */
-public interface Instruction {
+public class LDIP implements Instruction {
     /**
-     * Instruction
+     * Load immediate from argument and push
      * @param thr The thread executing the instruction
-     * @throws NekoArcException on error
      */
-	void invoke(ArcThread thr) throws NekoArcException;
+    @Override
+    public void invoke(ArcThread thr) {
+        long value = thr.instArg();
+        thr.push(thr.setAcc(Fixnum.get(value)));
+    }
 }

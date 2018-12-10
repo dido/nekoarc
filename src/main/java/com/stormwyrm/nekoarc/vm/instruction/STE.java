@@ -8,9 +8,9 @@ public class STE implements Instruction
 {
 
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		vm.setenv(vm.smallInstArg() & 0xff, vm.smallInstArg() & 0xff, vm.getAcc());
+		thr.setenv(thr.smallInstArg() & 0xff, thr.smallInstArg() & 0xff, thr.getAcc());
 	}
 
 }

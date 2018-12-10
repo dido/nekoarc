@@ -30,7 +30,7 @@ import com.stormwyrm.nekoarc.vm.instruction.*;
  */
 public class ArcThread extends ArcObject implements Callable, Runnable {
 	private final static int DEFAULT_STACKSIZE = 1024;
-	public final ArcObject TYPE = Symbol.intern("thread");
+	public final static ArcObject TYPE = Symbol.intern("thread");
 	public final VirtualMachine vm;
 	private int sp;					// stack pointer
 	private int bp;					// base pointer
@@ -45,268 +45,268 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	private static final INVALID NOINST = new INVALID();
 	public Thread thread;			// Java thread running this
 	public ArcObject here;			// "here" value used for Hanson-Lamping
-	private static final Symbol noBeforesOrAfters = (Symbol) Symbol.intern("no-befores-or-afters");
+	private final static Symbol noBeforesOrAfters = (Symbol) Symbol.intern("no-befores-or-afters");
 
 	/**
 	 * The instruction jump table.
 	 */
 	private static final Instruction[] jmptbl = {
-		new NOP(),		// 0x00
-		new PUSH(),		// 0x01
-		new POP(),		// 0x02
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		new RET(),		// 0x0d
-		NOINST,
-		NOINST,
-		NOINST,
-		new NO(),		// 0x11
-		new TRUE(),		// 0x12
-		new NIL(),		// 0x13
-		new HLT(),		// 0x14
-		new ADD(),		// 0x15
-		new SUB(),		// 0x16
-		new MUL(),		// 0x17
-		new DIV(),		// 0x18
-		new CONS(),		// 0x19
-		new CAR(),		// 0x1a
-		new CDR(),		// 0x1b
-		new SCAR(),		// 0x1c
-		new SCDR(),		// 0x1d
-		NOINST,
-		new IS(),		// 0x1f
-		NOINST,
-		NOINST,
-		NOINST,		    // used to be DUP, 0x22
-		NOINST,			// 0x23
-		new CONSR(),		// 0x24
-		NOINST,
-		new DCAR(),		// 0x26
-		new DCDR(),		// 0x27
-		NOINST,		    // used to be SPL, 0x28
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		new LDL(),		// 0x43
-		new LDI(),		// 0x44
-		new LDG(),		// 0x45
-		new STG(),		// 0x46
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		new APPLY(),	// 0x4c
-		new CLS(),		// 0x4d
-		new JMP(),		// 0x4e
-		new JT(),		// 0x4f
-		new JF(),		// 0x50
-		new JBND(),		// 0x51
-        new CONT(),		// 0x52 -- new CONT
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		new MENV(),		// 0x65
-		NOINST,
-		NOINST,
-		NOINST,
-		new LDE0(),		// 0x69
-		new STE0(),		// 0x6a
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		new LDE(),		// 0x87
-		new STE(),		// 0x88
-		NOINST,		    // 0x89 -- formerly CONT()
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		new ENV(),		// 0xca
-		new ENVR(),		// 0xcb
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
-		NOINST,
+			new NOP(),		// 0x00
+			new PUSH(),		// 0x01
+			new POP(),		// 0x02
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			new RET(),		// 0x0d
+			NOINST,
+			NOINST,
+			NOINST,
+			new NO(),		// 0x11
+			new TRUE(),		// 0x12
+			new NIL(),		// 0x13
+			new HLT(),		// 0x14
+			new ADD(),		// 0x15
+			new SUB(),		// 0x16
+			new MUL(),		// 0x17
+			new DIV(),		// 0x18
+			new CONS(),		// 0x19
+			new CAR(),		// 0x1a
+			new CDR(),		// 0x1b
+			new SCAR(),		// 0x1c
+			new SCDR(),		// 0x1d
+			NOINST,
+			new IS(),		// 0x1f
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			new CONSR(),		// 0x24
+			NOINST,
+			new DCAR(),		// 0x26
+			new DCDR(),		// 0x27
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			new LDL(),		// 0x43
+			new LDI(),		// 0x44
+			new LDG(),		// 0x45
+			new STG(),		// 0x46
+			new LDLP(),		// 0x47
+			new LDIP(),		// 0x48
+			NOINST,
+			NOINST,
+			NOINST,
+			new APPLY(),		// 0x4c
+			new CLS(),		// 0x4d
+			new JMP(),		// 0x4e
+			new JT(),		// 0x4f
+			new JF(),		// 0x50
+			new JBND(),		// 0x51
+			new CONT(),		// 0x52
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			new MENV(),		// 0x65
+			NOINST,
+			NOINST,
+			NOINST,
+			new LDE0(),		// 0x69
+			new STE0(),		// 0x6a
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			new LDE(),		// 0x87
+			new STE(),		// 0x88
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			new ENV(),		// 0xca
+			new ENVR(),		// 0xcb
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
+			NOINST,
 	};
 
 	/**
@@ -366,14 +366,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	 */
 	public void halt() {
 		runnable = false;
-	}
-
-	/**
-	 * Advance to the next instruction
-	 */
-	public void nextI()
-	{
-		ip++;
 	}
 
 	/**
@@ -452,20 +444,14 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		return acc;
 	}
 
-	public void setAcc(ArcObject acc)
+	public ArcObject setAcc(ArcObject acc)
 	{
-		this.acc = acc;
+		return(this.acc = acc);
 	}
 
 	public boolean runnable()
 	{
 		return(this.runnable);
-	}
-
-	public boolean setrunnable(boolean runstate)
-	{
-		this.runnable = runstate;
-		return(runstate);
 	}
 
 	public ArcObject literal(int offset)
@@ -518,11 +504,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		if (maxarg >= 0 && argc() > maxarg)
 			throw new NekoArcException("too many arguments, at most " + maxarg +
 					" allowed, " + argc() + " passed");
-	}
-
-	public void argcheck(int arg)
-	{
-		argcheck(arg, arg);
 	}
 
 	/**
@@ -717,7 +698,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 			sp = (int)((Fixnum)cont).fixnum;
 			cont = pop();
 			setenvreg(pop());
-			setBP((int)((Fixnum)pop()).fixnum);
+			bp = (int)((Fixnum)pop()).fixnum;
 			setIP((int)((Fixnum)pop()).fixnum);
 		} else if (cont instanceof Continuation) {
 			Continuation ct = (Continuation)cont;
@@ -731,31 +712,37 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		}
 	}
 
+	/**
+	 * Set the environment register.
+	 * @param env New environment
+	 */
 	public void setenvreg(ArcObject env)
 	{
 		this.env = env; 
 	}
 
-	public int getBP()
-	{
-		return bp;
-	}
-
-	private void setBP(int bp)
-	{
-		this.bp = bp;
-	}
-
+	/**
+	 * Get the current continuation
+	 * @return continuation register
+	 */
 	public ArcObject getCont()
 	{
 		return cont;
 	}
 
+	/**
+	 * Set the continuation register
+	 * @param cont the new continuation
+	 */
 	public void setCont(ArcObject cont)
 	{
 		this.cont = cont;
 	}
 
+	/**
+	 * Get the type of this object
+	 * @return symbol 'thread'
+	 */
 	@Override
 	public ArcObject type() {
 		return(TYPE);
@@ -819,11 +806,11 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	 * Hanson-Lamping reroot
 	 * @param there where to reroot
 	 */
-	public ArcObject reroot(InvokeThread ithr, ArcObject there) {
+	public void reroot(InvokeThread ithr, ArcObject there) {
 		ArcObject before, after;
 
 		if (here.is(there))
-			return(Nil.NIL);
+			return;
 		reroot(ithr, there.cdr());
 		before = there.car().car();
 		after = there.car().cdr();
@@ -832,7 +819,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		there.scar(noBeforesOrAfters);
 		there.scdr(Nil.NIL);
 		here = there;
-		return(ithr.apply(before));
+		ithr.apply(before);
 	}
 
 	/**

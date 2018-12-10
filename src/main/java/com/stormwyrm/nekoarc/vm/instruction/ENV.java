@@ -7,13 +7,13 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class ENV implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
 		int minenv, dsenv, optenv;
-		minenv = vm.smallInstArg() & 0xff;
-		dsenv = vm.smallInstArg() & 0xff;
-		optenv = vm.smallInstArg() & 0xff;
-		vm.argcheck(minenv, minenv + optenv);
-		vm.mkenv(vm.argc(), minenv + optenv - vm.argc() + dsenv);
+		minenv = thr.smallInstArg() & 0xff;
+		dsenv = thr.smallInstArg() & 0xff;
+		optenv = thr.smallInstArg() & 0xff;
+		thr.argcheck(minenv, minenv + optenv);
+		thr.mkenv(thr.argc(), minenv + optenv - thr.argc() + dsenv);
 	}
 }

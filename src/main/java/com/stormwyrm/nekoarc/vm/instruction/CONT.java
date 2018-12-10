@@ -7,9 +7,9 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class CONT implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		vm.makecont(vm.instArg());
+		thr.makecont(thr.instArg());
 	}
 
 }

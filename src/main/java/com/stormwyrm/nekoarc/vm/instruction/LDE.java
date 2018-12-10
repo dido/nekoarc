@@ -7,9 +7,9 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class LDE implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		vm.setAcc(vm.getenv(vm.smallInstArg() & 0xff, vm.smallInstArg() & 0xff));
+		thr.setAcc(thr.getenv(thr.smallInstArg() & 0xff, thr.smallInstArg() & 0xff));
 	}
 
 }

@@ -6,9 +6,9 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class HLT implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm)
+	public void invoke(ArcThread thr)
 	{
-		vm.halt();
+		thr.halt();
 	}
 
 }

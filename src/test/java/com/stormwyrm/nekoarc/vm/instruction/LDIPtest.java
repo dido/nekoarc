@@ -17,38 +17,40 @@
  */
 package com.stormwyrm.nekoarc.vm.instruction;
 
-import static org.junit.Assert.*;
-
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Op;
+import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
-public class LDItest {
-	@Test
-	public void testLDI() throws NekoArcException {
-		// ldi 1; hlt
-        byte[] inst = {0x44, 0x01, 0x00, 0x00, 0x00, 0x14};
-		CodeGen cg = new CodeGen();
-		Op.LDI.emit(cg, 1);
-		Op.HLT.emit(cg);
+import static org.junit.Assert.*;
 
-		for (int i=0; i<inst.length; i++)
-			assertEquals(inst[i], cg.getAtPos(i));
+public class LDIPtest {
+    @Test
+    public void testLDIP() throws NekoArcException {
+        // ldi 1; hlt
+        byte[] inst = {0x48, 0x01, 0x00, 0x00, 0x00, 0x14};
+        CodeGen cg = new CodeGen();
+        Op.LDIP.emit(cg, 1);
+        Op.HLT.emit(cg);
 
-		VirtualMachine vm = new VirtualMachine(cg);
-		ArcThread thr = new ArcThread(vm, 1024);
-		vm.load();
-		thr.setAcc(Nil.NIL);
-		assertTrue(thr.runnable());
-		thr.run();
-		assertFalse(thr.runnable());
-		assertEquals(Fixnum.get(1), thr.getAcc());
-		assertEquals(6, thr.getIP());
-		
-	}
+        for (int i=0; i<inst.length; i++)
+            assertEquals(inst[i], cg.getAtPos(i));
+
+        VirtualMachine vm = new VirtualMachine(cg);
+        ArcThread thr = new ArcThread(vm, 1024);
+        vm.load();
+        thr.setAcc(Nil.NIL);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(Fixnum.get(1), thr.getAcc());
+        assertEquals(Fixnum.get(1), thr.pop());
+        assertEquals(6, thr.getIP());
+
+    }
+
 }

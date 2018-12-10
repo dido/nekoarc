@@ -9,11 +9,11 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 public class CLS implements Instruction
 {
 	@Override
-	public void invoke(ArcThread vm) throws NekoArcException
+	public void invoke(ArcThread thr) throws NekoArcException
 	{
-		int target = vm.instArg() + vm.getIP();
-		Closure clos = new Closure(vm.heapenv(), Fixnum.get(target));
-		vm.setAcc(clos);
+		int target = thr.instArg() + thr.getIP();
+		Closure clos = new Closure(thr.heapenv(), Fixnum.get(target));
+		thr.setAcc(clos);
 	}
 
 }
