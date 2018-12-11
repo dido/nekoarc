@@ -49,6 +49,7 @@ public enum Op {
     STG(0x46, ArgType.REG_ARGS),
     LDLP(0x47, ArgType.REG_ARGS),
     LDIP(0x48, ArgType.REG_ARGS),
+    LDGP(0x49, ArgType.REG_ARGS),
     APPLY(0x4c, ArgType.SMALL_ARGS),
     CLS(0x4d, ArgType.REG_ARGS),
     JMP(0x4e, ArgType.REG_ARGS),
@@ -59,8 +60,10 @@ public enum Op {
     MENV(0x65, ArgType.SMALL_ARGS),
     LDE0(0x69, ArgType.SMALL_ARGS),
     STE0(0x6a, ArgType.SMALL_ARGS),
+    LDE0P(0x6b, ArgType.SMALL_ARGS),
     LDE(0x87, ArgType.SMALL_ARGS),
     STE(0x88, ArgType.SMALL_ARGS),
+    LDEP(0x89, ArgType.SMALL_ARGS),
     ENV(0xca, ArgType.SMALL_ARGS),
     ENVR(0xcb, ArgType.SMALL_ARGS);
 
