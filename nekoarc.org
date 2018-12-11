@@ -7,11 +7,11 @@ notice and this notice are preserved.
 ----------------------------------------------------------------------
 
 * The Arc Runtime
-** TODO base virtual machine [7/8]
+** DONE base virtual machine [8/8]
     - [X] Define virtual machine architecture
     - [X] Design interpreter core
     - [X] Build code generation infrastructure
-    - [-] Implement virtual machine instructions [40/43]
+    - [X] Implement virtual machine instructions [43/43]
       - [X] nop
       - [X] push
       - [X] pop
@@ -20,12 +20,12 @@ notice and this notice are preserved.
       - [X] ldg
       - [X] ldlp
       - [X] ldip
-      - [ ] ldgp
+      - [X] ldgp
       - [X] stg
       - [X] lde
       - [X] lde0
-      - [ ] ldep
-      - [ ] lde0p
+      - [X] ldep
+      - [X] lde0p
       - [X] ste
       - [X] ste0
       - [X] cont
