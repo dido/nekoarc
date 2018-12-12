@@ -17,6 +17,9 @@
  */
 package com.stormwyrm.nekoarc.types;
 
+import com.stormwyrm.nekoarc.NekoArcException;
+import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.util.ObjectMap;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
 import java.util.Arrays;
@@ -30,6 +33,8 @@ public class CodeGen extends ArcObject {
     private byte[] geninst;
     private int pos, litpos;
     private ArcObject[] genlits;
+    private final ObjectMap<String, ArcObject> codeLabelMap;
+    private final ObjectMap<String, ArcObject> litLabelMap;
 
     /**
      * Create a new code generator
@@ -39,6 +44,8 @@ public class CodeGen extends ArcObject {
         geninst = new byte[32];
         litpos = 0;
         genlits = new ArcObject[32];
+        codeLabelMap = new ObjectMap<>();
+        litLabelMap = new ObjectMap<>();
     }
 
     /**
@@ -56,7 +63,7 @@ public class CodeGen extends ArcObject {
     }
 
     /**
-     * Load generated code into a virtual machine
+     * Load generated code into a virtual machine. Throws an exception if there are any unresolved labels.
      * @param vm the virtual machine to load into
      */
     public void load(VirtualMachine vm) {
@@ -64,6 +71,15 @@ public class CodeGen extends ArcObject {
     //       geninst = Arrays.copyOf(geninst, pos);
     //  if (genlits.length > litpos)
     //    genlits = Arrays.copyOf(genlits, litpos);
+        for (String key : codeLabelMap) {
+            if (!(codeLabelMap.get(key) instanceof Fixnum))
+                throw new NekoArcException("Unresolved code label " + key);
+        }
+
+        for (String key : litLabelMap) {
+            if (!(litLabelMap.get(key) instanceof Fixnum))
+                throw new NekoArcException("Unresolved literal label " + key);
+        }
         vm.load(geninst, genlits);
     }
 
@@ -95,6 +111,68 @@ public class CodeGen extends ArcObject {
             }
         }
         return(pos);
+    }
+
+    /**
+     * Emit a branch instruction with a label operand. This will set the argument to the label if its position is
+     * already known, or else add the position of the instruction to the label hash for later update when the label
+     * value becomes known.
+     * @param op The opcode of the instruction
+     * @param label The label
+     * @return The position of the instruction
+     */
+    public int bremit(byte op, String label) {
+        int brpos = emit(op, 0);
+        if (codeLabelMap.containsKey(label)) {
+            ArcObject obj = codeLabelMap.get(label);
+            if (obj instanceof Fixnum) {
+                int labeldest = (int) ((Fixnum) obj).fixnum;
+                patchRelativeBranch(brpos, labeldest);
+            } else {
+                Cons c = new Cons(Fixnum.get(brpos), obj);
+                codeLabelMap.put(label, c);
+            }
+        } else {
+            codeLabelMap.put(label, new Cons(Fixnum.get(brpos), Nil.NIL));
+        }
+        return(brpos);
+    }
+
+    /**
+     * Emit an instruction with a literal operand. This will set the argument to the label if its position is already
+     * known, or else add the position of the instruction to the label hash for later update when the label value
+     * becomes known.
+     * @param op The opcode of the instruction
+     * @param label The label
+     * @return The position of the instruction
+     */
+    public int lemit(byte op, String label) {
+        int instpos = emit(op, 0);
+        if (litLabelMap.containsKey(label)) {
+            ArcObject obj = litLabelMap.get(label);
+            if (obj instanceof Fixnum)
+                setAtPos(instpos + 1, (int) ((Fixnum) obj).fixnum);
+            else
+                litLabelMap.put(label, new Cons(Fixnum.get(instpos), obj));
+        } else {
+            litLabelMap.put(label, new Cons(Fixnum.get(instpos), Nil.NIL));
+        }
+        return(instpos);
+    }
+
+    /**
+     * Set a label position. This will also update any instructions that might have used the label.
+     */
+    public int label(String label, int labeldest) {
+        if (codeLabelMap.containsKey(label)) {
+            Cons labelList =  (Cons) codeLabelMap.get(label);
+            for (ArcObject obj : labelList) {
+                int brpos = (int) ((Fixnum)obj).fixnum;
+                patchRelativeBranch(brpos, labeldest);
+            }
+        }
+        codeLabelMap.put(label, Fixnum.get(labeldest));
+        return(labeldest);
     }
 
     /**
@@ -161,6 +239,22 @@ public class CodeGen extends ArcObject {
         int tmppos = litpos;
         litpos++;
         return(tmppos);
+    }
+
+    /**
+     * Create a labelled literal
+     * @param label The label of the literal
+     * @param lit The literal
+     * @return The position of the literal
+     */
+    public int literal(String label, ArcObject lit) {
+        int lp = literal(lit);
+        if (litLabelMap.containsKey(label)) {
+            for (ArcObject ref : (Cons)litLabelMap.get(label))
+                setAtPos((int) (((Fixnum)ref).fixnum + 1), lp);
+        }
+        litLabelMap.put(label, Fixnum.get(lp));
+        return(lp);
     }
 
     /**
