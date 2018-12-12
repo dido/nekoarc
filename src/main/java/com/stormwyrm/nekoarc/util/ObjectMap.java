@@ -19,19 +19,19 @@ public class ObjectMap<K, V> implements Iterable<K>
 
 	public int size;
 
-	K[] keyTable;
-	V[] valueTable;
+	transient K[] keyTable;
+	transient V[] valueTable;
 	int capacity, stashSize;
 
 	private float loadFactor;
-	private int hashShift, mask, threshold;
-	private int stashCapacity;
-	private int pushIterations;
+	private transient int hashShift, mask, threshold;
+	private transient int stashCapacity;
+	private transient int pushIterations;
 
-	public static Random random = new Random();
+	public static final Random random = new Random();
 
 	/** Returns a random number between 0 (inclusive) and the specified value (inclusive). */
-	public static final int random (int range) {
+	public static int random (int range) {
 		return random.nextInt(range + 1);
 	}
 
@@ -544,12 +544,12 @@ public class ObjectMap<K, V> implements Iterable<K>
 
     @Override
     public Iterator<K> iterator() {
-	    Iterator<K> it = new Iterator<K>() {
+	    return(new Iterator<K>() {
 	        private int i = keyTable.length;
 
 	        @Override
             public boolean hasNext() {
-	            while (i > 0) {
+	            while (i > 0 && i < keyTable.length) {
 	                K key = keyTable[i];
 	                if (key == null) {
                         i--;
@@ -577,7 +577,6 @@ public class ObjectMap<K, V> implements Iterable<K>
             public void remove() {
 	            throw new UnsupportedOperationException();
             }
-        };
-        return(it);
+        });
     }
 }
