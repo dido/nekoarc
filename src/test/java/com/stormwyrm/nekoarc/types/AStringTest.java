@@ -19,6 +19,7 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Op;
+import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -26,16 +27,19 @@ import static org.junit.Assert.*;
 public class AStringTest {
     @Test
     public void testApply() {
-        ArcThread thr = new ArcThread(1024);
-        thr.vm.initSyms();
-        Op.ENV.emits(thr, 0, 0, 0);
-        Op.LDI.emit(thr, 1);
-        Op.PUSH.emit(thr);
-        Op.LDL.emit(thr, 0);
-        Op.APPLY.emit(thr, 1);
-        Op.RET.emit(thr);
-        thr.vm.cg.literal(new AString("日本語"));
-        thr.load();
+        CodeGen cg = new CodeGen();
+        Op.ENV.emit(cg, 0, 0, 0);
+        Op.LDIP.emit(cg, 1);
+        Op.LDL.emit(cg, 0);
+        Op.APPLY.emit(cg, 1);
+        Op.RET.emit(cg);
+        cg.literal(new AString("日本語"));
+
+        VirtualMachine vm = new VirtualMachine(cg);
+        vm.initSyms();
+        vm.load();
+        ArcThread thr = new ArcThread(vm);
+
         thr.setargc(0);
         assertTrue(thr.runnable());
         thr.run();
@@ -46,16 +50,18 @@ public class AStringTest {
 
     @Test
     public void testUnicodeApply() {
-        ArcThread thr = new ArcThread(1024);
-        thr.vm.initSyms();
-        Op.ENV.emits(thr, 0, 0, 0);
-        Op.LDI.emit(thr, 0);
-        Op.PUSH.emit(thr);
-        Op.LDL.emit(thr, 0);
-        Op.APPLY.emit(thr, 1);
-        Op.RET.emit(thr);
-        thr.vm.cg.literal(new AString("\uD83D\uDE1D\uD83D\uDE0E"));
-        thr.load();
+        CodeGen cg = new CodeGen();
+        Op.ENV.emit(cg, 0, 0, 0);
+        Op.LDIP.emit(cg, 0);
+        Op.LDL.emit(cg, 0);
+        Op.APPLY.emit(cg, 1);
+        Op.RET.emit(cg);
+        cg.literal(new AString("\uD83D\uDE1D\uD83D\uDE0E"));
+
+        VirtualMachine vm = new VirtualMachine(cg);
+        vm.initSyms();
+        vm.load();
+        ArcThread thr = new ArcThread(vm);
         thr.setargc(0);
         assertTrue(thr.runnable());
         thr.run();
