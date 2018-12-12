@@ -67,9 +67,15 @@ public enum Op {
     ENV(0xca, ArgType.SMALL_ARGS),
     ENVR(0xcb, ArgType.SMALL_ARGS);
 
+    /**
+     * Argument types
+     */
     private enum ArgType {
+        /** No arguments */
         NONE,
+        /** Regular arguments (32-bit) */
         REG_ARGS,
+        /** Small arguments (8-bit) */
         SMALL_ARGS
     }
 
@@ -77,6 +83,9 @@ public enum Op {
      * The opcode for the instruction
      */
     private final byte opcode;
+    /**
+     * The type of the argument
+     */
     private final ArgType argType;
 
     /**
@@ -90,7 +99,7 @@ public enum Op {
     }
 
     /**
-     * Create a new opcode for an instruction.
+     * Create a new opcode for an instruction. Default to no arguments.
      * @param opcode The opcode
      */
     Op(int opcode) {
@@ -125,18 +134,5 @@ public enum Op {
 
     public int emit(VirtualMachine vm, int... args) {
         return(emit(vm.cg, args));
-    }
-
-    @Deprecated
-    public int emits(CodeGen cg, int... args) {
-        return(cg.emits(opcode, args));
-    }
-
-    @Deprecated
-    public int emit(ArcThread thr, int... args) { return(emit(thr.vm.cg, args)); }
-
-    @Deprecated
-    public int emits(ArcThread thr, int... args) {
-        return(emits(thr.vm.cg, args));
     }
 }
