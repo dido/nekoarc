@@ -39,4 +39,53 @@ public class CodeGenTest {
         assertEquals((byte)0x87, cg.getAtPos(pos+4));
     }
 
+    @Test
+    public void testLabels() {
+        CodeGen cg = new CodeGen();
+
+        int jpos = Op.JMP.emit(cg, "label0");
+        assertEquals(Op.JMP.opcode(), cg.getAtPos(jpos));
+        assertEquals(0, cg.getAtPos(jpos+1));
+        assertEquals(0, cg.getAtPos(jpos+2));
+        assertEquals(0, cg.getAtPos(jpos+3));
+        assertEquals(0, cg.getAtPos(jpos+4));
+
+        Op.NOP.emit(cg);
+        Op.NOP.emit(cg);
+        Op.NOP.emit(cg);
+        Op.NOP.emit(cg);
+        int dest = cg.label("label0", Op.HLT.emit(cg));
+        int expected = dest - (jpos + 5);
+        assertEquals(expected, cg.getAtPos(jpos+1));
+        assertEquals(0, cg.getAtPos(jpos+2));
+        assertEquals(0, cg.getAtPos(jpos+3));
+        assertEquals(0, cg.getAtPos(jpos+4));
+
+        int ldgpos = Op.LDG.emit(cg, "foo");
+        assertEquals(0, cg.getAtPos(ldgpos+1));
+        assertEquals(0, cg.getAtPos(ldgpos+2));
+        assertEquals(0, cg.getAtPos(ldgpos+3));
+        assertEquals(0, cg.getAtPos(ldgpos+4));
+
+        cg.literal(Symbol.intern("x"));
+        expected = cg.literal("foo", Symbol.intern("foo"));
+        assertEquals(expected, cg.getAtPos(ldgpos+1));
+        assertEquals(0, cg.getAtPos(ldgpos+2));
+        assertEquals(0, cg.getAtPos(ldgpos+3));
+        assertEquals(0, cg.getAtPos(ldgpos+4));
+
+        // second use of label should resolve properly
+        ldgpos = Op.LDG.emit(cg, "foo");
+        assertEquals(expected, cg.getAtPos(ldgpos+1));
+        assertEquals(0, cg.getAtPos(ldgpos+2));
+        assertEquals(0, cg.getAtPos(ldgpos+3));
+        assertEquals(0, cg.getAtPos(ldgpos+4));
+
+        jpos = Op.JT.emit(cg, "label0");
+        expected = dest - (jpos + 5);
+        assertEquals(expected, cg.getAtPos(jpos+1));
+        assertEquals(-1, cg.getAtPos(jpos+2));
+        assertEquals(-1, cg.getAtPos(jpos+3));
+        assertEquals(-1, cg.getAtPos(jpos+4));
+    }
 }
