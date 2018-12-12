@@ -43,20 +43,20 @@ public enum Op {
     CONSR(0x24),
     DCAR(0x26),
     DCDR(0x27),
-    LDL(0x43, ArgType.REG_ARGS),
+    LDL(0x43, ArgType.LLABEL_ARGS),
     LDI(0x44, ArgType.REG_ARGS),
-    LDG(0x45, ArgType.REG_ARGS),
-    STG(0x46, ArgType.REG_ARGS),
-    LDLP(0x47, ArgType.REG_ARGS),
+    LDG(0x45, ArgType.LLABEL_ARGS),
+    STG(0x46, ArgType.LLABEL_ARGS),
+    LDLP(0x47, ArgType.LLABEL_ARGS),
     LDIP(0x48, ArgType.REG_ARGS),
-    LDGP(0x49, ArgType.REG_ARGS),
+    LDGP(0x49, ArgType.LLABEL_ARGS),
     APPLY(0x4c, ArgType.SMALL_ARGS),
-    CLS(0x4d, ArgType.REG_ARGS),
-    JMP(0x4e, ArgType.REG_ARGS),
-    JT(0x4f, ArgType.REG_ARGS),
-    JF(0x50, ArgType.REG_ARGS),
-    JBND(0x51, ArgType.REG_ARGS),
-    CONT(0x52, ArgType.REG_ARGS),
+    CLS(0x4d, ArgType.CLABEL_ARGS),
+    JMP(0x4e, ArgType.CLABEL_ARGS),
+    JT(0x4f, ArgType.CLABEL_ARGS),
+    JF(0x50, ArgType.CLABEL_ARGS),
+    JBND(0x51, ArgType.CLABEL_ARGS),
+    CONT(0x52, ArgType.CLABEL_ARGS),
     MENV(0x65, ArgType.SMALL_ARGS),
     LDE0(0x69, ArgType.SMALL_ARGS),
     STE0(0x6a, ArgType.SMALL_ARGS),
@@ -73,8 +73,12 @@ public enum Op {
     private enum ArgType {
         /** No arguments */
         NONE,
-        /** Regular arguments (32-bit) */
+        /** Regular arguments (32-bit), label not permitted */
         REG_ARGS,
+        /** Regular arguments (32-bit), can use code labels */
+        CLABEL_ARGS,
+        /** Regular arguments (32-bit), can use literal labels */
+        LLABEL_ARGS,
         /** Small arguments (8-bit) */
         SMALL_ARGS
     }
@@ -132,6 +136,30 @@ public enum Op {
         return(cg.emit(opcode, args));
     }
 
+    /**
+     * Emit code for the opcode with a label
+     * @param cg The code generator to emit to
+     * @param label The label argument
+     * @return The code generator offset at which the instruction was emitted
+     */
+    public int emit(CodeGen cg, String label) {
+        int pos;
+        // Determine what type of label to use
+        switch (argType) {
+            case CLABEL_ARGS:
+                pos = cg.bremit(opcode, label);
+                break;
+            case LLABEL_ARGS:
+                pos = cg.lemit(opcode, label);
+                break;
+            default:
+                throw new NekoArcException("instruction " + this.name() + " cannot use label arguments");
+        }
+        return(pos);
+    }
+
+
+    @Deprecated
     public int emit(VirtualMachine vm, int... args) {
         return(emit(vm.cg, args));
     }
