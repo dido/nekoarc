@@ -23,7 +23,7 @@ public class CodeGenTest {
         assertEquals(0x34, cg.getAtPos(pos+3));
         assertEquals(0x12, cg.getAtPos(pos+4));
 
-        pos = Op.ENV.emits(cg, 1, 2, 3);
+        pos = Op.ENV.emit(cg, 1, 2, 3);
         assertEquals(6, pos);
         assertEquals(Op.ENV.opcode(), cg.getAtPos(pos));
         assertEquals(1, cg.getAtPos(pos+1));
