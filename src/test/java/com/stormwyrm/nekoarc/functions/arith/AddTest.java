@@ -1,10 +1,8 @@
 package com.stormwyrm.nekoarc.functions.arith;
 
 import com.stormwyrm.nekoarc.Op;
-import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.types.Symbol;
-import com.stormwyrm.nekoarc.types.ArcThread;
+import com.stormwyrm.nekoarc.types.*;
+import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,20 +10,35 @@ import static org.junit.Assert.*;
 public class AddTest {
     @Test
     public void test0() {
-        ArcThread thr = new ArcThread(1024);
+        CodeGen cg = new CodeGen();
+        Op.ENV.emit(cg, 0, 0, 0);
+        Op.LDG.emit(cg, 0);
+        Op.APPLY.emit(cg, 0);
+        Op.RET.emit(cg);
+        cg.literal(Symbol.intern("+"));
+        VirtualMachine vm = new VirtualMachine(cg);
+        vm.initSyms();
+        vm.load();
+        ArcThread thr = new ArcThread(vm);
         thr.vm.initSyms();
-        Op.ENV.emits(thr, 0, 0, 0);
-        Op.LDG.emit(thr, 0);
-        Op.APPLY.emit(thr, 0);
-        Op.RET.emit(thr);
-        thr.vm.cg.literal(Symbol.intern("+"));
 
-        thr.load();
         thr.setargc(0);
         assertTrue(thr.runnable());
         thr.run();
         assertFalse(thr.runnable());
         assertEquals(0, ((Fixnum)thr.getAcc()).fixnum);
+    }
+
+    private void testtmpl(byte[] inst, int expected) {
+        VirtualMachine vm = new VirtualMachine();
+        vm.load(inst, new ArcObject[]{Symbol.intern("+")});
+        vm.initSyms();
+        ArcThread thr = new ArcThread(vm);
+        thr.setargc(0);
+        assertTrue(thr.runnable());
+        thr.run();
+        assertFalse(thr.runnable());
+        assertEquals(expected, ((Fixnum)thr.getAcc()).fixnum);
     }
 
     @Test
@@ -37,16 +50,8 @@ public class AddTest {
                 0x4c, 0x01,                                // apply 1
                 0x0d                                    // ret
         };
-        ArcThread thr = new ArcThread(1024);
-        thr.vm.initSyms();
-        ArcObject[] literals = new ArcObject[1];
-        literals[0] = Symbol.intern("+");
-        thr.load(inst, literals);
-        thr.setargc(0);
-        assertTrue(thr.runnable());
-        thr.run();
-        assertFalse(thr.runnable());
-        assertEquals(1, ((Fixnum)thr.getAcc()).fixnum);
+
+        testtmpl(inst, 1);
     }
 
     @Test
@@ -60,16 +65,7 @@ public class AddTest {
                 0x4c, 0x02,                                // apply 2
                 0x0d                                    // ret
         };
-        ArcThread thr = new ArcThread(1024);
-        thr.vm.initSyms();
-        ArcObject[] literals = new ArcObject[1];
-        literals[0] = Symbol.intern("+");
-        thr.load(inst, literals);
-        thr.setargc(0);
-        assertTrue(thr.runnable());
-        thr.run();
-        assertFalse(thr.runnable());
-        assertEquals(3, ((Fixnum)thr.getAcc()).fixnum);
+        testtmpl(inst, 3);
     }
 
     @Test
@@ -85,15 +81,6 @@ public class AddTest {
                 0x4c, 0x03,                                // apply 3
                 0x0d                                    // ret
         };
-        ArcThread thr = new ArcThread(1024);
-        thr.vm.initSyms();
-        ArcObject[] literals = new ArcObject[1];
-        literals[0] = Symbol.intern("+");
-        thr.load(inst, literals);
-        thr.setargc(0);
-        assertTrue(thr.runnable());
-        thr.run();
-        assertFalse(thr.runnable());
-        assertEquals(6, ((Fixnum)thr.getAcc()).fixnum);
+        testtmpl(inst, 6);
     }
 }
