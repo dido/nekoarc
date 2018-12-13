@@ -20,7 +20,6 @@ package com.stormwyrm.nekoarc;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.CodeGen;
-import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
 import static org.junit.Assert.*;
@@ -32,17 +31,29 @@ import static org.junit.Assert.assertTrue;
  * Templates for common types of tests
  */
 public class TestTemplate {
+    protected int stackSize = 1024;
+
     /**
      * Execute test code in cg
      * @param cg The CodeGen with the code to execute
      * @return The thread which ran the code, after termination
      */
     private ArcThread executeTest(CodeGen cg) {
+        return(executeTest(cg, (t)-> {}));
+    }
+
+    /**
+     * Execute test code in cg
+     * @param cg The CodeGen with the code to execute
+     * @param tl Thread lambda to prepare the thread
+     * @return The thread which ran the code after termination
+     */
+    private ArcThread executeTest(CodeGen cg, ThreadLambda tl) {
         VirtualMachine vm = new VirtualMachine(cg);
         vm.initSyms();
         vm.load();
-        ArcThread t = new ArcThread(vm);
-        t.setAcc(Fixnum.get(1234));
+        ArcThread t = new ArcThread(vm, stackSize);
+        tl.apply(t);
         assertTrue(t.runnable());
         t.run();
         assertFalse(t.runnable());
@@ -76,27 +87,48 @@ public class TestTemplate {
      * @param t Thread to test
      * @param at AssertTest lambda with tests
      */
-    private void asserts(ArcThread t, AssertTest at) {
-        at.doAssert(t);
+    private void asserts(ArcThread t, ThreadLambda at) {
+        at.apply(t);
     }
 
 
     /**
+     * Execute a test with no bytecode and provided prep and post (assertions) for run thread
+     * @param mc MakeCode lambda that generates code for testing
+     * @param pre Preparatory ThreadLambda to prepare thread for execution
+     * @param post Post-test lambda assertions, giving terminated thread for inspection
+     */
+    protected void doTest(MakeCode mc, ThreadLambda pre, ThreadLambda post) {
+        asserts(executeTest(codeGen(mc), pre), post);
+    }
+
+    /**
+     * Execute a test with no bytecode and provided prep and post (assertions) for run thread
+     * @param bytecode Reference bytecode to compare
+     * @param mc MakeCode lambda that generates code for testing, output will be compared with bytecode
+     * @param pre Preparatory ThreadLambda to prepare thread for execution
+     * @param post Post-test lambda assertions, giving terminated thread for inspection
+     */
+    protected void doTestWithByteCode(byte[] bytecode, MakeCode mc, ThreadLambda pre, ThreadLambda post) {
+        asserts(executeTest(testByteCode(bytecode, codeGen(mc)), pre), post);
+    }
+
+    /**
      * Execute a test with no bytecode and the provided assertion(s)
      * @param mc MakeCode lambda that generates code for testing
-     * @param at AssertTest lambda for assertions, giving the terminated thread for inspection by the tests
+     * @param at AssertTest lambda for assertions, giving the terminated thread for inspection
      */
-    protected void doTest(MakeCode mc, AssertTest at) {
+    protected void doTest(MakeCode mc, ThreadLambda at) {
         asserts(executeTest(codeGen(mc)), at);
     }
 
     /**
      * Execute a test with bytecode and assertions
      * @param bytecode The bytecode reference
-     * @param mc MakeCode lambda that generates code for testing,, will be compared with bytecode
+     * @param mc MakeCode lambda that generates code for testing, will be compared with bytecode
      * @param at AssertTest lambda for assertions, giving the terminated thread for inspection by the tests
      */
-    protected void doTestWithByteCode(byte[] bytecode, MakeCode mc, AssertTest at) {
+    protected void doTestWithByteCode(byte[] bytecode, MakeCode mc, ThreadLambda at) {
         asserts(executeTest(testByteCode(bytecode, codeGen(mc))), at);
     }
 
