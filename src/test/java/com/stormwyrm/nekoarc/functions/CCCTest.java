@@ -19,43 +19,36 @@ package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Op;
+import com.stormwyrm.nekoarc.TestTemplate;
 import com.stormwyrm.nekoarc.types.*;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class CCCTest {
+public class CCCTest extends TestTemplate {
     @Test
     public void testCCCsimple() {
-        CodeGen cg = new CodeGen();
-        // This is basically
-        // (ccc (fn (esc) (esc 42) 21))
+        doTest((cg) -> {
+            Op.ENV.emit(cg, 0, 0, 0);
+            Op.CONT.emit(cg, "L1");
+            Op.CLS.emit(cg, "lambda");
+            Op.PUSH.emit(cg);
+            Op.LDG.emit(cg, "ccc");
+            Op.APPLY.emit(cg, 1);
+            cg.label("L1", Op.PUSH.emit(cg));
+            Op.LDI.emit(cg, 1);
+            Op.ADD.emit(cg);
+            Op.RET.emit(cg);
 
-        Op.ENV.emit(cg, 0, 0, 0);
-        int contpos = Op.CONT.emit(cg, 0);
-        Op.LDLP.emit(cg, 1);
-        Op.LDG.emit(cg, 0);
-        Op.APPLY.emit(cg, 1);
-        int contdest = Op.RET.emit(cg);
-        cg.patchRelativeBranch(contpos, contdest);
-
-        // (fn (esc) (esc 42) 21)
-        int func = Op.ENV.emit(cg, 1, 0, 0);
-        Op.LDIP.emit(cg, 42);
-        Op.LDE0.emit(cg, 0);
-        Op.APPLY.emit(cg, 1);
-        Op.LDI.emit(cg, 21);
-        Op.RET.emit(cg);
-        cg.literal(Symbol.intern("ccc"));
-        cg.literal(new Closure(Nil.NIL, Fixnum.get(func)));
-
-        VirtualMachine vm = new VirtualMachine(cg);
-        vm.initSyms();
-
-        ArcThread thr = vm.spawn(0);
-        ArcObject retval = thr.join();
-        assertEquals(42, ((Fixnum)retval).fixnum);
+            cg.label("lambda", Op.ENV.emit(cg, 1, 0, 0));
+            Op.LDIP.emit(cg, 41);
+            Op.LDE0.emit(cg, 0);
+            Op.APPLY.emit(cg, 1);
+            Op.LDI.emit(cg, 21);
+            Op.RET.emit(cg);
+            cg.literal("ccc", Symbol.intern("ccc"));
+            return(cg); }, Fixnum.get(42));
     }
 
     @Test
