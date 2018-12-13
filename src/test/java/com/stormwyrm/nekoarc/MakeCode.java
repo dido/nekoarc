@@ -27,5 +27,5 @@ public interface MakeCode {
      * Make code. This generally used in a lambda expression that executes several emits against the codegen
      * @param cg The code generator
      */
-    void makeCode(CodeGen cg);
+    CodeGen makeCode(CodeGen cg);
 }
