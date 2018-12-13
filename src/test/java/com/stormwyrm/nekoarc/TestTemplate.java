@@ -34,6 +34,7 @@ import static org.junit.Assert.assertTrue;
 public class TestTemplate {
     private ArcThread executeTest(CodeGen cg) {
         VirtualMachine vm = new VirtualMachine(cg);
+        vm.initSyms();
         vm.load();
         ArcThread t = new ArcThread(vm);
         t.setAcc(Fixnum.get(1234));
