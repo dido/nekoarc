@@ -78,7 +78,7 @@ public class TestTemplate {
     private CodeGen testByteCode(byte[] inst, CodeGen cg) {
         assertEquals(inst.length, cg.pos());
         for (int i=0; i<inst.length; i++)
-            assertEquals(inst[i], cg.getAtPos(i));
+            assertEquals("Code is different from ref at offset " + i, inst[i], cg.getAtPos(i));
         return(cg);
     }
 
