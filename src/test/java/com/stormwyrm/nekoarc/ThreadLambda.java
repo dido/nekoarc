@@ -20,12 +20,12 @@ package com.stormwyrm.nekoarc;
 import com.stormwyrm.nekoarc.types.ArcThread;
 
 /**
- * Assertion test lambda
+ * Thread lambda
  */
-public interface AssertTest {
+public interface ThreadLambda {
     /**
-     * Perform assertions against the thread
-     * @param expected The expected value
+     * Perform stuff against a thread
+     * @param thr The thread to
      */
-    void doAssert(ArcThread expected);
+    void apply(ArcThread thr);
 }
