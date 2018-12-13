@@ -32,6 +32,11 @@ import static org.junit.Assert.assertTrue;
  * Templates for common types of tests
  */
 public class TestTemplate {
+    /**
+     * Execute test code in cg
+     * @param cg The CodeGen with the code to execute
+     * @return The thread which ran the code, after termination
+     */
     private ArcThread executeTest(CodeGen cg) {
         VirtualMachine vm = new VirtualMachine(cg);
         vm.initSyms();
@@ -44,10 +49,21 @@ public class TestTemplate {
         return(t);
     }
 
+    /**
+     * Apply a MakeCode lambda to a new CodeGen
+     * @param mc MakeCode lambda to apply
+     * @return a new CodeGen object to which mc has been applied
+     */
     private CodeGen codeGen(MakeCode mc) {
         return(mc.makeCode(new CodeGen()));
     }
 
+    /**
+     * Compare bytecode against a codegen. Assertions for equality will be performed against it.
+     * @param inst Instructions to compare against a CodeGen
+     * @param cg The completed CodeGen with instructions to compare
+     * @return the CodeGen that was tested
+     */
     private CodeGen testByteCode(byte[] inst, CodeGen cg) {
         assertEquals(inst.length, cg.pos());
         for (int i=0; i<inst.length; i++)
@@ -55,14 +71,31 @@ public class TestTemplate {
         return(cg);
     }
 
+    /**
+     * Apply AssertTest lambda to a thread
+     * @param t Thread to test
+     * @param at AssertTest lambda with tests
+     */
     private void asserts(ArcThread t, AssertTest at) {
         at.doAssert(t);
     }
 
+
+    /**
+     * Execute a test with no bytecode and the provided assertion(s)
+     * @param mc MakeCode lambda that generates code for testing
+     * @param at AssertTest lambda for assertions, giving the terminated thread for inspection by the tests
+     */
     protected void doTest(MakeCode mc, AssertTest at) {
         asserts(executeTest(codeGen(mc)), at);
     }
 
+    /**
+     * Execute a test with bytecode and assertions
+     * @param bytecode The bytecode reference
+     * @param mc MakeCode lambda that generates code for testing,, will be compared with bytecode
+     * @param at AssertTest lambda for assertions, giving the terminated thread for inspection by the tests
+     */
     protected void doTestWithByteCode(byte[] bytecode, MakeCode mc, AssertTest at) {
         asserts(executeTest(testByteCode(bytecode, codeGen(mc))), at);
     }
@@ -77,6 +110,12 @@ public class TestTemplate {
 
     }
 
+    /**
+     * Do a simple test for equality with bytecode
+     * @param bytecode The bytecode to test against
+     * @param mc MakeCode lambda that should generate code equal to bytecode
+     * @param expected Expected value
+     */
     protected void doTestWithByteCode(byte[] bytecode, MakeCode mc, ArcObject expected) {
         doTestWithByteCode(bytecode, mc, (t)-> assertEquals(t.getAcc(), expected));
     }
