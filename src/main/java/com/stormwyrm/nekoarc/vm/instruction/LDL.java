@@ -34,7 +34,7 @@ public class LDL implements Instruction {
 	@Override
 	public void invoke(ArcThread thr) throws NekoArcException {
 		int offset = thr.instArg();
-		thr.setAcc(thr.literal(offset));
+		thr.setAcc(thr.vm.literal(offset));
 	}
 
 }
