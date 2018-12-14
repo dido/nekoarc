@@ -35,7 +35,7 @@ public class LDGP implements Instruction {
     @Override
     public void invoke(ArcThread thr) throws NekoArcException {
         int offset = thr.instArg();
-        Symbol sym = (Symbol)thr.literal(offset);
+        Symbol sym = (Symbol)thr.vm.literal(offset);
         thr.push(thr.setAcc(thr.vm.value(sym)));
     }
 }
