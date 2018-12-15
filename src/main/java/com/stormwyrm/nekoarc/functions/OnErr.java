@@ -36,7 +36,7 @@ public class OnErr extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread ithr) {
+    public ArcObject invoke(InvokeThread ithr) throws Throwable {
         ArcObject handler = ithr.getenv(0);
         ArcObject thunk = ithr.getenv(1);
         ithr.thr.onErr(handler);
