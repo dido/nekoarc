@@ -32,7 +32,7 @@ public class APPLY implements Instruction {
 	 * @throws NekoArcException if there is an error during the apply
 	 */
 	@Override
-	public void invoke(ArcThread thr) throws NekoArcException {
+	public void invoke(ArcThread thr) throws Throwable {
 		thr.setargc(thr.smallInstArg());
 		thr.getAcc().apply(thr, thr);
 	}
