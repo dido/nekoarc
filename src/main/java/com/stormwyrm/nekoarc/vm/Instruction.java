@@ -29,5 +29,5 @@ public interface Instruction {
      * @param thr The thread executing the instruction
      * @throws NekoArcException on error
      */
-	void invoke(ArcThread thr) throws NekoArcException;
+	void invoke(ArcThread thr) throws Throwable;
 }
