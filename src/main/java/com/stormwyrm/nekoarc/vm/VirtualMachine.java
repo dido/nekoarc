@@ -223,6 +223,7 @@ public class VirtualMachine {
         defbuiltin(CCC.getInstance());
         defbuiltin(DynamicWind.getInstance());
         defbuiltin(Err.getInstance());
+        defbuiltin(OnErr.getInstance());
     }
 
     public ArcThread spawn(ArcThread t) {
