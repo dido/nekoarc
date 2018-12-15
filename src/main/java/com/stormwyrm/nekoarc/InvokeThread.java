@@ -52,12 +52,12 @@ public class InvokeThread extends Thread {
 		ArcObject ret;
 		try {
 			ret = obj.invoke(this);
+			// Restore the continuation created by the caller
+			thr.restorecont(caller);
 		} catch (Throwable e) {
 			// If the invocation threw something, the ret becomes an AException which wraps the original throwable
 			ret = new AException(e);
 		}
-		// Restore the continuation created by the caller
-		thr.restorecont(caller);
 		// Return the result to our caller's thread, waking them up
 		caller.sync().ret(ret);
 		// and this invoke thread's work is ended
