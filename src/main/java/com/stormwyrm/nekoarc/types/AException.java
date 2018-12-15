@@ -17,12 +17,10 @@
  */
 package com.stormwyrm.nekoarc.types;
 
-import com.stormwyrm.nekoarc.NekoArcException;
-
 public class AException extends ArcObject {
     public static final ArcObject TYPE = Symbol.intern("exception");
-    private NekoArcException exception;
-    public AException(NekoArcException e) {
+    public Throwable exception;
+    public AException(Throwable e) {
         exception = e;
     }
 
