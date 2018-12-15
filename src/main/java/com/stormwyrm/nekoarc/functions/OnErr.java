@@ -17,8 +17,10 @@
  */
 package com.stormwyrm.nekoarc.functions;
 
+import com.stormwyrm.nekoarc.HeapContinuation;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.Fixnum;
 
 public class OnErr extends Builtin {
     private static final OnErr INSTANCE = new OnErr();
@@ -39,7 +41,10 @@ public class OnErr extends Builtin {
     public ArcObject invoke(InvokeThread ithr) throws Throwable {
         ArcObject handler = ithr.getenv(0);
         ArcObject thunk = ithr.getenv(1);
-        ithr.thr.onErr(handler);
+        ArcObject continuation = ithr.thr.getCont();
+        if (continuation instanceof Fixnum)
+            continuation = HeapContinuation.fromStackCont(ithr.thr, continuation);
+        ithr.thr.onErr(handler, continuation);
         return(ithr.apply(thunk));
     }
 }
