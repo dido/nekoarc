@@ -46,6 +46,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	public Thread thread;			// Java thread running this
 	public ArcObject here;			// "here" value used for Hanson-Lamping
 	private final static Symbol noBeforesOrAfters = (Symbol) Symbol.intern("no-befores-or-afters");
+	private ArcObject exceptionHandlers = Nil.NIL;
 
 	/**
 	 * The instruction jump table.
@@ -794,11 +795,77 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	}
 
 	/**
+	 * Exception handler wrapper class
+	 */
+	class ExceptionHandler extends ArcObject {
+		private final ArcObject TYPE = Symbol.intern("exceptionhandler");
+		private final ArcObject here;
+		private final ArcObject handler;
+
+		/**
+		 * Create an exception handler
+		 * @param handler The handler (which must be an object capable of accepting only one required argument)
+		 * @param here The current Hanson-Lamping *here* at the time the exception handler was registered
+		 */
+		public ExceptionHandler(ArcObject handler, ArcObject here) {
+			this.handler = handler;
+			this.here = here;
+		}
+
+		@Override
+		public ArcObject type() {
+			return(TYPE);
+		}
+
+		/**
+		 * Required number of arguments to invoke an exception handler
+		 * @return Always 1
+		 */
+		@Override
+		public int requiredArgs() {
+			return(1);
+		}
+
+		@Override
+		public ArcObject invoke(InvokeThread ithr) {
+			// Hanson-Lamping reroot first
+			ithr.thr.reroot(ithr, here);
+			// Invoke the handler
+			return(ithr.apply(handler));
+		}
+
+		@Override
+		public String toString() {
+			return("#<exnhandler>");
+		}
+	}
+
+	/**
+	 * Register an exception handler
+	 * @param errProc the exception handler
+	 */
+	public void onErr(ArcObject errProc) {
+		exceptionHandlers = new Cons(new ExceptionHandler(errProc, here), exceptionHandlers);
+	}
+
+	/**
 	 * Main entry point of the thread.
 	 */
 	public void run() {
 		while (runnable) {
-			jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
+			try {
+				jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
+			} catch (NekoArcException e) {
+				// Just rethrow the exception if there are no exception handlers registered
+				if (exceptionHandlers.is(Nil.NIL))
+					throw e;
+				// If there is an exception handler, pop it off and execute it.
+				ArcObject eh = exceptionHandlers.car();
+				exceptionHandlers = exceptionHandlers.cdr();
+				setargc(1);
+				push(new AException(e));
+				eh.apply(this, this);
+			}
 		}
 	}
 
