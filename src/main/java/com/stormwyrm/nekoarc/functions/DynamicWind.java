@@ -25,7 +25,7 @@ public class DynamicWind extends Builtin {
      * @return the result of the 'during' thunk (parameter 1)
      */
     @Override
-    public ArcObject invoke(InvokeThread ithr) {
+    public ArcObject invoke(InvokeThread ithr) throws Throwable {
         ArcObject myHere = ithr.thr.here;
         ArcObject before = ithr.getenv(0), during = ithr.getenv(1), after = ithr.getenv(2);
 
