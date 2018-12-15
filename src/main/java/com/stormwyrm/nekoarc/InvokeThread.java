@@ -53,6 +53,7 @@ public class InvokeThread extends Thread {
 		try {
 			ret = obj.invoke(this);
 		} catch (Throwable e) {
+			// If the invocation threw something, the ret becomes an AException which wraps the original throwable
 			ret = new AException(e);
 		}
 		// Restore the continuation created by the caller
