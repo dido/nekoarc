@@ -55,7 +55,8 @@ public class TestTemplate {
         ArcThread t = new ArcThread(vm, stackSize);
         tl.apply(t);
         assertTrue(t.runnable());
-        t.run();
+        vm.spawn(t);
+        t.join();
         assertFalse(t.runnable());
         return(t);
     }
