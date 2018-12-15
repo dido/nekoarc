@@ -2,10 +2,11 @@ package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.Op;
 import com.stormwyrm.nekoarc.TestTemplate;
-import com.stormwyrm.nekoarc.functions.typehandling.Sym;
 import com.stormwyrm.nekoarc.types.AString;
 import com.stormwyrm.nekoarc.types.Symbol;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class OnErrTest extends TestTemplate {
     @Test
@@ -39,7 +40,7 @@ public class OnErrTest extends TestTemplate {
             cg.literal("wcatooex", new AString("we can also throw our own exceptions"));
             return(cg);
                 },
-                new AString("got error we can also throw our own exceptions"));
+                (t) -> assertEquals("got error we can also throw our own exceptions", t.getAcc().toString()));
     }
 
 }
