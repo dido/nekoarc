@@ -827,7 +827,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		}
 
 		@Override
-		public ArcObject invoke(InvokeThread ithr) {
+		public ArcObject invoke(InvokeThread ithr) throws Throwable {
 			// Hanson-Lamping reroot first
 			ithr.thr.reroot(ithr, here);
 			// Invoke the handler
@@ -855,16 +855,25 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 		while (runnable) {
 			try {
 				jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
-			} catch (NekoArcException e) {
-				// Just rethrow the exception if there are no exception handlers registered
-				if (exceptionHandlers.is(Nil.NIL))
-					throw e;
-				// If there is an exception handler, pop it off and execute it.
-				ArcObject eh = exceptionHandlers.car();
-				exceptionHandlers = exceptionHandlers.cdr();
-				setargc(1);
-				push(new AException(e));
-				eh.apply(this, this);
+			} catch (Throwable e) {
+				boolean noex;
+				do {
+					noex = false;
+					// Just rethrow the exception if there are no exception handlers registered
+					if (exceptionHandlers.is(Nil.NIL))
+						throw new NekoArcException(e.getMessage());
+					// If there is an exception handler, pop it off and execute it.
+					ArcObject eh = exceptionHandlers.car();
+					exceptionHandlers = exceptionHandlers.cdr();
+					setargc(1);
+					push(new AException(e));
+					try {
+						eh.apply(this, this);
+					} catch (Throwable et) {
+						noex = true;
+						e = et;
+					}
+				} while (noex);
 			}
 		}
 	}
@@ -873,7 +882,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 	 * Hanson-Lamping reroot
 	 * @param there where to reroot
 	 */
-	public void reroot(InvokeThread ithr, ArcObject there) {
+	public void reroot(InvokeThread ithr, ArcObject there) throws Throwable {
 		ArcObject before, after;
 
 		if (here.is(there))
