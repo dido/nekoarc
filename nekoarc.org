@@ -94,8 +94,6 @@ notice and this notice are preserved.
    - [ ] Numbers [0/4]
      - [ ] Integer
      - [ ] Flonum
-     - [ ] Rational
-     - [ ] Complex
    - [ ] Regexps
    - [ ] Atstrings
 ** TODO Arc compiler [0/5]
@@ -142,7 +140,7 @@ notice and this notice are preserved.
      - [ ] Complement (~)
      - [ ] Structure access (. and !)
      - [ ] And (&)
-** TODO basic data types [14/18]
+** TODO basic data types [15/18]
     - [X] Nil
     - [X] True
     - [X] Numeric Types [2/2]
@@ -163,7 +161,7 @@ notice and this notice are preserved.
       - [X] outstring
       - [ ] outfile
     - [X] Threads
-    - [ ] Exceptions
+    - [X] Exceptions
     - [X] Channels
     - [X] Closures (code)
     - [ ] Objects
@@ -374,15 +372,15 @@ notice and this notice are preserved.
      - [ ] file-exists
      - [ ] rmfile
      - [ ] mvfile
-   - [-] Error handling and continuations [2/8]
-     - [ ] details
-     - [ ] err
-     - [ ] on-err
+   - [-] Error handling and continuations [5/7]
+     - [X] details
+     - [X] err
+     - [X] on-err
      - [X] ccc
-     - [ ] protect
      - [X] dynamic-wind
      - [ ] ccmark
      - [ ] scmark
+     - [ ] cmark
    - [X] Strings [1/1]
      - [X] newstring
    - [ ] Objects [0/3]
