@@ -212,8 +212,7 @@ public abstract class ArcObject implements Callable
 	 * @return The string representation of the object
 	 */
 	public String toString() {
-		throw new NekoArcException("Type " + type()
-				+ " has no string representation");
+		return("#<" + type() + ">");
 	}
 
 	// default implementation
