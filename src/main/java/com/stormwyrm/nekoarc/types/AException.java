@@ -15,19 +15,26 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
-package com.stormwyrm.nekoarc.vm;
+package com.stormwyrm.nekoarc.types;
 
-import com.stormwyrm.nekoarc.NekoArcException;
-import com.stormwyrm.nekoarc.types.ArcThread;
+public class AException extends ArcObject {
+    public static final ArcObject TYPE = Symbol.intern("exception");
+    public Throwable exception;
+    public AException(Throwable e) {
+        exception = e;
+    }
 
-/**
- * Interface for basic instructions
- */
-public interface Instruction {
-    /**
-     * Instruction
-     * @param thr The thread executing the instruction
-     * @throws NekoArcException on error
-     */
-	void invoke(ArcThread thr) throws Throwable;
+    @Override
+    public ArcObject type() {
+        return null;
+    }
+
+    public AString details() {
+        return(new AString(exception.getMessage()));
+    }
+
+    @Override
+    public String toString() {
+        return("#<exn:" + exception.getMessage() + ">");
+    }
 }

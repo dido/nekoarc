@@ -16,7 +16,7 @@ public class MapTable extends Builtin {
     }
 
     @Override
-    public ArcObject invoke(InvokeThread ithr) {
+    public ArcObject invoke(InvokeThread ithr) throws Throwable {
         ArcObject proc = ithr.getenv(0, 0);
         Table tbl = (Table) ithr.getenv(0, 1);
         for (ArcObject k : tbl)

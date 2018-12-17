@@ -222,6 +222,9 @@ public class VirtualMachine {
         // Error handling and continuations
         defbuiltin(CCC.getInstance());
         defbuiltin(DynamicWind.getInstance());
+        defbuiltin(Err.getInstance());
+        defbuiltin(OnErr.getInstance());
+        defbuiltin(Details.getInstance());
     }
 
     public ArcThread spawn(ArcThread t) {

@@ -17,6 +17,7 @@
  */
 package com.stormwyrm.nekoarc;
 
+import com.stormwyrm.nekoarc.types.AException;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.types.ArcThread;
@@ -48,16 +49,21 @@ public class InvokeThread extends Thread {
 	@Override
 	public void run() {
 		// Perform our function's thing
-		ArcObject ret = obj.invoke(this);
-		// Restore the continuation created by the caller
-		thr.restorecont(caller);
+		ArcObject ret;
+		try {
+			ret = obj.invoke(this);
+			// Restore the continuation created by the caller
+			thr.restorecont(caller);
+		} catch (Throwable e) {
+			// If the invocation threw something, the ret becomes an AException which wraps the original throwable
+			ret = new AException(e);
+		}
 		// Return the result to our caller's thread, waking them up
 		caller.sync().ret(ret);
 		// and this invoke thread's work is ended
 	}
 
-	public ArcObject getenv(int i, int j)
-	{
+	public ArcObject getenv(int i, int j) {
 		return(thr.getenv(i, j));
 	}
 
@@ -73,7 +79,7 @@ public class InvokeThread extends Thread {
 	 * @param args the arguments
 	 * @return the return value of the application
 	 */
-	public ArcObject apply(ArcObject fn, ArcObject...args) {
+	public ArcObject apply(ArcObject fn, ArcObject...args) throws Throwable {
 		// First, push all of the arguments to the stack
 		thr.setargc(args.length);
 		for (ArcObject arg : args)

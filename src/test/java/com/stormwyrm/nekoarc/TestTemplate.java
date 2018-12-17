@@ -55,7 +55,8 @@ public class TestTemplate {
         ArcThread t = new ArcThread(vm, stackSize);
         tl.apply(t);
         assertTrue(t.runnable());
-        t.run();
+        vm.spawn(t);
+        t.join();
         assertFalse(t.runnable());
         return(t);
     }
@@ -138,7 +139,7 @@ public class TestTemplate {
      * @param expected Expected value
      */
     protected void doTest(MakeCode mc, ArcObject expected) {
-        doTest(mc, (t)-> assertEquals(t.getAcc(), expected));
+        doTest(mc, (t)-> assertEquals(expected, t.getAcc()));
 
     }
 
@@ -149,6 +150,6 @@ public class TestTemplate {
      * @param expected Expected value
      */
     protected void doTestWithByteCode(byte[] bytecode, MakeCode mc, ArcObject expected) {
-        doTestWithByteCode(bytecode, mc, (t)-> assertEquals(t.getAcc(), expected));
+        doTestWithByteCode(bytecode, mc, (t)-> assertEquals(expected, t.getAcc()));
     }
 }

@@ -76,7 +76,7 @@ public class CCC extends Builtin {
 		 * @return the parameter passed to the continuation when it was invoked
 		 */
 		@Override
-		public ArcObject invoke(InvokeThread ithr) {
+		public ArcObject invoke(InvokeThread ithr) throws Throwable {
 			// Hanson-Lamping reroot first
 			ithr.thr.reroot(ithr, here);
 			// Set original continuation as current continuation
@@ -91,7 +91,7 @@ public class CCC extends Builtin {
 	 * @return The return value of the closure passed to it.
 	 */
 	@Override
-	public ArcObject invoke(InvokeThread ithr) {
+	public ArcObject invoke(InvokeThread ithr) throws Throwable {
 		ArcObject continuation = ithr.thr.getCont();
 		if (continuation instanceof Fixnum)
 			continuation = HeapContinuation.fromStackCont(ithr.thr, continuation);

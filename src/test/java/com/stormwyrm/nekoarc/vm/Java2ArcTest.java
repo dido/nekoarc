@@ -29,17 +29,13 @@ import com.stormwyrm.nekoarc.types.Fixnum;
 import org.junit.Test;
 
 /** Test for Java to Arc bytecode calls */
-public class Java2ArcTest 
-{
+public class Java2ArcTest {
 
 	@Test
-	public void test()
-	{
-		Builtin builtin = new Builtin("test", 1, 0, 0, false)
-		{
+	public void test() {
+		Builtin builtin = new Builtin("test", 1, 0, 0, false) {
 			@Override
-			public ArcObject invoke(InvokeThread ithr)
-			{
+			public ArcObject invoke(InvokeThread ithr) throws Throwable {
 				ArcObject arg = ithr.getenv(0, 0);
 				return(ithr.apply(arg, Fixnum.get(1)));
 			}

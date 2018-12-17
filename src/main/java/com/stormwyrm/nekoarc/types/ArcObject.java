@@ -167,7 +167,7 @@ public abstract class ArcObject implements Callable
 	 * @param thr The thread applying the object
 	 * @param caller The function calling
 	 */
-	public void apply(ArcThread thr, Callable caller) {
+	public void apply(ArcThread thr, Callable caller) throws Throwable {
 		int minenv, dsenv, optenv;
 		minenv = requiredArgs();
 		dsenv = extraArgs();
@@ -191,7 +191,10 @@ public abstract class ArcObject implements Callable
 		new Thread(ithr).start();
 
 		// Suspend the caller's thread until the invoke thread returns
-		thr.setAcc(caller.sync().retval());
+		ArcObject retval = caller.sync().retval();
+		if (retval instanceof AException)
+			throw ((AException) retval).exception;
+		thr.setAcc(retval);
 	}
 
 	/**
@@ -199,7 +202,7 @@ public abstract class ArcObject implements Callable
 	 * @param ithr The invocation thread.
 	 * @return The return value
 	 */
-	public ArcObject invoke(InvokeThread ithr) {
+	public ArcObject invoke(InvokeThread ithr) throws Throwable {
 		throw new NekoArcException("Cannot invoke object of type " + type());
 
 	}
