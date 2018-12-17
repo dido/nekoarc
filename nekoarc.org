@@ -140,7 +140,7 @@ notice and this notice are preserved.
      - [ ] Complement (~)
      - [ ] Structure access (. and !)
      - [ ] And (&)
-** TODO basic data types [15/18]
+** DONE basic data types [17/17]
     - [X] Nil
     - [X] True
     - [X] Numeric Types [2/2]
@@ -154,17 +154,16 @@ notice and this notice are preserved.
     - [X] Vectors
     - [X] Tagged
     - [X] Functions
-    - [-] Input Ports [1/2]
+    - [X] Input Ports [2/2]
       - [X] instring
-      - [ ] infile
-    - [-] Output Ports [1/2]
+      - [X] infile
+    - [X] Output Ports [2/2]
       - [X] outstring
-      - [ ] outfile
+      - [X] outfile
     - [X] Threads
     - [X] Exceptions
     - [X] Channels
     - [X] Closures (code)
-    - [ ] Objects
 ** TODO Runtime Built-In Functions [6/19]
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
