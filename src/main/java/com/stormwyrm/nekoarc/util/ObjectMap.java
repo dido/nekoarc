@@ -545,7 +545,7 @@ public class ObjectMap<K, V> implements Iterable<K>
     @Override
     public Iterator<K> iterator() {
 	    return(new Iterator<K>() {
-	        private int i = keyTable.length;
+	        private int i = keyTable.length-1;
 
 	        @Override
             public boolean hasNext() {
@@ -564,8 +564,8 @@ public class ObjectMap<K, V> implements Iterable<K>
             public K next() {
                 while (i > 0) {
                     K key = keyTable[i];
+                    i--;
                     if (key == null) {
-                        i--;
                         continue;
                     }
                     return(key);
