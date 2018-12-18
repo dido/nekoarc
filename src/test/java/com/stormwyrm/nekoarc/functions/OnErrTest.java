@@ -2,6 +2,7 @@ package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.Op;
 import com.stormwyrm.nekoarc.TestTemplate;
+import com.stormwyrm.nekoarc.True;
 import com.stormwyrm.nekoarc.types.AString;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
@@ -14,34 +15,35 @@ public class OnErrTest extends TestTemplate {
     public void testNoErrOnErr() {
         // (on-err [assign foo 100] (fn () (assign foo 200) "abc"))
         doTest((cg) -> {
-            Op.ENV.emit(cg, 0, 0, 0);
-            Op.CLS.emit(cg, "handler");
-            Op.PUSH.emit(cg);
-            Op.CLS.emit(cg, "thunk");
-            Op.PUSH.emit(cg);
-            Op.LDG.emit(cg, "on-err");
-            Op.APPLY.emit(cg, 2);
-            Op.RET.emit(cg);
-            cg.label("handler", Op.ENV.emit(cg, 1, 0, 0));
-            Op.LDI.emit(cg, 100);
-            Op.STG.emit(cg, "foo");
-            Op.RET.emit(cg);
-            cg.label("thunk", Op.ENV.emit(cg, 0, 0, 0));
-            Op.LDI.emit(cg, 200);
-            Op.STG.emit(cg, "foo");
-            Op.LDL.emit(cg, "abc");
-            Op.RET.emit(cg);
-            cg.literal("abc", new AString("abc"));
-            cg.literal("on-err", Symbol.intern("on-err"));
-            cg.literal("foo", Symbol.intern("foo"));
-            return(cg);
-        },
-                (t) ->{
-            assertEquals(200, ((Fixnum)(t.vm.value((Symbol) Symbol.intern("foo")))).fixnum);
-            assertEquals("abc", t.getAcc().toString());
+                    Op.ENV.emit(cg, 0, 0, 0);
+                    Op.CLS.emit(cg, "handler");
+                    Op.PUSH.emit(cg);
+                    Op.CLS.emit(cg, "thunk");
+                    Op.PUSH.emit(cg);
+                    Op.LDG.emit(cg, "on-err");
+                    Op.APPLY.emit(cg, 2);
+                    Op.RET.emit(cg);
+                    cg.label("handler", Op.ENV.emit(cg, 1, 0, 0));
+                    Op.LDI.emit(cg, 100);
+                    Op.STG.emit(cg, "foo");
+                    Op.RET.emit(cg);
+                    cg.label("thunk", Op.ENV.emit(cg, 0, 0, 0));
+                    Op.LDI.emit(cg, 200);
+                    Op.STG.emit(cg, "foo");
+                    Op.LDL.emit(cg, "abc");
+                    Op.RET.emit(cg);
+                    cg.literal("abc", new AString("abc"));
+                    cg.literal("on-err", Symbol.intern("on-err"));
+                    cg.literal("foo", Symbol.intern("foo"));
+                    return (cg);
+                },
+                (t) -> {
+                    assertEquals(200, ((Fixnum) (t.vm.value((Symbol) Symbol.intern("foo")))).fixnum);
+                    assertEquals("abc", t.getAcc().toString());
                 });
 
     }
+
     @Test
     public void testErrOnErr() {
         // (on-err [+ "got error " (details _)] (fn () (err (fn () "we can also throw our own exceptions))))
@@ -141,5 +143,30 @@ public class OnErrTest extends TestTemplate {
                     assertEquals("abcdefghi", t.vm.value((Symbol) Symbol.intern("text")).toString());
                     assertEquals("abcdefghi", t.getAcc().toString());
                 });
+    }
+
+    @Test
+    public void testDivZero() {
+        doTest((cg) -> {
+                    Op.ENV.emit(cg, 0, 0, 0);
+                    Op.CLS.emit(cg, "handler");
+                    Op.PUSH.emit(cg);
+                    Op.CLS.emit(cg, "thunk");
+                    Op.PUSH.emit(cg);
+                    Op.LDG.emit(cg, "on-err");
+                    Op.APPLY.emit(cg, 2);
+                    Op.RET.emit(cg);
+                    cg.label("handler", Op.ENV.emit(cg, 1, 0, 0));
+                    Op.TRUE.emit(cg);
+                    Op.RET.emit(cg);
+                    cg.label("thunk", Op.ENV.emit(cg, 0, 0, 0));
+                    Op.LDIP.emit(cg, 1);
+                    Op.LDI.emit(cg, 0);
+                    Op.DIV.emit(cg);
+                    Op.RET.emit(cg);
+                    cg.literal("on-err", Symbol.intern("on-err"));
+                    return (cg);
+                },
+                (t) -> assertTrue(True.T.is(t.getAcc())));
     }
 }
