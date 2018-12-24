@@ -218,6 +218,8 @@ public class VirtualMachine {
         defbuiltin(FInString.getInstance());
         defbuiltin(FOutString.getInstance());
         defbuiltin(Inside.getInstance());
+        defbuiltin(FInFile.getInstance());
+        defbuiltin(FOutFile.getInstance());
 
         // Error handling and continuations
         defbuiltin(CCC.getInstance());
