@@ -220,6 +220,8 @@ public class VirtualMachine {
         defbuiltin(Inside.getInstance());
         defbuiltin(FInFile.getInstance());
         defbuiltin(FOutFile.getInstance());
+        defbuiltin(FSeek.getInstance());
+        defbuiltin(FTell.getInstance());
 
         // Error handling and continuations
         defbuiltin(CCC.getInstance());
