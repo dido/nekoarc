@@ -2,7 +2,6 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.NekoArcException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
