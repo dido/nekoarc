@@ -20,19 +20,46 @@ package com.stormwyrm.nekoarc.types;
 import java.io.ByteArrayInputStream;
 
 public class InString extends InputPort {
-    private ByteArrayInputStream str;
+    private class BIS extends ByteArrayInputStream {
+        public BIS(byte[] buf) {
+            super(buf);
+        }
 
-    public InString(String s) {
-        this(s, "");
+        public long seek(long newpos) {
+            return(pos = (int)newpos);
+        }
+
+        public long tell() {
+            return(pos);
+        }
+
     }
+
+    private final BIS str;
+
+    public InString(byte[] b, String name) {
+        super(name);
+        this.str = new BIS(b) {
+        };
+    }
+
 
     public InString(String s, String name) {
         this(s.getBytes(), name);
     }
 
-    public InString(byte[] b, String name) {
-        super(name);
-        this.str = new ByteArrayInputStream(b);
+    public InString(String s) {
+        this(s, "");
+    }
+
+    @Override
+    public long seek(long newpos) {
+        return(str.seek(newpos));
+    }
+
+    @Override
+    public long tell() {
+        return(str.tell());
     }
 
     @Override

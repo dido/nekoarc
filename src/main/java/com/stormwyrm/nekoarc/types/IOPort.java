@@ -60,4 +60,14 @@ public abstract class IOPort extends ArcObject {
     public void close() {
         closed = true;
     }
+
+    /**
+     * Seek in the I/O port.
+     */
+    public abstract long seek(long newpos);
+
+    /**
+     * Tell the position of the I/O port.
+     */
+    public abstract long tell();
 }

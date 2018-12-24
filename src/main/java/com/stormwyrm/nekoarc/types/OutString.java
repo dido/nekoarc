@@ -17,10 +17,12 @@
  */
 package com.stormwyrm.nekoarc.types;
 
+import com.stormwyrm.nekoarc.NekoArcException;
+
 import java.io.ByteArrayOutputStream;
 
 public class OutString extends OutputPort {
-    private ByteArrayOutputStream outstr;
+    private final ByteArrayOutputStream outstr;
 
     /**
      * Create an output string with the given name
@@ -32,6 +34,15 @@ public class OutString extends OutputPort {
         outstr = new ByteArrayOutputStream();
     }
 
+    @Override
+    public long seek(long newpos) {
+        throw new NekoArcException("cannot seek in an outstring");
+    }
+
+    @Override
+    public long tell() {
+        return(outstr.size());
+    }
 
     /**
      * Create an output string with no name
