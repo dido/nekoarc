@@ -3,11 +3,11 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.NekoArcException;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class OutFile extends OutputPort {
-    private final FileOutputStream fp;
+    private final RandomAccessFile fp;
     /**
      * Create a File output port from the path
      *
@@ -17,8 +17,10 @@ public class OutFile extends OutputPort {
     public OutFile(String name, boolean append) {
         super(name);
         try {
-            fp = new FileOutputStream(name, append);
-        } catch (FileNotFoundException e) {
+            fp = new RandomAccessFile(name, "rw");
+            if (append)
+                fp.seek(fp.length());
+        } catch (IOException e) {
             throw new NekoArcException(e.getMessage());
         }
     }
@@ -39,6 +41,25 @@ public class OutFile extends OutputPort {
         super.close();
         try {
             fp.close();
+        } catch (IOException e) {
+            throw new NekoArcException(e.getMessage());
+        }
+    }
+
+    @Override
+    public long seek(long newpos) {
+        try {
+            fp.seek(newpos);
+            return(newpos);
+        } catch (IOException e) {
+            throw new NekoArcException(e.getMessage());
+        }
+    }
+
+    @Override
+    public long tell() {
+        try {
+            return(fp.getFilePointer());
         } catch (IOException e) {
             throw new NekoArcException(e.getMessage());
         }

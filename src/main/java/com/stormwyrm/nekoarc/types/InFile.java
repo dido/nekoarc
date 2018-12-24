@@ -19,15 +19,13 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.NekoArcException;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * InFile - File based input port
  */
 public class InFile extends InputPort {
-    private final FileInputStream fp;
+    private final RandomAccessFile fp;
     /**
      * Create an input port with the given name
      *
@@ -36,7 +34,7 @@ public class InFile extends InputPort {
     public InFile(String path, ArcObject mode) {
         super(path);
         try {
-            fp = new FileInputStream(path);
+            fp = new RandomAccessFile(path, "r");
         } catch (FileNotFoundException e) {
             throw new NekoArcException(e.getMessage());
         }
@@ -58,6 +56,25 @@ public class InFile extends InputPort {
         super.close();
         try {
             fp.close();
+        } catch (IOException e) {
+            throw new NekoArcException(e.getMessage());
+        }
+    }
+
+    @Override
+    public long seek(long newpos) {
+        try {
+            fp.seek(newpos);
+            return(newpos);
+        } catch (IOException e) {
+            throw new NekoArcException(e.getMessage());
+        }
+    }
+
+    @Override
+    public long tell() {
+        try {
+            return(fp.getFilePointer());
         } catch (IOException e) {
             throw new NekoArcException(e.getMessage());
         }
