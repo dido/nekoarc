@@ -164,7 +164,7 @@ notice and this notice are preserved.
     - [X] Exceptions
     - [X] Channels
     - [X] Closures (code)
-** TODO Runtime Built-In Functions [6/19]
+** TODO Runtime Built-In Functions [8/19]
    Consider whether or not to provide instructions for the asterisked
    functions, so as to make their use cheaper.
    - [X] Initialization for binding runtime primitives to global symbols
@@ -302,7 +302,7 @@ notice and this notice are preserved.
 	   This is actually a global variable, and needs to be
 	   assigned at initialization.	   
      - [ ] uniq
-   - [-] Basic I/O primitives [3/5]
+   - [X] Basic I/O primitives [5/5]
          These are the base I/O functions provided by the Arcueid C
          runtime.
      - [X] Input [4/4]
@@ -322,10 +322,10 @@ notice and this notice are preserved.
      - [X] Output [2/2]
        - [X] writeb
        - [X] writec
-     - [ ] File I/O [0/3]
-       - [ ] infile
-       - [ ] outfile
-       - [ ] close
+     - [X] File I/O [3/3]
+       - [X] infile
+       - [X] outfile
+       - [X] close
      - [X] String port I/O [3/3]
 	   Note that doing readb/writeb or readc/writec on a string
 	   port have the same effect.  Strings are made up of Unicode
@@ -334,12 +334,12 @@ notice and this notice are preserved.
        - [X] instring
        - [X] outstring
        - [X] inside
-     - [ ] Seeking / telling [0/2]
+     - [X] Seeking / telling [2/2]
              Note that these essential functions are not available in
              PG-Arc for some reason but will probably be necessary to
              implement CIEL.
-       - [ ] seek
-       - [ ] tell
+       - [X] seek
+       - [X] tell
    - [ ] Additional I/O functions (src/io.c) [0/8]
          These other I/O functions are defined in standard Arc but are not
          necessary for CIEL or the reader, so we do them later.
@@ -371,7 +371,7 @@ notice and this notice are preserved.
      - [ ] file-exists
      - [ ] rmfile
      - [ ] mvfile
-   - [-] Error handling and continuations [5/7]
+   - [-] Error handling and continuations [5/8]
      - [X] details
      - [X] err
      - [X] on-err
@@ -403,19 +403,10 @@ notice and this notice are preserved.
      - [ ] quit
      - [ ] setuid
      - [ ] memory
-   - [-] Miscellaneous [3/5]
+   - [X] Miscellaneous [3/3]
      - [X] sref *
      - [X] len
      - [X] bound
-     - [ ] arcueid-code-setname
-     - [ ] declare
-** TODO Threading [0/6]
-   - [ ] Basic scheduling
-   - [ ] Suspend threads on I/O
-   - [ ] Synchronization
-   - [ ] Deadlock detection
-   - [ ] Thread control
-   - [ ] alt mechanism
 ** TODO Baseline environment (arc.arc) [0/2]
    - [ ] Load all arc.arc functions
    - [ ] Test behaviour of all arc.arc functions
