@@ -1,4 +1,4 @@
-m;; Copyright (C) 2018 Rafael R. Sevilla
+;; Copyright (C) 2018 Rafael R. Sevilla
 ;;
 ;; This file is part of NekoArc
 ;;
@@ -28,81 +28,148 @@ m;; Copyright (C) 2018 Rafael R. Sevilla
 ;; * literal - get a literal from literal space at the offset argument
 ;;
 
-(definst nop 0x00 ())
+(definst nop #x00 ())
 
-(definst push 0x01 ()
+(definst push #x01 ()
 	 (push acc))
 
-(definst pop 0x02 ()
+(definst pop #x02 ()
 	 (acc (pop)))
 
-(definst ret 0x0d ()
+(definst ret #x0d ()
 	 (restorecont))
 
-(definst no 0x11 ()
+(definst no #x11 ()
  	 (acc (if (is acc nil) t nil)))
 
-(definst true 0x12 ()
+(definst true #x12 ()
 	 (acc t))
 
-(definst nil 0x13 ()
+(definst nil #x13 ()
 	 (acc nil))
 
-(definst hlt 0x14 ()
+(definst hlt #x14 ()
 	 (halt))
 
-(definst add 0x15 ()
+(definst add #x15 ()
 	 (acc (+ (pop) acc)))
 
-(definst sub 0x16 ()
+(definst sub #x16 ()
 	 (acc (- (pop) acc)))
 
-(definst mul 0x17 ()
+(definst mul #x17 ()
 	 (acc (* (pop) acc)))
 
-(definst div 0x18 ()
+(definst div #x18 ()
 	 (acc (/ (pop) acc)))
 
-(definst cons 0x19 ()
+(definst cons #x19 ()
 	 (acc (cons (pop) acc)))
 
-(definst car 0x1a ()
+(definst car #x1a ()
 	 (acc (car acc)))
 
-(definst cdr 0x1b ()
+(definst cdr #x1b ()
 	 (acc (cdr acc)))
 
-(definst scar 0x1c ()
+(definst scar #x1c ()
 	 (let arg1 (pop)
 	   (scar arg1 acc)
 	   (acc arg1)))
 
-(definst scdr 0x1d ()
+(definst scdr #x1d ()
 	 (let arg1 (pop)
 	   (scdr arg1 acc)
 	   (acc arg1)))
 
-(definst is 0x1f ()
+(definst is #x1f ()
 	 (acc (is (pop) acc)))
 
-(definst consr 0x24 ()
+(definst consr #x24 ()
 	 (acc (cons acc (pop))))
 
-(definst dcar 0x26 ()
+(definst dcar #x26 ()
 	 (acc (if (or (nilp acc) (unboundp acc))
 		  unbound
 		  (car acc))))
 
-(definst dcdr 0x27
+(definst dcdr #x27
 	 (acc (if (or (nilp acc) (unboundp acc))
 		  unbound
 		  (cdr acc))))
 
-(definst ldl 0x43 (offset)
+(definsl ldl #x43 (offset)
 	 (acc (literal offset)))
 
-(definst ldi 0x44 (value)
+(definsr ldi #x44 (value)
 	 (acc value))
 
-(definst ldg 0x45 (offset)
+(definsl ldg #x45 (offset)
 	 (acc (value (literal offset))))
+
+(definsl stg #x46 (offset)
+	 (bind (value (literal offset)) acc))
+
+(definsl ldlp #x47 (offset)
+	 (push (acc (literal offset))))
+
+(definsr ldip #x48 (value)
+	 (push (acc value)))
+
+(definsl ldgp #x49 (value)
+	 (push (acc (value (literal offset)))))
+
+(definss apply #x4c (value)
+	 (argc value)
+	 (apply acc))
+
+(definsc cls #x4d (target)
+	 (acc (closure (+ target ip))))
+
+(definsc jmp #x4e (target)
+	 (setip (+ ip target)))
+
+(definsc jt #x4f (target)
+	 (if (no (nilp acc))
+	     (setip (+ ip target))))
+
+(definsc jf #x50 (target)
+	 (if (nilp acc)
+	     (setip (+ ip target))))
+
+(definsc jbnd #x51 (target)
+	 (if (boundp acc)
+	     (setip (+ ip target))))
+
+(definsc cont #x52 (target)
+	 (cont target))
+
+(definss menv #x65 (count)
+	 (menv count))
+
+(definss lde0 #x69 (index)
+	 (acc (getenv 0 index)))
+
+(definss ste0 #x6a (index)
+	 (setenv 0 index acc))
+
+(definss lde0p #x6b (index)
+	 (push (acc (getenv 0 index))))
+
+(definss lde #x87 (depth index)
+	 (acc (getenv depth index)))
+
+(definss ste #x88 (depth index)
+	 (setenv depth index acc))
+
+(definss ldep #x89 (depth index)
+	 (push (acc (getenv depth index))))
+
+(definss env #xca (min ds opt)
+	 (argcheck min (+ min opt))
+	 (mkenv argc (+ (- (+ min opt) argc) ds)))
+
+(definss envr #xcb (min ds opt)
+	 (argcheck min -1)
+	 (mkenvrest argc min ds opt))
+
