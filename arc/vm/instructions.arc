@@ -15,7 +15,18 @@ m;; Copyright (C) 2018 Rafael R. Sevilla
 ;; You should have received a copy of the GNU Lesser General Public
 ;; License along with this library; if not, see <http://www.gnu.org/licenses/>
 ;;
-;; Instructions are given as 
+;; Instructions are defined by definst, which takes the instruction mnemonic,
+;; the opcode, and a list of names for arguments.
+;;
+;; There are several built-in functions that manipulate various
+;; aspects of the virtual machine:
+;;
+;; * acc - The accumulator. When an argument is applied to it, sets the
+;;         value of the that argument to it.
+;; * push - Push its argument onto the stack
+;; * pop - Pop the stack and return its value.
+;; * literal - get a literal from literal space at the offset argument
+;;
 
 (definst nop 0x00 ())
 
@@ -52,11 +63,46 @@ m;; Copyright (C) 2018 Rafael R. Sevilla
 (definst div 0x18 ()
 	 (acc (/ (pop) acc)))
 
+(definst cons 0x19 ()
+	 (acc (cons (pop) acc)))
+
+(definst car 0x1a ()
+	 (acc (car acc)))
+
+(definst cdr 0x1b ()
+	 (acc (cdr acc)))
+
+(definst scar 0x1c ()
+	 (let arg1 (pop)
+	   (scar arg1 acc)
+	   (acc arg1)))
+
+(definst scdr 0x1d ()
+	 (let arg1 (pop)
+	   (scdr arg1 acc)
+	   (acc arg1)))
+
+(definst is 0x1f ()
+	 (acc (is (pop) acc)))
+
+(definst consr 0x24 ()
+	 (acc (cons acc (pop))))
+
+(definst dcar 0x26 ()
+	 (acc (if (or (nilp acc) (unboundp acc))
+		  unbound
+		  (car acc))))
+
+(definst dcdr 0x27
+	 (acc (if (or (nilp acc) (unboundp acc))
+		  unbound
+		  (cdr acc))))
+
 (definst ldl 0x43 (offset)
 	 (acc (literal offset)))
 
 (definst ldi 0x44 (value)
-	 (acc (fixnum value)))
+	 (acc value))
 
 (definst ldg 0x45 (offset)
 	 (acc (value (literal offset))))
