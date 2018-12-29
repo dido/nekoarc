@@ -20,10 +20,8 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.util.CallSync;
 import com.stormwyrm.nekoarc.util.Callable;
-import com.stormwyrm.nekoarc.vm.INVALID;
 import com.stormwyrm.nekoarc.vm.Instruction;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
-import com.stormwyrm.nekoarc.vm.instruction.*;
 
 /**
  * An Arc Thread.
