@@ -23,3 +23,9 @@ cat <<EOF | $ARC
 (genop "instructions.arc" "../../src/main/java/com/stormwyrm/nekoarc/Op.java")
 EOF
 echo "done"
+echo -n "Generating JmpTbl.java..."
+cat <<EOF | $ARC
+(load "mkjmptbl.arc")
+(genjmptbl "instructions.arc" "../../src/main/java/com/stormwyrm/nekoarc/JmpTbl.java")
+EOF
+echo "done"
