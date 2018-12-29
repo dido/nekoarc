@@ -25,7 +25,6 @@
 package com.stormwyrm.nekoarc;
 
 import com.stormwyrm.nekoarc.types.CodeGen;
-import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
 public enum Op {")
