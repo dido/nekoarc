@@ -33,6 +33,7 @@ public class Closure extends ArcObject {
 	 * Create a new closure.
 	 * @param env The environment saved in the closure
 	 * @param ip Pointer to the code of the closure
+     * @param dp Data pointer for the closure
 	 */
 	public Closure(ArcObject env, int ip, int dp) {
 		this.env = env;
