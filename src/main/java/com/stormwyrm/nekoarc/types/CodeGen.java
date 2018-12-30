@@ -97,6 +97,20 @@ public class CodeGen extends ArcObject {
     }
 
     /**
+     * Emit a 32-bit word
+     * @param word the word to emit
+     * @return the offset at which the word was emitted;
+     */
+    private int emitWord(int word) {
+        int pos = this.pos;
+        for (int i=0; i<4; i++) {
+            instwrite((byte) (word & 0xff));
+            word >>= 8;
+        }
+        return(pos);
+    }
+
+    /**
      * Emit an instruction with regular (4-byte) parameters
      * @param op The opcode of the instruction
      * @param vals The parameters of the instruction
@@ -104,12 +118,8 @@ public class CodeGen extends ArcObject {
      */
     public int emit(byte op, int... vals) {
         int pos = instwrite(op);
-        for (int val : vals) {
-            for (int i=0; i<4; i++) {
-                instwrite((byte) (val & 0xff));
-                val >>= 8;
-            }
-        }
+        for (int val : vals)
+            emitWord(val);
         return(pos);
     }
 
