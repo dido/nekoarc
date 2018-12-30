@@ -28,12 +28,10 @@ import com.stormwyrm.nekoarc.types.Closure;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import org.junit.Test;
 
-public class HeapContinuationTest
-{
+public class HeapContinuationTest {
 	/** First we try to invent a HeapContinuation out of whole cloth. */
 	@Test
-	public void test()
-	{
+	public void test() {
 		HeapContinuation hc;
 
 		// Prepare an environment
@@ -83,13 +81,12 @@ public class HeapContinuationTest
 		hc = new HeapContinuation(3,		// 3 stack elements
 				Nil.NIL,					// previous continuation
 				env,						// environment
-				20,
-				thr.here);						// saved IP
+				20,						// saved IP
+				0);						// saved DP
 		// Stack elements
 		hc.setIndex(0, Fixnum.get(1));
 		hc.setIndex(1, Fixnum.get(2));
 		hc.setIndex(2, Fixnum.get(3));
-
 
 		thr.setargc(2);
 		thr.push(Fixnum.get(7));
@@ -134,7 +131,7 @@ public class HeapContinuationTest
         };
 
         VirtualMachine vm = new VirtualMachine();
-		ArcThread thr = new ArcThread(vm,4);
+		ArcThread thr = new ArcThread(vm,5);
         ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
 		vm.load(inst, literals);
@@ -151,8 +148,7 @@ public class HeapContinuationTest
 	 *  (afn (x) (if (is x 0) 0 (+ 2 (self (- x 1)))))
 	 */
 	@Test
-	public void test3()
-	{
+	public void test3() {
 		// env 1 0 0; lde0 0; push; ldi 0; is; jf L1; ldi 2; ret;
 		// L1: ldi 2; push; cont L2; lde0 0; push; ldi 1; sub; push; ldl 0; apply 1; L2: add; ret
         byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00,    // env 1 0 0
@@ -177,7 +173,7 @@ public class HeapContinuationTest
                 0x0d                                    // ret
         };
         VirtualMachine vm = new VirtualMachine();
-		ArcThread thr = new ArcThread(vm,5);
+		ArcThread thr = new ArcThread(vm,6);
         ArcObject[] literals = new ArcObject[1];
 		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
 		vm.load(inst, literals);
