@@ -487,17 +487,20 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
         }
     }
 
+    /** Size of a continuation */
+    public static final int CONTSIZE = 5;
+
     /**
      * Make a continuation on the stack. The new continuation is
      * saved in the continuation register.
-     * @param ipoffset IP address of continuation
+     * @param ipoffset IP to go to when continuation is restored
      */
     public void makecont(int ipoffset) {
-        stackcheck(4, "stack overflow while creating continuation");
+        stackcheck(CONTSIZE, "stack overflow while creating continuation");
         int newip = ip + ipoffset;
         push(Fixnum.get(newip));
+        push(Fixnum.get(dp));
         push(Fixnum.get(bp));
-        // push(Fixnum.get(dp));
         push(env);
         push(cont);
         cont = Fixnum.get(sp);
@@ -518,11 +521,11 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
      */
     public void restorecont(Callable caller) {
         if (cont instanceof Fixnum) {
-            sp = (int) ((Fixnum) cont).fixnum;
+            sp = (int)((Fixnum)cont).fixnum;
             cont = pop();
             setenvreg(pop());
-            // dp = (int) ((Fixnum)pop()).fixnum;
-            bp = (int) ((Fixnum) pop()).fixnum;
+            bp = (int)((Fixnum)pop()).fixnum;
+            dp = (int)((Fixnum)pop()).fixnum;
             setIP((int) ((Fixnum) pop()).fixnum);
         } else if (cont instanceof Continuation) {
             Continuation ct = (Continuation) cont;
