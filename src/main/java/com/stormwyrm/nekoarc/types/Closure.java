@@ -32,13 +32,23 @@ public class Closure extends ArcObject {
 	/**
 	 * Create a new closure.
 	 * @param env The environment saved in the closure
-	 * @param ip The IP address of the code in the closure
+	 * @param ip Pointer to the code of the closure
 	 */
-	public Closure(ArcObject env, int ip) {
+	public Closure(ArcObject env, int ip, int dp) {
 		this.env = env;
 		this.ip = ip;
-		this.dp = 0;
+		this.dp = dp;
 	}
+
+    /**
+     * Create new closure with 0 dp
+     * @param env The environment saved in the closure
+     * @param ip Pointer to code of the closure
+     */
+    @Deprecated
+    public Closure(ArcObject env, int ip) {
+	    this(env, ip, 0);
+    }
 
 	/**
 	 * Type of the closure
