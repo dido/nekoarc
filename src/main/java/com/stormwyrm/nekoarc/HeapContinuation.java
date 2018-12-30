@@ -32,6 +32,7 @@ public class HeapContinuation extends Vector implements Continuation {
 	private final ArcObject prevcont;
 	private final ArcObject env;
 	private final int ipoffset;
+	private final int dp;
 
 	/**
 	 * Create a new heap continuation.
@@ -39,12 +40,14 @@ public class HeapContinuation extends Vector implements Continuation {
 	 * @param pcont Previous continuation
 	 * @param e Environment
 	 * @param ip Saved instruction pointer
+     * @param dp Saved data pointer
 	 */
-	public HeapContinuation(int size, ArcObject pcont, ArcObject e, int ip) {
+	public HeapContinuation(int size, ArcObject pcont, ArcObject e, int ip, int dp) {
 		super(size);
 		prevcont = pcont;
 		env = e;
 		ipoffset = ip;
+		this.dp = dp;
 	}
 
 	/**
@@ -56,7 +59,8 @@ public class HeapContinuation extends Vector implements Continuation {
 	public void restore(ArcThread thr, Callable cc) {
 		int svsize = (int)this.len();
 
-		thr.stackcheck(svsize + 4, "stack overflow while restoring heap continuation");
+		thr.stackcheck(svsize + ArcThread.CONTSIZE,
+                "stack overflow while restoring heap continuation");
 
 		int bp = thr.getSP();
 		// push the saved stack values back to the stack
@@ -64,6 +68,8 @@ public class HeapContinuation extends Vector implements Continuation {
 			thr.push(index(i));
 		// push the saved instruction pointer
 		thr.push(Fixnum.get(ipoffset));
+		// push the saved data pointer
+        thr.push(Fixnum.get(dp));
 		// push the new base pointer
 		thr.push(Fixnum.get(bp));
 		// push the saved environment
@@ -74,17 +80,16 @@ public class HeapContinuation extends Vector implements Continuation {
 		thr.restorecont();
 	}
 
-	/** Offset of previous continuation in stack continuation */
-	private static final int PREVCONTOFFSET = 1;
-	/** Offset of saved environment register in stack continuation */
-	private static final int ENVOFFSET = 2;
-	/** Offset of saved base pointer in stack continuation */
-	private static final int BPOFFSET = 3;
-	/** Offset of saved instruction pointer in stack continuation */
-	private static final int IPOFFSET = 4;
-	/** Offset of the start of saved stack elements in stack continuation */
-	private static final int CONTSIZE = 4;
-
+    /** Offset of previous continuation in stack continuation */
+    public static final int PREVCONTOFFSET = 1;
+    /** Offset of saved environment register in stack continuation */
+    public  static final int ENVOFFSET = 2;
+    /** Offset of saved base pointer in stack continuation */
+    public static final int BPOFFSET = 3;
+    /** Offset of saved data pointer in stack continuation */
+    public static final int DPOFFSET = 4;
+    /** Offset of saved instruction pointer in stack continuation */
+    public static final int IPOFFSET = 5;
 	/**
 	 * Create a new heap continuation from a stack-based continuation.
 	 * A stack continuation is a pointer into the stack, such that
@@ -102,16 +107,17 @@ public class HeapContinuation extends Vector implements Continuation {
 		if (sc instanceof HeapContinuation || sc.is(Nil.NIL))
 			return(sc);
 		int cc = (int)((Fixnum)sc).fixnum;
+        int dp = (int)((Fixnum)thr.stackIndex(cc-DPOFFSET)).fixnum;
 		// Calculate the size of the actual continuation based on the saved base pointer
 		int bp = (int)((Fixnum)thr.stackIndex(cc-BPOFFSET)).fixnum;
 		// Calculate number of stack elements to be saved */
-		int svsize = cc - bp - CONTSIZE;
+		int svsize = cc - bp - ArcThread.CONTSIZE;
 		// Turn previous continuation into a heap-based one too
 		ArcObject pco = thr.stackIndex(cc-PREVCONTOFFSET);
 		pco = fromStackCont(thr, pco);
 		ArcObject senv = HeapEnv.fromStackEnv(thr, thr.stackIndex(cc-ENVOFFSET));
 		HeapContinuation c = new HeapContinuation(svsize, pco, senv,
-				(int)((Fixnum)thr.stackIndex(cc-IPOFFSET)).fixnum);
+				(int)((Fixnum)thr.stackIndex(cc-IPOFFSET)).fixnum, dp);
 
 		for (int i=0; i<svsize; i++)
 			c.setIndex(i, thr.stackIndex(bp + i));
