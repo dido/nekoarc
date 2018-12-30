@@ -72,7 +72,7 @@ public class CCCTest extends TestTemplate {
         Op.RET.emit(cg);
 
         cg.literal(Symbol.intern("ccc"));
-        cg.literal(new Closure(Nil.NIL, Fixnum.get(func)));
+        cg.literal(new Closure(Nil.NIL, func));
 
         VirtualMachine vm = new VirtualMachine(cg);
         ArcThread thr = new ArcThread(vm);

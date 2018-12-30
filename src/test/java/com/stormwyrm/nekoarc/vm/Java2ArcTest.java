@@ -59,7 +59,7 @@ public class Java2ArcTest {
         };
 
         ArcObject[] literals = new ArcObject[2];
-        literals[0] = new Closure(Nil.NIL, Fixnum.get(18));	// position of second
+        literals[0] = new Closure(Nil.NIL, 18);	// position of second
         literals[1] = builtin;
         VirtualMachine vm = new VirtualMachine();
         ArcThread thr = new ArcThread(vm, 1024);

@@ -132,7 +132,7 @@ public class FibonacciTest {
 
 		for (int i=0; i<len; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
-		cg.literal(new Closure(Nil.NIL, Fixnum.get(codestart)));
+		cg.literal(new Closure(Nil.NIL, codestart));
 
 		VirtualMachine vm = new VirtualMachine(cg);
 		vm.initSyms();

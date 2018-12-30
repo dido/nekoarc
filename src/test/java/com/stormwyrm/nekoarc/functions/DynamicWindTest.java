@@ -51,9 +51,9 @@ public class DynamicWindTest {
         Op.RET.emit(cg);
 
         cg.literal(Symbol.intern("dynamic-wind"));
-        cg.literal(new Closure(Nil.NIL, Fixnum.get(tbefore)));
-        cg.literal(new Closure(Nil.NIL, Fixnum.get(tduring)));
-        cg.literal(new Closure(Nil.NIL, Fixnum.get(tafter)));
+        cg.literal(new Closure(Nil.NIL, tbefore));
+        cg.literal(new Closure(Nil.NIL, tduring));
+        cg.literal(new Closure(Nil.NIL, tafter));
         cg.literal(Symbol.intern("before"));
         cg.literal(Symbol.intern("during"));
         cg.literal(Symbol.intern("after"));

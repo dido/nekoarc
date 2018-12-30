@@ -133,7 +133,7 @@ public class HeapContinuationTest {
         VirtualMachine vm = new VirtualMachine();
 		ArcThread thr = new ArcThread(vm,5);
         ArcObject[] literals = new ArcObject[1];
-		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
+		literals[0] = new Closure(Nil.NIL, 0);
 		vm.load(inst, literals);
 		thr.setargc(1);
 		thr.push(Fixnum.get(100));
@@ -175,7 +175,7 @@ public class HeapContinuationTest {
         VirtualMachine vm = new VirtualMachine();
 		ArcThread thr = new ArcThread(vm,6);
         ArcObject[] literals = new ArcObject[1];
-		literals[0] = new Closure(Nil.NIL, Fixnum.get(0));
+		literals[0] = new Closure(Nil.NIL, 0);
 		vm.load(inst, literals);
 		thr.setargc(1);
 		thr.push(Fixnum.get(1));
