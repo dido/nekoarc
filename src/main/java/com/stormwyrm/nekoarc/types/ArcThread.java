@@ -37,6 +37,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
     private final ArcObject[] stack;        // stack
     private final CallSync caller;
     private int ip;                    // instruction pointer
+    private int dp;                     // data pointer
     private boolean runnable;
     private ArcObject acc;            // accumulator
     private int argc;                // argument counter for current function
@@ -58,7 +59,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
      */
     public ArcThread(VirtualMachine vm, int stacksize) {
         this.vm = vm;
-        sp = bp = 0;
+        sp = bp = dp = 0;
         stack = new ArcObject[stacksize];
         ip = 0;
         runnable = true;
@@ -122,13 +123,12 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
      * 3. Compact the stack by moving the remainder of the non-stack / non-continuation elements down.
      */
     private void stackgc() {
-        int[] deepest = {sp};
         if (env instanceof Fixnum)
-            env = HeapEnv.fromStackEnv(this, env, deepest);
+            env = HeapEnv.fromStackEnv(this, env);
 
         // If the current continuation is on the stack move it to the heap
         if (cont instanceof Fixnum)
-            this.setCont(HeapContinuation.fromStackCont(this, cont, deepest));
+            this.setCont(HeapContinuation.fromStackCont(this, cont));
 
         // If all environments and continuations have been moved to the heap, we can now
         // move all other stack elements down to the bottom.
@@ -264,6 +264,23 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
      */
     public int argc() {
         return (argc);
+    }
+
+    /**
+     * Get data pointer
+     * @return current data pointer
+     */
+    public int getDP() {
+        return(dp);
+    }
+
+    /**
+     * Set data pointer
+     * @param dp New data pointer
+     * @return New data pointer
+     */
+    public int setDP(int dp) {
+        return(this.dp = dp);
     }
 
     /**
@@ -480,6 +497,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
         int newip = ip + ipoffset;
         push(Fixnum.get(newip));
         push(Fixnum.get(bp));
+        // push(Fixnum.get(dp));
         push(env);
         push(cont);
         cont = Fixnum.get(sp);
@@ -503,6 +521,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
             sp = (int) ((Fixnum) cont).fixnum;
             cont = pop();
             setenvreg(pop());
+            // dp = (int) ((Fixnum)pop()).fixnum;
             bp = (int) ((Fixnum) pop()).fixnum;
             setIP((int) ((Fixnum) pop()).fixnum);
         } else if (cont instanceof Continuation) {
@@ -730,6 +749,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
 
     @Override
     public String toString() {
-        return ("#<thread>");
+        return ("#<thread" + this.hashCode() + ">");
     }
 }
