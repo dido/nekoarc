@@ -19,23 +19,47 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.util.Callable;
 
-public class Closure extends Cons
-{
+/**
+ * A closure
+ */
+public class Closure extends ArcObject {
 	public static final ArcObject TYPE = Symbol.intern("closure");
 
-	public Closure(ArcObject ca, ArcObject cd)
-	{
-		super(ca, cd);
+	public final ArcObject env;
+	public final int ip;
+	public final int dp;
+
+	/**
+	 * Create a new closure.
+	 * @param env The environment saved in the closure
+	 * @param ip The IP address of the code in the closure
+	 */
+	public Closure(ArcObject env, int ip) {
+		this.env = env;
+		this.ip = ip;
+		this.dp = 0;
 	}
 
-	/** This is the only place where apply should be overridden */
+	/**
+	 * Type of the closure
+	 * * @return 'closure
+	 */
 	@Override
-	public void apply(ArcThread thr, Callable caller)
-	{
-		ArcObject newenv, newip;
-		newenv = this.car();
-		newip = this.cdr();
-		thr.setIP((int)((Fixnum)newip).fixnum);
+	public ArcObject type() {
+		return(TYPE);
+	}
+
+	/**
+	 * Apply a closure. This is the only place where apply should be overriden
+	 * @param thr The thread applying the closure
+	 * @param caller The function calling
+	 */
+	@Override
+	public void apply(ArcThread thr, Callable caller) {
+		ArcObject newenv;
+		newenv = this.env;
+		thr.setIP(ip);
+		thr.setDP(dp);
 		thr.setenvreg(newenv);
 		// If this is not a call from the thr itself, some other additional actions need to be taken.
 		// 1. The virtual machine thread should be resumed.
