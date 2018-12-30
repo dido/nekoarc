@@ -32,14 +32,19 @@ public class HeapContinuation extends Vector implements Continuation {
 	private final ArcObject prevcont;
 	private final ArcObject env;
 	private final int ipoffset;
-	protected final ArcObject myHere;
 
-	public HeapContinuation(int size, ArcObject pcont, ArcObject e, int ip, ArcObject myHere) {
+	/**
+	 * Create a new heap continuation.
+	 * @param size Total size of the continuation
+	 * @param pcont Previous continuation
+	 * @param e Environment
+	 * @param ip Saved instruction pointer
+	 */
+	public HeapContinuation(int size, ArcObject pcont, ArcObject e, int ip) {
 		super(size);
 		prevcont = pcont;
 		env = e;
 		ipoffset = ip;
-		this.myHere = myHere;
 	}
 
 	/**
@@ -69,9 +74,16 @@ public class HeapContinuation extends Vector implements Continuation {
 		thr.restorecont();
 	}
 
-	public static ArcObject fromStackCont(ArcThread vm, ArcObject sc) {
-		return(fromStackCont(vm, sc, null));
-	}
+	/** Offset of previous continuation in stack continuation */
+	private static final int PREVCONTOFFSET = 1;
+	/** Offset of saved environment register in stack continuation */
+	private static final int ENVOFFSET = 2;
+	/** Offset of saved base pointer in stack continuation */
+	private static final int BPOFFSET = 3;
+	/** Offset of saved instruction pointer in stack continuation */
+	private static final int IPOFFSET = 4;
+	/** Offset of the start of saved stack elements in stack continuation */
+	private static final int CONTSIZE = 4;
 
 	/**
 	 * Create a new heap continuation from a stack-based continuation.
@@ -84,30 +96,32 @@ public class HeapContinuation extends Vector implements Continuation {
 	 * This function copies all of this relevant information to the a new HeapContinuation so it can later be restored
 	 * @param thr The thread whose stack continuation is to be created
 	 * @param sc The stack continuation (offset into the stack)
-	 * @param deepest deepest
 	 * @return the created HeapContinuation
 	 */
-	public static ArcObject fromStackCont(ArcThread thr, ArcObject sc, int[] deepest) {
+	public static ArcObject fromStackCont(ArcThread thr, ArcObject sc) {
 		if (sc instanceof HeapContinuation || sc.is(Nil.NIL))
 			return(sc);
 		int cc = (int)((Fixnum)sc).fixnum;
 		// Calculate the size of the actual continuation based on the saved base pointer
-		int bp = (int)((Fixnum)thr.stackIndex(cc-3)).fixnum;
-		int svsize = cc - bp - 4;
-		if (deepest != null && deepest[0] > bp)
-			deepest[0] = bp;
+		int bp = (int)((Fixnum)thr.stackIndex(cc-BPOFFSET)).fixnum;
+		// Calculate number of stack elements to be saved */
+		int svsize = cc - bp - CONTSIZE;
 		// Turn previous continuation into a heap-based one too
-		ArcObject pco = thr.stackIndex(cc-1);
-		pco = fromStackCont(thr, pco, deepest);
-		ArcObject senv = HeapEnv.fromStackEnv(thr, thr.stackIndex(cc-2), deepest);
+		ArcObject pco = thr.stackIndex(cc-PREVCONTOFFSET);
+		pco = fromStackCont(thr, pco);
+		ArcObject senv = HeapEnv.fromStackEnv(thr, thr.stackIndex(cc-ENVOFFSET));
 		HeapContinuation c = new HeapContinuation(svsize, pco, senv,
-				(int)((Fixnum)thr.stackIndex(cc-4)).fixnum, thr.here);
+				(int)((Fixnum)thr.stackIndex(cc-IPOFFSET)).fixnum);
 
 		for (int i=0; i<svsize; i++)
 			c.setIndex(i, thr.stackIndex(bp + i));
 		return(c);
 	}
 
+	/**
+	 * Required args for applying a heap continuation
+	 * @return 1
+	 */
 	@Override
 	public int requiredArgs() {
 		return(1);
@@ -125,10 +139,10 @@ public class HeapContinuation extends Vector implements Continuation {
 
 	/**
 	 * Convert to string
-	 * @return continuation
+	 * @return continuation as a string
 	 */
 	@Override
 	public String toString() {
-		return("#<continuation>");
+		return("#<continuation:" + this.hashCode() + ">");
 	}
 }
