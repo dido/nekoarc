@@ -181,10 +181,21 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
      * @return Next four-byte instruction argument at the current IP
      */
     public int instArg() {
+       int ret = codeWord(ip);
+       ip += 4;
+       return(ret);
+    }
+
+    /**
+     * Retrieve a four-byte word from code space at the given pointer
+     * @param ptr Where to get the word
+     * @return the word at ptr
+     */
+    public int codeWord(int ptr) {
         long val = 0;
         int data;
         for (int i = 0; i < 4; i++) {
-            data = (((int) vm.code()[ip++]) & 0xff);
+            data = (((int) vm.code()[ptr++]) & 0xff);
             val |= data << i * 8;
         }
         return ((int) ((val << 1) >> 1));
