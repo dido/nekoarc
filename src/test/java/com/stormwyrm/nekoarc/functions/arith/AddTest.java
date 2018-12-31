@@ -11,11 +11,13 @@ public class AddTest {
     @Test
     public void test0() {
         CodeGen cg = new CodeGen();
+        cg.startCode();
         Op.ENV.emit(cg, 0, 0, 0);
-        Op.LDG.emit(cg, 0);
+        Op.LDG.emit(cg, "+");
         Op.APPLY.emit(cg, 0);
         Op.RET.emit(cg);
-        cg.literal(Symbol.intern("+"));
+        cg.endCode();
+        cg.literal("+", Symbol.intern("+"));
         VirtualMachine vm = new VirtualMachine(cg);
         vm.initSyms();
         vm.load();
