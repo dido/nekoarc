@@ -20,10 +20,7 @@ package com.stormwyrm.nekoarc.vm;
 import static org.junit.Assert.*;
 
 import com.stormwyrm.nekoarc.Op;
-import com.stormwyrm.nekoarc.types.ArcThread;
-import com.stormwyrm.nekoarc.types.CodeGen;
-import com.stormwyrm.nekoarc.types.Fixnum;
-import com.stormwyrm.nekoarc.types.Closure;
+import com.stormwyrm.nekoarc.types.*;
 import com.stormwyrm.nekoarc.Nil;
 import org.junit.Test;
 
@@ -40,99 +37,42 @@ public class FibonacciTest {
 	 */
 	@Test
 	public void test() {
-		int codestart;
 		CodeGen cg = new CodeGen();
 
-		assertEquals(0x00, codestart = Op.ENV.emit(cg, 1, 0, 0));
-		assertEquals(0x04, Op.LDE0.emit(cg, 0));
-		assertEquals(0x06, Op.PUSH.emit(cg));
-		assertEquals(0x07, Op.LDI.emit(cg, 0));
-		assertEquals(0x0c, Op.IS.emit(cg));
-		int setl1;
-		assertEquals(0x0d, setl1 = Op.JF.emit(cg, 0));
-		assertEquals(0x12, Op.LDI.emit(cg, 1));
-		assertEquals(0x17, Op.RET.emit(cg));
-		int l1;
-		assertEquals(0x18, l1 = Op.LDE0.emit(cg, 0));
-		assertEquals(6, cg.patchRelativeBranch(setl1, l1));
-		assertEquals(Op.JF.opcode(), cg.getAtPos(setl1));
-		assertEquals(6, cg.getAtPos(setl1+1));
-		assertEquals(0, cg.getAtPos(setl1+2));
-		assertEquals(0, cg.getAtPos(setl1+3));
-		assertEquals(0, cg.getAtPos(setl1+4));
-
-		Op.PUSH.emit(cg);
-		Op.LDI.emit(cg, 1);
+		cg.startCode();
+		Op.ENV.emit(cg, 1, 0, 0);
+		Op.LDE0P.emit(cg, 0);
+		Op.LDI.emit(cg, 0);
 		Op.IS.emit(cg);
-		int setl2 = Op.JF.emit(cg, 0);
+		Op.JF.emit(cg, "l1");
 		Op.LDI.emit(cg, 1);
 		Op.RET.emit(cg);
-		int l2 = Op.CONT.emit(cg, 0);
-		assertEquals(6, cg.patchRelativeBranch(setl2, l2));
-		Op.LDE0.emit(cg, 0);
-		Op.PUSH.emit(cg);
+		cg.label("l1", Op.LDE0P.emit(cg, 0));
+		Op.LDI.emit(cg, 1);
+		Op.IS.emit(cg);
+		Op.JF.emit(cg, "l2");
+		Op.LDI.emit(cg, 1);
+		Op.RET.emit(cg);
+		cg.label("l2", Op.CONT.emit(cg, "l3"));
+		Op.LDE0P.emit(cg, 0);
 		Op.LDI.emit(cg, 1);
 		Op.SUB.emit(cg);
 		Op.PUSH.emit(cg);
-		Op.LDL.emit(cg, 0);
+		Op.LDL.emit(cg, "self");
 		Op.APPLY.emit(cg, 1);
-		int l3 = Op.PUSH.emit(cg);
-		assertEquals(0x11, cg.patchRelativeBranch(l2, l3));
-		int setl4 = Op.CONT.emit(cg, 0);
-		Op.LDE0.emit(cg, 0);
-		Op.PUSH.emit(cg);
+		cg.label("l3", Op.PUSH.emit(cg));
+		Op.CONT.emit(cg, "l4");
+		Op.LDE0P.emit(cg, 0);
 		Op.LDI.emit(cg, 2);
 		Op.SUB.emit(cg);
 		Op.PUSH.emit(cg);
-		Op.LDL.emit(cg, 0);
+		Op.LDL.emit(cg, "self");
 		Op.APPLY.emit(cg, 1);
-		int l4 = Op.ADD.emit(cg);
-		assertEquals(0x11, cg.patchRelativeBranch(setl4, l4));
-		int len = Op.RET.emit(cg) + 1;
+		cg.label("l4", Op.ADD.emit(cg));
+		Op.RET.emit(cg);
+		Code code = cg.endCode();
 
-		// env 1 0 0; lde0 0; push; ldi 0; is; jf xxx; ldi 1; ret; lde0 0; push ldi 1; is; jf xxx; ldi 1; ret;
-		// cont xxx; lde0 0; push; ldi 1; sub; push; ldl 0; apply 1; push;
-		// cont xxx; lde0 0; push; ldi 2; sub; push; ldl 0; apply 1; add; ret
-        byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00,    // env 1 0 0
-                0x69, 0x00,                                // lde0 0
-                0x01,                                    // push
-                0x44, 0x00, 0x00, 0x00, 0x00,            // ldi 0
-                0x1f,                                    // is
-                0x50, 0x06, 0x00, 0x00, 0x00,            // jf L1 (6)
-                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
-                0x0d,                                    // ret
-                0x69, 0x00,                                // L1: lde0 0
-                0x01,                                    // push
-                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
-                0x1f,                                    // is
-                0x50, 0x06, 0x00, 0x00, 0x00,            // jf L2 (6)
-                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
-                0x0d,                                    // ret
-                (byte) 0x52, 0x11, 0x00, 0x00, 0x00,        // L2: cont L3 (0x11)
-                0x69, 0x00,                                // lde0 0
-                0x01,                                    // push
-                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
-                0x16,                                    // sub
-                0x01,                                    // push
-                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
-                0x4c, 0x01,                                // apply 1
-                0x01,                                    // L3: push
-                (byte) 0x52, 0x11, 0x00, 0x00, 0x00,        // cont L4 (0x11)
-                0x69, 0x00,                                // lde0 0
-                0x01,                                    // push
-                0x44, 0x02, 0x00, 0x00, 0x00,            // ldi 2
-                0x16,                                    // sub
-                0x01,                                    // push
-                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
-                0x4c, 0x01,                                // apply 1
-                0x15,                                    // add
-                0x0d                                    // ret
-        };
-		assertEquals(inst.length, len);
-
-		for (int i=0; i<len; i++)
-			assertEquals(inst[i], cg.getAtPos(i));
-		cg.literal(new Closure(Nil.NIL, codestart));
+		cg.literal("self", new Closure(Nil.NIL, code));
 
 		VirtualMachine vm = new VirtualMachine(cg);
 		vm.initSyms();
