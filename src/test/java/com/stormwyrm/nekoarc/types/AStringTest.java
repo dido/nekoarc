@@ -28,12 +28,14 @@ public class AStringTest {
     @Test
     public void testApply() {
         CodeGen cg = new CodeGen();
+        cg.startCode();
         Op.ENV.emit(cg, 0, 0, 0);
         Op.LDIP.emit(cg, 1);
-        Op.LDL.emit(cg, 0);
+        Op.LDL.emit(cg, "str");
         Op.APPLY.emit(cg, 1);
         Op.RET.emit(cg);
-        cg.literal(new AString("日本語"));
+        cg.endCode();
+        cg.literal("str", new AString("日本語"));
 
         VirtualMachine vm = new VirtualMachine(cg);
         vm.initSyms();
@@ -51,12 +53,14 @@ public class AStringTest {
     @Test
     public void testUnicodeApply() {
         CodeGen cg = new CodeGen();
+        cg.startCode();
         Op.ENV.emit(cg, 0, 0, 0);
         Op.LDIP.emit(cg, 0);
-        Op.LDL.emit(cg, 0);
+        Op.LDL.emit(cg, "str");
         Op.APPLY.emit(cg, 1);
         Op.RET.emit(cg);
-        cg.literal(new AString("\uD83D\uDE1D\uD83D\uDE0E"));
+        cg.endCode();
+        cg.literal("str", new AString("\uD83D\uDE1D\uD83D\uDE0E"));
 
         VirtualMachine vm = new VirtualMachine(cg);
         vm.initSyms();
