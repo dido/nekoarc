@@ -19,6 +19,7 @@ package com.stormwyrm.nekoarc.vm.instruction;
 
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.types.Closure;
+import com.stormwyrm.nekoarc.types.Code;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.vm.Instruction;
 import com.stormwyrm.nekoarc.types.ArcThread;
@@ -28,14 +29,15 @@ import com.stormwyrm.nekoarc.types.ArcThread;
  */
 public class CLS implements Instruction {
 	/**
-	 * Create a new closure.
+	 * Create a new closure given a code literal at the offset argument, using the current environment.
 	 * @param thr The thread executing the instruction
 	 * @throws NekoArcException on error
 	 */
 	@Override
 	public void invoke(ArcThread thr) throws NekoArcException {
-		int target = thr.instArg() + thr.getIP();
-		Closure clos = new Closure(thr.heapenv(), target);
+		int offset = thr.instArg();
+		Code code = (Code)thr.vm.literal(offset);
+		Closure clos = new Closure(thr.heapenv(), code);
 		thr.setAcc(clos);
 	}
 
