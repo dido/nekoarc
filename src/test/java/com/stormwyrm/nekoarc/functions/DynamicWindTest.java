@@ -16,47 +16,57 @@ public class DynamicWindTest {
         //               (fn () (assign during (+ 2 before))
         //               (fn () (assign after (+ 3 before)))
         CodeGen cg = new CodeGen();
+        cg.startCode();
         Op.ENV.emit(cg, 0, 0, 0);
-        int contpos = Op.CONT.emit(cg, 0);
-        Op.LDL.emit(cg, 1);         // before
+        Op.CONT.emit(cg, "contdest");
+        Op.CLS.emit(cg, "fbefore");         // before
         Op.PUSH.emit(cg);
-        Op.LDL.emit(cg, 2);         // during
+        Op.CLS.emit(cg, "fduring");         // during
         Op.PUSH.emit(cg);
-        Op.LDL.emit(cg, 3);         // after
+        Op.CLS.emit(cg, "fafter");         // after
         Op.PUSH.emit(cg);
-        Op.LDG.emit(cg, 0);         // dynamic-wind
+        Op.LDG.emit(cg, "dynamic-wind");         // dynamic-wind
         Op.APPLY.emit(cg, 3);
-        int contdest = Op.RET.emit(cg);
-        cg.patchRelativeBranch(contpos, contdest);
-        int tbefore = Op.ENV.emit(cg, 0, 0, 0);
+        cg.label("contdest", Op.RET.emit(cg));
+        cg.endCode();
+
+        cg.startCode();
+        Op.ENV.emit(cg, 0, 0, 0);
         Op.LDI.emit(cg, 1);
         Op.PUSH.emit(cg);
-        Op.LDG.emit(cg, 4);
+        Op.LDG.emit(cg, "before");
         Op.ADD.emit(cg);
-        Op.STG.emit(cg, 4);
+        Op.STG.emit(cg, "before");
         Op.RET.emit(cg);
-        int tduring = Op.ENV.emit(cg, 0, 0, 0);
+        Code fbefore = cg.endCode();
+
+        cg.startCode();
+        Op.ENV.emit(cg, 0, 0, 0);
         Op.LDI.emit(cg, 2);
         Op.PUSH.emit(cg);
-        Op.LDG.emit(cg, 5);
+        Op.LDG.emit(cg, "during");
         Op.ADD.emit(cg);
-        Op.STG.emit(cg, 5);
+        Op.STG.emit(cg, "during");
         Op.RET.emit(cg);
-        int tafter = Op.ENV.emit(cg, 0, 0, 0);
+        Code fduring = cg.endCode();
+
+        cg.startCode();
+        Op.ENV.emit(cg, 0, 0, 0);
         Op.LDI.emit(cg, 3);
         Op.PUSH.emit(cg);
-        Op.LDG.emit(cg, 6);
+        Op.LDG.emit(cg, "after");
         Op.ADD.emit(cg);
-        Op.STG.emit(cg, 6);
+        Op.STG.emit(cg, "after");
         Op.RET.emit(cg);
+        Code fafter = cg.endCode();
 
-        cg.literal(Symbol.intern("dynamic-wind"));
-        cg.literal(new Closure(Nil.NIL, tbefore));
-        cg.literal(new Closure(Nil.NIL, tduring));
-        cg.literal(new Closure(Nil.NIL, tafter));
-        cg.literal(Symbol.intern("before"));
-        cg.literal(Symbol.intern("during"));
-        cg.literal(Symbol.intern("after"));
+        cg.literal("dynamic-wind", Symbol.intern("dynamic-wind"));
+        cg.literal("fbefore", fbefore);
+        cg.literal("fduring", fduring);
+        cg.literal("fafter", fafter);
+        cg.literal("before", Symbol.intern("before"));
+        cg.literal("during", Symbol.intern("during"));
+        cg.literal("after", Symbol.intern("after"));
         VirtualMachine vm = new VirtualMachine(cg);
         vm.initSyms();
         vm.bind((Symbol) Symbol.intern("before"), Fixnum.get(1));
@@ -85,15 +95,15 @@ public class DynamicWindTest {
 
         CodeGen cg = new CodeGen();
 
-        int start = Op.ENV.emit(cg, 0, 0, 0);
-        int contpos = Op.CONT.emit(cg, 0);
-        int clspos = Op.CLS.emit(cg, 0);
+        int start = cg.startCode();
+        Op.ENV.emit(cg, 0, 0, 0);
+        Op.CONT.emit(cg, "contdest");
+        Op.CLS.emit(cg, "cccarg");
         Op.PUSH.emit(cg);
-        Op.LDG.emit(cg, 0);                     // ccc
+        Op.LDG.emit(cg, "ccc");                     // ccc
         Op.APPLY.emit(cg, 1);
-        int contdest = Op.PUSH.emit(cg);
-        cg.patchRelativeBranch(contpos, contdest);
-        Op.LDG.emit(cg, 2);                     // before
+        cg.label("contdest", Op.PUSH.emit(cg));
+        Op.LDG.emit(cg, "before");                     // before
         Op.ADD.emit(cg);
         Op.PUSH.emit(cg);
         Op.LDG.emit(cg, 3);                     // during
@@ -102,46 +112,56 @@ public class DynamicWindTest {
         Op.LDG.emit(cg, 4);                     // after
         Op.ADD.emit(cg);
         Op.RET.emit(cg);
+        cg.endCode();
 
-        int clsdest = Op.ENV.emit(cg, 1, 0, 0);
-        cg.patchRelativeBranch(clspos, clsdest);
-        contpos = Op.CONT.emit(cg, 0);
-        int sbefore = Op.CLS.emit(cg, 0);     // before
+        cg.startCode();
+        Op.ENV.emit(cg, 1, 0, 0);
+        Op.CONT.emit(cg, "contdest2");
+        Op.CLS.emit(cg, "fbefore");     // before
         Op.PUSH.emit(cg);
-        int sduring = Op.CLS.emit(cg, 0);     // during
+        Op.CLS.emit(cg, "fduring");     // during
         Op.PUSH.emit(cg);
-        int safter = Op.CLS.emit(cg, 0);       // after
+        Op.CLS.emit(cg, "fafter");       // after
         Op.PUSH.emit(cg);
-        Op.LDG.emit(cg, 1);                  // dynamic-wind
+        Op.LDG.emit(cg, "dynamic-wind");                  // dynamic-wind
         Op.APPLY.emit(cg, 3);
-        contdest = Op.RET.emit(cg);
-        cg.patchRelativeBranch(contpos, contdest);
+        cg.label("contdest2", Op.RET.emit(cg));
+        Code cccarg = cg.endCode();
 
-        int tbefore = Op.ENV.emit(cg, 0, 0, 0);
-        cg.patchRelativeBranch(sbefore, tbefore);
+        cg.startCode();
+        Op.ENV.emit(cg, 0, 0, 0);
         Op.LDI.emit(cg, 1);
-        Op.STG.emit(cg, 2);                 // before
+        Op.STG.emit(cg, "before");                 // before
         Op.RET.emit(cg);
-        int tduring = Op.ENV.emit(cg, 0, 0, 0);
-        cg.patchRelativeBranch(sduring, tduring);
+        Code fbefore = cg.endCode();
+
+        cg.startCode();
+        Op.ENV.emit(cg, 0, 0, 0);
         Op.LDI.emit(cg, 2);
-        Op.STG.emit(cg, 3);                 // during
-        Op.LDG.emit(cg, 3);
+        Op.STG.emit(cg, "during");                 // during
+        Op.LDG.emit(cg, "during");
         Op.PUSH.emit(cg);
         Op.LDE.emit(cg, 1, 0);         // continuation passed
         Op.APPLY.emit(cg, 1);
         Op.RET.emit(cg);
-        int tafter = Op.ENV.emit(cg, 0, 0, 0);
-        cg.patchRelativeBranch(safter, tafter);
-        Op.LDI.emit(cg, 3);
-        Op.STG.emit(cg, 4);             // after
-        Op.RET.emit(cg);
+        Code fduring = cg.endCode();
 
-        cg.literal(Symbol.intern("ccc"));
-        cg.literal(Symbol.intern("dynamic-wind"));
-        cg.literal(Symbol.intern("before"));
-        cg.literal(Symbol.intern("during"));
-        cg.literal(Symbol.intern("after"));
+        cg.startCode();
+        Op.ENV.emit(cg, 0, 0, 0);
+        Op.LDI.emit(cg, 3);
+        Op.STG.emit(cg, "after");             // after
+        Op.RET.emit(cg);
+        Code fafter = cg.endCode();
+
+        cg.literal("ccc", Symbol.intern("ccc"));
+        cg.literal("dynamic-wind", Symbol.intern("dynamic-wind"));
+        cg.literal("before", Symbol.intern("before"));
+        cg.literal("during", Symbol.intern("during"));
+        cg.literal("after", Symbol.intern("after"));
+        cg.literal("cccarg", cccarg);
+        cg.literal("fbefore", fbefore);
+        cg.literal("fduring", fduring);
+        cg.literal("fafter", fafter);
 
         VirtualMachine vm = new VirtualMachine(cg);
         vm.initSyms();
