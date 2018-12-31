@@ -27,29 +27,16 @@ public class Closure extends ArcObject {
 
 	public final ArcObject env;
 	public final int ip;
-	public final int dp;
 
 	/**
 	 * Create a new closure.
 	 * @param env The environment saved in the closure
 	 * @param ip Pointer to the code of the closure
-     * @param dp Data pointer for the closure
 	 */
-	public Closure(ArcObject env, int ip, int dp) {
+	public Closure(ArcObject env, int ip) {
 		this.env = env;
 		this.ip = ip;
-		this.dp = dp;
 	}
-
-    /**
-     * Create new closure with 0 dp
-     * @param env The environment saved in the closure
-     * @param ip Pointer to code of the closure
-     */
-    @Deprecated
-    public Closure(ArcObject env, int ip) {
-	    this(env, ip, 0);
-    }
 
 	/**
 	 * Type of the closure
@@ -70,7 +57,6 @@ public class Closure extends ArcObject {
 		ArcObject newenv;
 		newenv = this.env;
 		thr.setIP(ip);
-		thr.setDP(dp);
 		thr.setenvreg(newenv);
 		// If this is not a call from the thr itself, some other additional actions need to be taken.
 		// 1. The virtual machine thread should be resumed.
