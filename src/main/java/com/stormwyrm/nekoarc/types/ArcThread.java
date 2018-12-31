@@ -37,7 +37,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
     private final ArcObject[] stack;        // stack
     private final CallSync caller;
     private int ip;                    // instruction pointer
-    private int dp;                     // data pointer
     private boolean runnable;
     private ArcObject acc;            // accumulator
     private int argc;                // argument counter for current function
@@ -59,7 +58,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
      */
     public ArcThread(VirtualMachine vm, int stacksize) {
         this.vm = vm;
-        sp = bp = dp = 0;
+        sp = bp = 0;
         stack = new ArcObject[stacksize];
         ip = 0;
         runnable = true;
@@ -278,23 +277,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
     }
 
     /**
-     * Get data pointer
-     * @return current data pointer
-     */
-    public int getDP() {
-        return(dp);
-    }
-
-    /**
-     * Set data pointer
-     * @param dp New data pointer
-     * @return New data pointer
-     */
-    public int setDP(int dp) {
-        return(this.dp = dp);
-    }
-
-    /**
      * Set number of arguments
      * @param ac New argument count
      * @return Argument count
@@ -499,7 +481,7 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
     }
 
     /** Size of a continuation */
-    public static final int CONTSIZE = 5;
+    public static final int CONTSIZE = 4;
 
     /**
      * Make a continuation on the stack. The new continuation is
@@ -510,7 +492,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
         stackcheck(CONTSIZE, "stack overflow while creating continuation");
         int newip = ip + ipoffset;
         push(Fixnum.get(newip));
-        push(Fixnum.get(dp));
         push(Fixnum.get(bp));
         push(env);
         push(cont);
@@ -536,7 +517,6 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
             cont = pop();
             setenvreg(pop());
             bp = (int)((Fixnum)pop()).fixnum;
-            dp = (int)((Fixnum)pop()).fixnum;
             setIP((int) ((Fixnum) pop()).fixnum);
         } else if (cont instanceof Continuation) {
             Continuation ct = (Continuation) cont;
