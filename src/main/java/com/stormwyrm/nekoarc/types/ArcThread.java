@@ -740,9 +740,4 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
             throw new NekoArcException("thread join interrupted");
         }
     }
-
-    @Override
-    public String toString() {
-        return ("#<thread" + this.hashCode() + ">");
-    }
 }
