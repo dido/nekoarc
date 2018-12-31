@@ -25,17 +25,18 @@ import com.stormwyrm.nekoarc.util.Callable;
 public class Closure extends ArcObject {
 	public static final ArcObject TYPE = Symbol.intern("closure");
 
-	public final ArcObject env;
-	public final int ip;
+	private ArcObject env;
+	private final Code code;
 
 	/**
 	 * Create a new closure.
 	 * @param env The environment saved in the closure
-	 * @param ip Pointer to the code of the closure
+	 * @param code The code object.
+
 	 */
-	public Closure(ArcObject env, int ip) {
+	public Closure(ArcObject env, Code code) {
 		this.env = env;
-		this.ip = ip;
+		this.code = code;
 	}
 
 	/**
@@ -56,7 +57,7 @@ public class Closure extends ArcObject {
 	public void apply(ArcThread thr, Callable caller) {
 		ArcObject newenv;
 		newenv = this.env;
-		thr.setIP(ip);
+		thr.setIP(code.ip);
 		thr.setenvreg(newenv);
 		// If this is not a call from the thr itself, some other additional actions need to be taken.
 		// 1. The virtual machine thread should be resumed.
