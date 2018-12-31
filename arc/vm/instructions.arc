@@ -119,12 +119,15 @@
 (definsl ldgp #x49 (value)
 	 (push (acc (value (literal offset)))))
 
+;; cls was #x4d, changed so that deprecated usages are smoked out
+;; It now receives a literal Code object and combines it with the
+;; current environment to create a closure.
+(definsl cls #x4a (target)
+	 (acc (closure (+ target ip))))
+
 (definss apply #x4c (value)
 	 (argc value)
 	 (apply acc))
-
-(definsc cls #x4d (target)
-	 (acc (closure (+ target ip))))
 
 (definsc jmp #x4e (target)
 	 (setip (+ ip target)))
