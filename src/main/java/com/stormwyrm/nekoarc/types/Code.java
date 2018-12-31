@@ -15,35 +15,28 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
-package com.stormwyrm.nekoarc;
+package com.stormwyrm.nekoarc.types;
 
-import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.ArcThread;
-import com.stormwyrm.nekoarc.types.Symbol;
-import com.stormwyrm.nekoarc.util.Callable;
+import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
 /**
- * Continuation that stops the thread restoring it.
+ * A code object
  */
-public class StopContinuation extends HeapContinuation {
-    public static final ArcObject TYPE = Symbol.intern("continuation");
+public class Code extends ArcObject {
+    public static final ArcObject TYPE = Symbol.intern("code");
+
+    public final int ip;
+    public final int size;
+    public final ArcObject ldls;
+
+    public Code(int ip, int size, ArcObject ldls) {
+        this.ip = ip;
+        this.size = size;
+        this.ldls = ldls;
+    }
 
     @Override
     public ArcObject type() {
         return(TYPE);
-    }
-
-    public StopContinuation(ArcObject here) {
-        super(0, Nil.NIL, Nil.NIL, 0, here);
-    }
-
-    /**
-     * Restore the continuation. It will simply stop the running thread.
-     * @param thr virtual machine thread
-     * @param caller the caller
-     */
-    @Override
-    public void restore(ArcThread thr, Callable caller) {
-        thr.halt();
     }
 }
