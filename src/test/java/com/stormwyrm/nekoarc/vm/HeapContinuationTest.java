@@ -81,8 +81,7 @@ public class HeapContinuationTest {
 		hc = new HeapContinuation(3,		// 3 stack elements
 				Nil.NIL,					// previous continuation
 				env,						// environment
-				20,						// saved IP
-				0);						// saved DP
+				20);						// saved IP
 		// Stack elements
 		hc.setIndex(0, Fixnum.get(1));
 		hc.setIndex(1, Fixnum.get(2));
