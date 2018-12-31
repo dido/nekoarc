@@ -36,6 +36,8 @@ public class CodeGen extends ArcObject {
     private LongMap<ArcObject> genlits;
     private final ObjectMap<String, ArcObject> codeLabelMap;
     private final ObjectMap<String, ArcObject> litLabelMap;
+    private ArcObject ldls;
+    private int start;
 
     /**
      * Create a new code generator
@@ -47,6 +49,37 @@ public class CodeGen extends ArcObject {
         genlits = new LongMap<>();
         codeLabelMap = new ObjectMap<>();
         litLabelMap = new ObjectMap<>();
+        ldls = Nil.NIL;
+        start = -1;
+    }
+
+    /**
+     * Set up code generation.
+     */
+    public int startCode() {
+        start = pos;
+        ldls = Nil.NIL;
+        return(start);
+    }
+
+    /**
+     * Add an LDL instruction to the list.
+     * @param ldlpos The position of the LDL instruction
+     */
+    public void ldl(int ldlpos) {
+        // store the address as a one relative to the start
+        ldls = new Cons(Fixnum.get(start - ldlpos), ldls);
+    }
+
+    /**
+     * Finish up code generation. Creates a Code and will reset start and the ldl list.
+     * @return A closure from the code just generated.
+     */
+    public Code endCode() {
+        Code code = new Code(start, pos - start, ldls);
+        start = -1;
+        ldls = Nil.NIL;
+        return(code);
     }
 
     /**
@@ -55,6 +88,8 @@ public class CodeGen extends ArcObject {
      * @return offset at which the instruction was written
      */
     private int instwrite(byte b) {
+        if (start < 0)
+            throw new NekoArcException("code generated without startCode");
         if (pos >= geninst.length)
             geninst = Arrays.copyOf(geninst, geninst.length * 2);
         geninst[pos] = b;
