@@ -82,7 +82,12 @@ public class VirtualMachine {
         this.literals = literals;
     }
 
-    @Deprecated
+
+    /**
+     * Load bytecode and an array of literals into the virtual machine. This will be deprecated soon!
+     * @param instructions bytecode to load
+     * @param literals literal data to load
+     */
     public void load(final byte[] instructions, final ArcObject[] literals) {
         this.code = instructions;
         this.literals = new LongMap<>();
