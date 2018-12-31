@@ -9,6 +9,7 @@ public class CodeGenTest {
     @Test
     public void test() {
         CodeGen cg = new CodeGen();
+        cg.startCode();
         int pos;
 
         pos = Op.NOP.emit(cg);
@@ -42,6 +43,7 @@ public class CodeGenTest {
     @Test
     public void testLabels() {
         CodeGen cg = new CodeGen();
+        cg.startCode();
 
         int jpos = Op.JMP.emit(cg, "label0");
         assertEquals(Op.JMP.opcode(), cg.getAtPos(jpos));
