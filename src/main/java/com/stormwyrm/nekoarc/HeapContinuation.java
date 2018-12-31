@@ -32,7 +32,6 @@ public class HeapContinuation extends Vector implements Continuation {
 	private final ArcObject prevcont;
 	private final ArcObject env;
 	private final int ipoffset;
-	private final int dp;
 
 	/**
 	 * Create a new heap continuation.
@@ -40,14 +39,12 @@ public class HeapContinuation extends Vector implements Continuation {
 	 * @param pcont Previous continuation
 	 * @param e Environment
 	 * @param ip Saved instruction pointer
-     * @param dp Saved data pointer
 	 */
-	public HeapContinuation(int size, ArcObject pcont, ArcObject e, int ip, int dp) {
+	public HeapContinuation(int size, ArcObject pcont, ArcObject e, int ip) {
 		super(size);
 		prevcont = pcont;
 		env = e;
 		ipoffset = ip;
-		this.dp = dp;
 	}
 
 	/**
@@ -68,8 +65,6 @@ public class HeapContinuation extends Vector implements Continuation {
 			thr.push(index(i));
 		// push the saved instruction pointer
 		thr.push(Fixnum.get(ipoffset));
-		// push the saved data pointer
-        thr.push(Fixnum.get(dp));
 		// push the new base pointer
 		thr.push(Fixnum.get(bp));
 		// push the saved environment
@@ -86,10 +81,8 @@ public class HeapContinuation extends Vector implements Continuation {
     public  static final int ENVOFFSET = 2;
     /** Offset of saved base pointer in stack continuation */
     public static final int BPOFFSET = 3;
-    /** Offset of saved data pointer in stack continuation */
-    public static final int DPOFFSET = 4;
     /** Offset of saved instruction pointer in stack continuation */
-    public static final int IPOFFSET = 5;
+    public static final int IPOFFSET = 4;
 	/**
 	 * Create a new heap continuation from a stack-based continuation.
 	 * A stack continuation is a pointer into the stack, such that
@@ -107,7 +100,6 @@ public class HeapContinuation extends Vector implements Continuation {
 		if (sc instanceof HeapContinuation || sc.is(Nil.NIL))
 			return(sc);
 		int cc = (int)((Fixnum)sc).fixnum;
-        int dp = (int)((Fixnum)thr.stackIndex(cc-DPOFFSET)).fixnum;
 		// Calculate the size of the actual continuation based on the saved base pointer
 		int bp = (int)((Fixnum)thr.stackIndex(cc-BPOFFSET)).fixnum;
 		// Calculate number of stack elements to be saved */
@@ -117,7 +109,7 @@ public class HeapContinuation extends Vector implements Continuation {
 		pco = fromStackCont(thr, pco);
 		ArcObject senv = HeapEnv.fromStackEnv(thr, thr.stackIndex(cc-ENVOFFSET));
 		HeapContinuation c = new HeapContinuation(svsize, pco, senv,
-				(int)((Fixnum)thr.stackIndex(cc-IPOFFSET)).fixnum, dp);
+				(int)((Fixnum)thr.stackIndex(cc-IPOFFSET)).fixnum);
 
 		for (int i=0; i<svsize; i++)
 			c.setIndex(i, thr.stackIndex(bp + i));
