@@ -83,10 +83,10 @@ public class JmpTbl {
             new LDLP(),        // 0x47
             new LDIP(),        // 0x48
             new LDGP(),        // 0x49
-            NOINST,
+            new CLS(),        // 0x4a
             NOINST,
             new APPLY(),        // 0x4c
-            new CLS(),        // 0x4d
+            NOINST,
             new JMP(),        // 0x4e
             new JT(),        // 0x4f
             new JF(),        // 0x50
