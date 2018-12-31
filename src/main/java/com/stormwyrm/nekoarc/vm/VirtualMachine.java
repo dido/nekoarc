@@ -29,6 +29,7 @@ import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Symbol;
+import com.stormwyrm.nekoarc.util.LongMap;
 import com.stormwyrm.nekoarc.util.ObjectMap;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -39,7 +40,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class VirtualMachine {
     public final CodeGen cg;
     private byte[] code;
-    private  ArcObject[] literals;
+    private LongMap<ArcObject> literals;
     /**
      * Lock protecting the global environment
      */
@@ -76,9 +77,17 @@ public class VirtualMachine {
      * @param instructions bytecode to load
      * @param literals literal data to load
      */
-    public void load(final byte[] instructions, final ArcObject[] literals) {
+    public void load(final byte[] instructions, final LongMap<ArcObject> literals) {
         this.code = instructions;
         this.literals = literals;
+    }
+
+    @Deprecated
+    public void load(final byte[] instructions, final ArcObject[] literals) {
+        this.code = instructions;
+        this.literals = new LongMap<>();
+        for (int i=0; i<literals.length; i++)
+            this.literals.put(i, literals[i]);
     }
 
     /**
@@ -93,17 +102,17 @@ public class VirtualMachine {
      * @param instructions the bytecode to load
      */
     public void load(final byte[] instructions) {
-        load(instructions, null);
+        load(instructions, (LongMap<ArcObject>) null);
     }
 
 
     /**
      * Get a literal from the data section of the virtual machine
-     * @param offset the offset to get the data from
+     * @param key the offset to get the data from
      * @return the data object at the offset
      */
-    public ArcObject literal(int offset) {
-        return (literals[offset]);
+    public ArcObject literal(int key) {
+        return (literals.get(key));
     }
 
     /**
