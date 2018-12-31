@@ -17,7 +17,6 @@
  */
 package com.stormwyrm.nekoarc.functions;
 
-import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Op;
 import com.stormwyrm.nekoarc.TestTemplate;
 import com.stormwyrm.nekoarc.types.*;
@@ -30,6 +29,7 @@ public class CCCTest extends TestTemplate {
     @Test
     public void testCCCsimple() {
         doTest((cg) -> {
+            cg.startCode();
             Op.ENV.emit(cg, 0, 0, 0);
             Op.CONT.emit(cg, "L1");
             Op.CLS.emit(cg, "lambda");
@@ -40,14 +40,18 @@ public class CCCTest extends TestTemplate {
             Op.LDI.emit(cg, 1);
             Op.ADD.emit(cg);
             Op.RET.emit(cg);
+            cg.endCode();
 
-            cg.label("lambda", Op.ENV.emit(cg, 1, 0, 0));
+            cg.startCode();
+            Op.ENV.emit(cg, 1, 0, 0);
             Op.LDIP.emit(cg, 41);
             Op.LDE0.emit(cg, 0);
             Op.APPLY.emit(cg, 1);
             Op.LDI.emit(cg, 21);
             Op.RET.emit(cg);
+            Code lambda = cg.endCode();
             cg.literal("ccc", Symbol.intern("ccc"));
+            cg.literal("lambda", lambda);
             return(cg); }, Fixnum.get(42));
     }
 
@@ -58,21 +62,26 @@ public class CCCTest extends TestTemplate {
         // (ccc [(_42) 21])
         // but there is no continuation, as would be generated with ccc in a tail position
 
+        cg.startCode();
         Op.ENV.emit(cg, 0, 0, 0);
-        Op.LDLP.emit(cg, 1);         // function [(_ 42) 21]
-        Op.LDG.emit(cg, 0);         // symbol ccc
+        Op.CLS.emit(cg, "func");         // function [(_ 42) 21]
+        Op.PUSH.emit(cg);
+        Op.LDG.emit(cg, "ccc");         // symbol ccc
         Op.APPLY.emit(cg, 1);
+        Code c = cg.endCode();
 
         // [(_ 42) 21]
-        int func = Op.ENV.emit(cg, 1, 0, 0);
+        cg.startCode();
+        Op.ENV.emit(cg, 1, 0, 0);
         Op.LDIP.emit(cg, 42);
         Op.LDE0.emit(cg, 0);
         Op.APPLY.emit(cg, 1);
         Op.LDI.emit(cg, 21);
         Op.RET.emit(cg);
+        Code func = cg.endCode();
 
-        cg.literal(Symbol.intern("ccc"));
-        cg.literal(new Closure(Nil.NIL, func));
+        cg.literal("ccc", Symbol.intern("ccc"));
+        cg.literal("func", func);
 
         VirtualMachine vm = new VirtualMachine(cg);
         ArcThread thr = new ArcThread(vm);
