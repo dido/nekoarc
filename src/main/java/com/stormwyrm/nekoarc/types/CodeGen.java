@@ -19,6 +19,7 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.util.LongMap;
 import com.stormwyrm.nekoarc.util.ObjectMap;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 
@@ -32,7 +33,7 @@ public class CodeGen extends ArcObject {
 
     private byte[] geninst;
     private int pos, litpos;
-    private ArcObject[] genlits;
+    private LongMap<ArcObject> genlits;
     private final ObjectMap<String, ArcObject> codeLabelMap;
     private final ObjectMap<String, ArcObject> litLabelMap;
 
@@ -43,7 +44,7 @@ public class CodeGen extends ArcObject {
         pos = 0;
         geninst = new byte[32];
         litpos = 0;
-        genlits = new ArcObject[32];
+        genlits = new LongMap<>();
         codeLabelMap = new ObjectMap<>();
         litLabelMap = new ObjectMap<>();
     }
@@ -243,12 +244,10 @@ public class CodeGen extends ArcObject {
      * @return the offset in the literals table at which it was put
      */
     public int literal(ArcObject lit) {
-        if (litpos >= genlits.length)
-            genlits = Arrays.copyOf(genlits, genlits.length * 2);
-        genlits[litpos] = lit;
-        int tmppos = litpos;
-        litpos++;
-        return(tmppos);
+        while (genlits.containsKey(litpos))
+            litpos++;
+        genlits.put(litpos, lit);
+        return(litpos);
     }
 
     /**
