@@ -22,10 +22,8 @@ import static org.junit.Assert.*;
 import com.stormwyrm.nekoarc.HeapContinuation;
 import com.stormwyrm.nekoarc.HeapEnv;
 import com.stormwyrm.nekoarc.Nil;
-import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.ArcThread;
-import com.stormwyrm.nekoarc.types.Closure;
-import com.stormwyrm.nekoarc.types.Fixnum;
+import com.stormwyrm.nekoarc.Op;
+import com.stormwyrm.nekoarc.types.*;
 import org.junit.Test;
 
 public class HeapContinuationTest {
@@ -39,49 +37,51 @@ public class HeapContinuationTest {
 		env.setEnv(0, Fixnum.get(4));
 		env.setEnv(1, Fixnum.get(5));
 		env.setEnv(2, Fixnum.get(6));
-
 		// CodeGen:
 		// env 2 0 0; lde0 0; push; lde0 1; apply 1; ret; hlt; hlt; hlt; hlt; hlt;
 		// add everything already on the stack to the value applied to the continuation, get the
 		// stuff in the environment and add it too, and return the sum.
 		// add; add; add; push; lde0 0; add; push; lde0 1; add; push; lde0 2; add; ret
-        byte[] inst = {(byte) 0xca, 0x02, 0x00, 0x00,    // env 1 0 0
-                0x69, 0x00,                                // lde0 0  ; value (fixnum)
-                0x01,                                    // push
-                0x69, 0x01,                                // lde0 1  ; continuation
-                0x4c, 0x01,                                // apply 1
-                0x0d,                                    // ret
-                0x14,                                    // hlt
-                0x14,                                    // hlt
-                0x14,                                    // hlt
-                0x14,                                    // hlt
-                0x14,                                    // hlt
-                0x14,                                    // hlt
-                0x14,                                    // hlt
-                0x14,                                    // hlt
-                0x15,                                    // add		; continuation ip address
-                0x15,                                    // add
-                0x15,                                    // add
-                0x01,                                    // push
-                0x69, 0x00,                                // lde0 0
-                0x15,                                    // add
-                0x01,                                    // push
-                0x69, 0x01,                                // lde0 1
-                0x15,                                    // add
-                0x01,                                    // push
-                0x69, 0x02,                                // lde0 2
-                0x15,                                    // add
-                0x0d,                                    // ret
-        };
-        VirtualMachine vm = new VirtualMachine();
-		ArcThread thr = new ArcThread(vm,1024);
-		vm.load(inst);
+		CodeGen cg = new CodeGen();
+		cg.startCode();
+		Op.ENV.emit(cg, 2, 0, 0);
+		Op.LDE0P.emit(cg, 0);
+		Op.LDE0.emit(cg, 1);			// continuation
+		Op.APPLY.emit(cg, 1);
+		Op.RET.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		Op.HLT.emit(cg);
+		int contaddr = Op.ADD.emit(cg);
+		Op.ADD.emit(cg);
+		Op.ADD.emit(cg);
+		Op.PUSH.emit(cg);
+		Op.LDE0.emit(cg, 0);
+		Op.ADD.emit(cg);
+		Op.PUSH.emit(cg);
+		Op.LDE0.emit(cg, 1);
+		Op.ADD.emit(cg);
+		Op.PUSH.emit(cg);
+		Op.LDE0.emit(cg, 2);
+		Op.ADD.emit(cg);
+		Op.RET.emit(cg);
+		cg.endCode();
+
+        VirtualMachine vm = new VirtualMachine(cg);
+		ArcThread thr = new ArcThread(vm);
 
 		// Synthetic HeapContinuation
 		hc = new HeapContinuation(3,		// 3 stack elements
 				Nil.NIL,					// previous continuation
 				env,						// environment
-				20);						// saved IP
+				contaddr);						// saved IP
 		// Stack elements
 		hc.setIndex(0, Fixnum.get(1));
 		hc.setIndex(1, Fixnum.get(2));
@@ -89,7 +89,6 @@ public class HeapContinuationTest {
 
 		thr.setargc(2);
 		thr.push(Fixnum.get(7));
-
 		thr.push(hc);
 		thr.setAcc(Nil.NIL);
 		assertTrue(thr.runnable());
@@ -105,38 +104,35 @@ public class HeapContinuationTest {
 	 */
 	@Test
 	public void test2() {
-		// env 1 0 0; lde0 0; push; ldi 0; is; jf L1; ldi 2; ret;
-		// L1: cont L2; lde0 0; push; ldi 1; sub; push; ldl 0; apply 1; L2: push; ldi 2; add; ret
-        byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00,    // env 1 0 0
-                0x69, 0x00,                                // lde0 0
-                0x01,                                    // push
-                0x44, 0x00, 0x00, 0x00, 0x00,            // ldi 0
-                0x1f,                                    // is
-                0x50, 0x06, 0x00, 0x00, 0x00,            // jf L1 (6)
-                0x44, 0x00, 0x00, 0x00, 0x00,            // ldi 0
-                0x0d,                                    // ret
-                (byte) 0x52, 0x11, 0x00, 0x00, 0x00,        // L1: cont L2 (0x11)
-                0x69, 0x00,                                // lde0 0
-                0x01,                                    // push
-                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
-                0x16,                                    // sub
-                0x01,                                    // push
-                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
-                0x4c, 0x01,                                // apply 1
-                0x01,                                    // L2: push
-                0x44, 0x02, 0x00, 0x00, 0x00,            // ldi 2
-                0x15,                                    // add
-                0x0d                                    // ret
-        };
+		CodeGen cg = new CodeGen();
 
-        VirtualMachine vm = new VirtualMachine();
+		cg.startCode();
+		Op.ENV.emit(cg, 1, 0, 0);
+		Op.LDE0P.emit(cg, 0);
+		Op.LDI.emit(cg, 0);
+		Op.IS.emit(cg);
+		Op.JF.emit(cg, "L1");
+		Op.LDI.emit(cg, 0);
+		Op.RET.emit(cg);
+		cg.label("L1", Op.CONT.emit(cg, "L2"));
+		Op.LDE0P.emit(cg, 0);
+		Op.LDI.emit(cg, 1);
+		Op.SUB.emit(cg);
+		Op.PUSH.emit(cg);
+		Op.LDL.emit(cg, "self");
+		Op.APPLY.emit(cg, 1);
+		cg.label("L2", Op.PUSH.emit(cg));
+		Op.LDI.emit(cg, 2);
+		Op.ADD.emit(cg);
+		Op.RET.emit(cg);
+		Closure clos = new Closure(Nil.NIL, cg.endCode());
+		cg.literal("self", clos);
+
+        VirtualMachine vm = new VirtualMachine(cg);
 		ArcThread thr = new ArcThread(vm,5);
-        ArcObject[] literals = new ArcObject[1];
-		literals[0] = new Closure(Nil.NIL, 0);
-		vm.load(inst, literals);
 		thr.setargc(1);
 		thr.push(Fixnum.get(100));
-		thr.setAcc(literals[0]);
+		thr.setAcc(clos);
 		assertTrue(thr.runnable());
 		thr.run();
 		assertFalse(thr.runnable());
@@ -148,37 +144,37 @@ public class HeapContinuationTest {
 	 */
 	@Test
 	public void test3() {
-		// env 1 0 0; lde0 0; push; ldi 0; is; jf L1; ldi 2; ret;
+		// env 1 0 0; lde0 0; push; ldi 0; is; jf L1; ldi 0; ret;
 		// L1: ldi 2; push; cont L2; lde0 0; push; ldi 1; sub; push; ldl 0; apply 1; L2: add; ret
-        byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00,    // env 1 0 0
-                0x69, 0x00,                                // lde0 0
-                0x01,                                    // push
-                0x44, 0x00, 0x00, 0x00, 0x00,            // ldi 0
-                0x1f,                                    // is
-                0x50, 0x06, 0x00, 0x00, 0x00,            // jf L1 (6)
-                0x44, 0x00, 0x00, 0x00, 0x00,            // ldi 0
-                0x0d,                                    // ret
-                0x44, 0x02, 0x00, 0x00, 0x00,            // L1: ldi 2
-                0x01,                                    // push
-                (byte) 0x52, 0x11, 0x00, 0x00, 0x00,        // cont L2 (0x11)
-                0x69, 0x00,                                // lde0 0
-                0x01,                                    // push
-                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
-                0x16,                                    // sub
-                0x01,                                    // push
-                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
-                0x4c, 0x01,                                // apply 1
-                0x15,                                    // L2: add
-                0x0d                                    // ret
-        };
-        VirtualMachine vm = new VirtualMachine();
+		CodeGen cg = new CodeGen();
+
+		cg.startCode();
+		Op.ENV.emit(cg, 1, 0, 0);
+		Op.LDE0P.emit(cg, 0);
+		Op.LDI.emit(cg, 0);
+		Op.IS.emit(cg);
+		Op.JF.emit(cg, "L1");
+		Op.LDI.emit(cg, 0);
+		Op.RET.emit(cg);
+		cg.label("L1", Op.LDIP.emit(cg, 2));
+		Op.CONT.emit(cg, "L2");
+		Op.LDE0P.emit(cg, 0);
+		Op.LDI.emit(cg, 1);
+		Op.SUB.emit(cg);
+		Op.PUSH.emit(cg);
+		Op.LDL.emit(cg, "self");
+		Op.APPLY.emit(cg, 1);
+		cg.label("L2", Op.ADD.emit(cg));
+		Op.RET.emit(cg);
+		Closure clos = new Closure(Nil.NIL, cg.endCode());
+		cg.literal("self", clos);
+
+        VirtualMachine vm = new VirtualMachine(cg);
 		ArcThread thr = new ArcThread(vm,6);
         ArcObject[] literals = new ArcObject[1];
-		literals[0] = new Closure(Nil.NIL, 0);
-		vm.load(inst, literals);
 		thr.setargc(1);
 		thr.push(Fixnum.get(1));
-		thr.setAcc(literals[0]);
+		thr.setAcc(clos);
 		assertTrue(thr.runnable());
 		thr.run();
 		assertFalse(thr.runnable());

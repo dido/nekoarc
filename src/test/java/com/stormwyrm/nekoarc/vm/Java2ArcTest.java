@@ -21,11 +21,9 @@ import static org.junit.Assert.*;
 
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.Op;
 import com.stormwyrm.nekoarc.functions.Builtin;
-import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.ArcThread;
-import com.stormwyrm.nekoarc.types.Closure;
-import com.stormwyrm.nekoarc.types.Fixnum;
+import com.stormwyrm.nekoarc.types.*;
 import org.junit.Test;
 
 /** Test for Java to Arc bytecode calls */
@@ -44,27 +42,25 @@ public class Java2ArcTest {
 		// env 0 0 0; ldl 0; push; ldl 1; apply 1; ret;
 		// to (fn (x) (+ x 1))
 		// env 1 0 0; lde0 0; push; ldi 1; add; ret
-        byte[] inst = {(byte) 0xca, 0x00, 0x00, 0x00,    // env 0 0 0
-                0x43, 0x00, 0x00, 0x00, 0x00,            // ldl 0
-                0x01,                                    // push
-                0x43, 0x01, 0x00, 0x00, 0x00,            // ldl 0
-                0x4c, 0x01,                                // apply 1
-                0x0d,                                    // ret
-                (byte) 0xca, 0x01, 0x00, 0x00,            // env 1 0 0
-                0x69, 0x00,                                // lde0 0
-                0x01,                                    // push
-                0x44, 0x01, 0x00, 0x00, 0x00,            // ldi 1
-                0x15,                                    // add
-                0x0d                                    // ret
-        };
-
-        ArcObject[] literals = new ArcObject[2];
-        literals[0] = new Closure(Nil.NIL, 18);	// position of second
-        literals[1] = builtin;
-        VirtualMachine vm = new VirtualMachine();
+		CodeGen cg = new CodeGen();
+		cg.startCode();
+		Op.ENV.emit(cg, 0, 0, 0);
+		Op.LDLP.emit(cg, "lambda");
+		Op.LDL.emit(cg, "builtin");
+		Op.APPLY.emit(cg, 1);
+		Op.RET.emit(cg);
+		cg.endCode();
+		cg.startCode();
+		Op.ENV.emit(cg, 1, 0, 0);
+		Op.LDE0P.emit(cg, 0);
+		Op.LDI.emit(cg, 1);
+		Op.ADD.emit(cg);
+		Op.RET.emit(cg);
+		Code lambda = cg.endCode();
+		cg.literal("lambda", new Closure(Nil.NIL, lambda));
+		cg.literal("builtin", builtin);
+        VirtualMachine vm = new VirtualMachine(cg);
         ArcThread thr = new ArcThread(vm, 1024);
-
-        vm.load(inst, literals);
         thr.setargc(0);
 		assertTrue(thr.runnable());
 		thr.run();
