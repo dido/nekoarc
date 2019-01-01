@@ -32,8 +32,10 @@ public class LDGtest {
 		byte[] inst = {0x45, 0x00, 0x00, 0x00, 0x00, 0x14};
 
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDG.emit(cg, 0);
 		Op.HLT.emit(cg);
+		cg.endCode();
 
 		Symbol sym = (Symbol)Symbol.intern("foo");
 		cg.literal(sym);
