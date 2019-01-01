@@ -43,6 +43,7 @@ public class LDEtest {
                 (byte) 0x87, 0x00, 0x00,
                 0x14};
         CodeGen cg = new CodeGen();
+        cg.startCode();
         Op.LDI.emit(cg, 1);
         Op.PUSH.emit(cg);
         Op.LDI.emit(cg, 2);
@@ -52,6 +53,7 @@ public class LDEtest {
         Op.ENV.emit(cg, 3, 1, 1);
         Op.LDE.emit(cg, 0, 0);
         Op.HLT.emit(cg);
+        cg.endCode();
         assertEquals(cg.pos(), inst.length);
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
@@ -81,6 +83,7 @@ public class LDEtest {
                 (byte) 0x87, 0x00, 0x01,
                 0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDI.emit(cg, 1);
 		Op.PUSH.emit(cg);
 		Op.LDI.emit(cg, 2);
@@ -90,6 +93,7 @@ public class LDEtest {
 		Op.ENV.emit(cg, 3, 1, 1);
 		Op.LDE.emit(cg, 0, 1);
 		Op.HLT.emit(cg);
+		cg.endCode();
 		assertEquals(cg.pos(), inst.length);
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
@@ -118,6 +122,7 @@ public class LDEtest {
                 (byte) 0x87, 0x00, 0x02,
                 0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDI.emit(cg, 1);
 		Op.PUSH.emit(cg);
 		Op.LDI.emit(cg, 2);
@@ -127,6 +132,7 @@ public class LDEtest {
 		Op.ENV.emit(cg, 3, 1, 1);
 		Op.LDE.emit(cg, 0, 2);
 		Op.HLT.emit(cg);
+		cg.endCode();
 		assertEquals(cg.pos(), inst.length);
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
@@ -155,6 +161,7 @@ public class LDEtest {
                 (byte) 0x87, 0x00, 0x03,
                 0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDI.emit(cg, 1);
 		Op.PUSH.emit(cg);
 		Op.LDI.emit(cg, 2);
@@ -164,6 +171,7 @@ public class LDEtest {
 		Op.ENV.emit(cg, 3, 1, 1);
 		Op.LDE.emit(cg, 0, 3);
 		Op.HLT.emit(cg);
+		cg.endCode();
 		assertEquals(cg.pos(), inst.length);
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
@@ -192,6 +200,7 @@ public class LDEtest {
                 (byte) 0x87, 0x00, 0x04,
                 0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDI.emit(cg, 1);
 		Op.PUSH.emit(cg);
 		Op.LDI.emit(cg, 2);
@@ -201,6 +210,7 @@ public class LDEtest {
 		Op.ENV.emit(cg, 3, 1, 1);
 		Op.LDE.emit(cg, 0, 4);
 		Op.HLT.emit(cg);
+		cg.endCode();
 		assertEquals(cg.pos(), inst.length);
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
@@ -235,6 +245,7 @@ public class LDEtest {
 				(byte) 0x87, (byte)depth, (byte)idx,
 				0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDI.emit(cg, 1);
 		Op.PUSH.emit(cg);
 		Op.LDI.emit(cg, 2);
@@ -251,6 +262,7 @@ public class LDEtest {
 		Op.ENV.emit(cg, 1, 0, 3);
 		Op.LDE.emit(cg, depth, idx);
 		Op.HLT.emit(cg);
+		cg.endCode();
 		assertEquals(cg.pos(), inst.length);
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
