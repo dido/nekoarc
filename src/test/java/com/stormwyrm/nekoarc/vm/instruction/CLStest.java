@@ -21,7 +21,9 @@ import static org.junit.Assert.*;
 
 import com.stormwyrm.nekoarc.HeapEnv;
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.Op;
 import com.stormwyrm.nekoarc.types.Closure;
+import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
@@ -30,14 +32,19 @@ import org.junit.Test;
 public class CLStest {
 	@Test
 	public void test() {
-		// env 1 0 0 cls 2; ret; ldi 1; ret
-        byte[] inst = {(byte) 0xca, 0x01, 0x00, 0x00, 0x00,
-                0x4d, 0x02, 0x00, 0x00, 0x00,
-                0x0d,
-                0x44, 0x01, 0x00, 0x00, 0x00,
-                0x0d};
-		VirtualMachine vm = new VirtualMachine();
-		vm.load(inst);
+		// env 1 0 0 cls 2; ret; env 0 0 0; ldi 1; ret
+		CodeGen cg = new CodeGen();
+		cg.startCode();
+		Op.ENV.emit(cg, 1, 0, 0);
+		Op.CLS.emit(cg, "lambda");
+		Op.RET.emit(cg);
+		cg.endCode();
+		cg.startCode();
+		Op.ENV.emit(cg, 0, 0, 0);
+		Op.LDI.emit(cg, 1);
+		Op.RET.emit(cg);
+		cg.literal("lambda", cg.endCode());
+		VirtualMachine vm = new VirtualMachine(cg);
 		ArcThread thr = new ArcThread(vm);
 		thr.setAcc(Nil.NIL);
 		thr.setargc(1);
