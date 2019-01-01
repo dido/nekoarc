@@ -37,12 +37,14 @@ public class CARtest extends TestTemplate {
                 0x1a,
                 0x14},
 				(cg)-> {
+        	cg.startCode();
         	Op.LDI.emit(cg, 2);
         	Op.PUSH.emit(cg);
         	Op.LDI.emit(cg, 1);
         	Op.CONS.emit(cg);
         	Op.CAR.emit(cg);
         	Op.HLT.emit(cg);
+        	cg.endCode();
         	return(cg);
 				}, Fixnum.get(2));
 	}
