@@ -1,3 +1,20 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
 package com.stormwyrm.nekoarc.vm.instruction;
 
 import static org.junit.Assert.*;
@@ -22,11 +39,13 @@ public class DIVtest extends TestTemplate {
 						0x18,
 						0x14},
 				(cg)-> {
+					cg.startCode();
 					Op.LDI.emit(cg, 8);
 					Op.PUSH.emit(cg);
 					Op.LDI.emit(cg, 2);
 					Op.DIV.emit(cg);
 					Op.HLT.emit(cg);
+					cg.endCode();
 					return(cg);
 				}, Fixnum.get(4));
 	}
@@ -40,11 +59,13 @@ public class DIVtest extends TestTemplate {
 				0x18,
 				0x14},
 				(cg) -> {
+					cg.startCode();
 					Op.LDI.emit(cg, 2);
 					Op.PUSH.emit(cg);
 					Op.LDI.emit(cg, 8);
 					Op.DIV.emit(cg);
 					Op.HLT.emit(cg);
+					cg.endCode();
 					return(cg);
 				}, Fixnum.ZERO);
 	}
@@ -58,11 +79,13 @@ public class DIVtest extends TestTemplate {
 				0x18,
 				0x14},
 				(cg) -> {
+					cg.startCode();
 					Op.LDL.emit(cg, "pi");
 					Op.PUSH.emit(cg);
 					Op.LDI.emit(cg, 2);
 					Op.DIV.emit(cg);
 					Op.HLT.emit(cg);
+					cg.endCode();
 					cg.literal("pi", new Flonum(3.1415926535));
 					return(cg);
 			}, (t)-> assertEquals(1.570796325, ((Flonum)t.getAcc()).flonum, 1e-6));
@@ -77,11 +100,13 @@ public class DIVtest extends TestTemplate {
 				0x18,
 				0x14},
 				(cg) -> {
+					cg.startCode();
 					Op.LDL.emit(cg, "pi");
 					Op.PUSH.emit(cg);
 					Op.LDL.emit(cg, "e");
 					Op.DIV.emit(cg);
 					Op.HLT.emit(cg);
+					cg.endCode();
 					cg.literal("pi", new Flonum(3.1415926535));
 					cg.literal("e", new Flonum(2.7182818285));
 					return(cg);
