@@ -56,9 +56,11 @@ public class NOtest {
 		// nil; no; hlt
 		byte[] inst = {0x13, 0x11, 0x14};
 		MyCodeGen mcg = (cg) -> {
+			cg.startCode();
 			Op.NIL.emit(cg);
 			Op.NO.emit(cg);
 			Op.HLT.emit(cg);
+			cg.endCode();
 		};
 		testtmpl(inst, mcg, True.T);
 	}
@@ -68,9 +70,11 @@ public class NOtest {
 		// true; no; hlt
 		byte[] inst = {0x12, 0x11, 0x14};
 		MyCodeGen mcg = (cg) -> {
+			cg.startCode();
 			Op.TRUE.emit(cg);
 			Op.NO.emit(cg);
 			Op.HLT.emit(cg);
+			cg.endCode();
 		};
 		testtmpl(inst, mcg, Nil.NIL);
 	}
@@ -82,9 +86,11 @@ public class NOtest {
 		byte[] inst = {0x44, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x00,
 				0x11, 0x14};
 		MyCodeGen mcg = (cg) -> {
+			cg.startCode();
 			Op.LDI.emit(cg, 2);
 			Op.NO.emit(cg);
 			Op.HLT.emit(cg);
+			cg.endCode();
 		};
 		testtmpl(inst, mcg, Nil.NIL);
 	}
