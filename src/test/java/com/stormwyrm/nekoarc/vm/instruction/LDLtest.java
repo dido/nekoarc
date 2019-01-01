@@ -35,8 +35,10 @@ public class LDLtest {
 		// ldl 0; hlt
         byte[] inst = {0x43, 0x00, 0x00, 0x00, 0x00, 0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDL.emit(cg, 0);
 		Op.HLT.emit(cg);
+		cg.endCode();
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
 
