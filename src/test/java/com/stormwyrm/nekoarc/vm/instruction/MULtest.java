@@ -28,11 +28,13 @@ public class MULtest extends TestTemplate {
     @Test
     public void testFixnumTimesFixnum() {
         MakeCode mc = (cg) -> {
+            cg.startCode();
             Op.LDIP.emit(cg, 6);
             Op.LDI.emit(cg, 7);
             Op.MUL.emit(cg);
             Op.HLT.emit(cg);
-            return(cg);
+            cg.endCode();
+            return (cg);
         };
         doTest(mc, Fixnum.get(42));
     }
@@ -40,40 +42,46 @@ public class MULtest extends TestTemplate {
     @Test
     public void testFixnumTimesFlonum() {
         MakeCode mc = (cg) -> {
-          Op.LDLP.emit(cg, "pi");
-          Op.LDI.emit(cg, 4);
-          Op.MUL.emit(cg);
-          Op.HLT.emit(cg);
-          cg.literal("pi", new Flonum(3.1415926535));
-          return(cg);
+            cg.startCode();
+            Op.LDLP.emit(cg, "pi");
+            Op.LDI.emit(cg, 4);
+            Op.MUL.emit(cg);
+            Op.HLT.emit(cg);
+            cg.endCode();
+            cg.literal("pi", new Flonum(3.1415926535));
+            return (cg);
         };
-        doTest(mc, (t)-> assertEquals(12.566370614, ((Flonum)t.getAcc()).flonum, 1e-6));
+        doTest(mc, (t) -> assertEquals(12.566370614, ((Flonum) t.getAcc()).flonum, 1e-6));
     }
 
     @Test
     public void testFlonumTimesFixnum() {
         MakeCode mc = (cg) -> {
+            cg.startCode();
             Op.LDIP.emit(cg, 4);
             Op.LDL.emit(cg, "pi");
             Op.MUL.emit(cg);
             Op.HLT.emit(cg);
+            cg.endCode();
             cg.literal("pi", new Flonum(3.1415926535));
-            return(cg);
+            return (cg);
         };
-        doTest(mc, (t)-> assertEquals(12.566370614, ((Flonum)t.getAcc()).flonum, 1e-6));
+        doTest(mc, (t) -> assertEquals(12.566370614, ((Flonum) t.getAcc()).flonum, 1e-6));
     }
 
     @Test
     public void testFlonumTimesFlonum() {
         MakeCode mc = (cg) -> {
+            cg.startCode();
             Op.LDLP.emit(cg, "e");
             Op.LDL.emit(cg, "pi");
             Op.MUL.emit(cg);
             Op.HLT.emit(cg);
+            cg.endCode();
             cg.literal("pi", new Flonum(3.1415926535));
             cg.literal("e", new Flonum(2.7182818285));
-            return(cg);
+            return (cg);
         };
-        doTest(mc, (t)-> assertEquals(8.539734222558147, ((Flonum)t.getAcc()).flonum, 1e-6));
+        doTest(mc, (t) -> assertEquals(8.539734222558147, ((Flonum) t.getAcc()).flonum, 1e-6));
     }
 }
