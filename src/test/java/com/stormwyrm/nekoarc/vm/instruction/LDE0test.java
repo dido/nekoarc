@@ -43,6 +43,7 @@ public class LDE0test {
 				(byte) 0x69, (byte)idx,
 				0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDI.emit(cg, 1);
 		Op.PUSH.emit(cg);
 		Op.LDI.emit(cg, 2);
@@ -52,6 +53,7 @@ public class LDE0test {
 		Op.ENV.emit(cg, 3, 1, 1);
 		Op.LDE0.emit(cg, idx);
 		Op.HLT.emit(cg);
+		cg.endCode();
 		assertEquals(cg.pos(), inst.length);
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
