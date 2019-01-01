@@ -36,11 +36,13 @@ public class POPtest
         byte[] inst = {0x44, (byte) 0x5d, (byte) 0xc3, (byte) 0x1f, (byte) 0x21, 0x01,
                 0x44, (byte) 0xa3, (byte) 0x3c, (byte) 0xe0, (byte) 0xde, 0x02, 0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDI.emit(cg, 555729757);
 		Op.PUSH.emit(cg);
 		Op.LDI.emit(cg, -555729757);
 		Op.POP.emit(cg);
 		Op.HLT.emit(cg);
+		cg.endCode();
 		assertEquals(inst.length, cg.pos());
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
