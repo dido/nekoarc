@@ -1,3 +1,20 @@
+/*  Copyright (C) 2018 Rafael R. Sevilla
+
+    This file is part of NekoArc
+
+    NekoArc is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 3 of the
+    License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ */
 package com.stormwyrm.nekoarc.vm.instruction;
 
 import com.stormwyrm.nekoarc.Nil;
@@ -25,6 +42,7 @@ public class LDEPTest {
                 (byte) 0x89, 0x00, (byte)idx,
                 0x14};
         CodeGen cg = new CodeGen();
+        cg.startCode();
         Op.LDI.emit(cg, 1);
         Op.PUSH.emit(cg);
         Op.LDI.emit(cg, 2);
@@ -34,6 +52,7 @@ public class LDEPTest {
         Op.ENV.emit(cg, 3, 1, 1);
         Op.LDEP.emit(cg, 0, idx);
         Op.HLT.emit(cg);
+        cg.endCode();
         assertEquals(cg.pos(), inst.length);
         for (int i=0; i<inst.length; i++)
             assertEquals(inst[i], cg.getAtPos(i));
@@ -99,6 +118,7 @@ public class LDEPTest {
                 (byte) 0x89, (byte)depth, (byte)idx,
                 0x14};
         CodeGen cg = new CodeGen();
+        cg.startCode();
         Op.LDI.emit(cg, 1);
         Op.PUSH.emit(cg);
         Op.LDI.emit(cg, 2);
@@ -115,6 +135,7 @@ public class LDEPTest {
         Op.ENV.emit(cg, 1, 0, 3);
         Op.LDEP.emit(cg, depth, idx);
         Op.HLT.emit(cg);
+        cg.endCode();
         assertEquals(cg.pos(), inst.length);
         for (int i=0; i<inst.length; i++)
             assertEquals(inst[i], cg.getAtPos(i));
