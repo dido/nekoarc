@@ -34,8 +34,10 @@ public class LDItest {
 		// ldi 1; hlt
         byte[] inst = {0x44, 0x01, 0x00, 0x00, 0x00, 0x14};
 		CodeGen cg = new CodeGen();
+		cg.startCode();
 		Op.LDI.emit(cg, 1);
 		Op.HLT.emit(cg);
+		cg.endCode();
 
 		for (int i=0; i<inst.length; i++)
 			assertEquals(inst[i], cg.getAtPos(i));
