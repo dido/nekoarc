@@ -31,6 +31,17 @@
 ;; 3. Vectors (obviously not supported by reference Arc)
 ;;
 
+;; The following functions/macros should be moved to NekoArc's arc.arc
+(mac aloop (withses . body)
+  (let w pair.withses
+    `((rfn recur ,(map1 car w) ,@body)
+      ,@(map1 cadr w))))
+
+(def hexdigit (c) (or (digit c) (<= #\a c #\f) (<= #\A c #\F)))
+
+(def newlinec (c)
+  (in c #\return #\newline #\u0085 #\page #\u2028 #\u2029))
+
 ;; Parse one s-expression from src.  Returns the s-expression.
 (def zread (src (o eof nil) (o rparen [err "misplaced " _]))
   (let fp (if (isa src 'string) (instring src) src)
@@ -58,7 +69,7 @@
 			;; 		   (do (readc fp)
 			;; 		       readheredoc)
 			;; 		   (fn (fp eof) (readsym fp eof "#<"))))
-			#\/ readregex
+;;			#\/ readregex
 			(fn (fp eof) (readsym fp eof "#"))))
 	      #\; (do (readcomment fp) (recur (scan fp)))
 	      readsym)) fp eof)))
@@ -262,30 +273,30 @@
 	   (err "FATAL: invalid readstring state"))))
 
 ;; Unique to Arcueid.  Not supported by regular Arc.
-(def readregex (fp eof)
-  ;; This metachar function permits recognition of the regular expression
-  ;; escape sequences.  Otherwise, the only way to enter them would be to
-  ;; prefix them with double rather than single slashes.
-  (withs (metachar
-	  (fn (ch buf)
-	      (if (in ch #\[ #\^ #\$ #\. #\| #\? #\* #\+ #\( #\) #\{ #\})
-		  (do (writec #\\ buf) (writec ch buf) t)
-		  nil))
-	  rx (readstring fp eof #\/ metachar))
-	 ;; Now we have to determine what flags are defined.  Arcueid
-	 ;; recognises the i and m flags which denote case-insensitive
-	 ;; and multiline regexes respectively.  They may only be specified
-	 ;; exactly once.
-	 (aloop (iflag nil mflag nil)
-		(case (peekc fp)
-		  #\i (if iflag (err "case-insensitive flag specified more than once")
-			  (do (readc fp) (recur t mflag)))
-		  #\m (if mflag (err "multiline flag specified more than once")
-			  (do (readc fp) (recur iflag t)))
-		  (if (and iflag mflag) (mkregexp rx 3)
-		      iflag (mkregexp rx 2)
-		      mflag (mkregexp rx 1)
-		      (mkregexp rx 0))))))
+;; (def readregex (fp eof)
+;;   ;; This metachar function permits recognition of the regular expression
+;;   ;; escape sequences.  Otherwise, the only way to enter them would be to
+;;   ;; prefix them with double rather than single slashes.
+;;   (withs (metachar
+;; 	  (fn (ch buf)
+;; 	      (if (in ch #\[ #\^ #\$ #\. #\| #\? #\* #\+ #\( #\) #\{ #\})
+;; 		  (do (writec #\\ buf) (writec ch buf) t)
+;; 		  nil))
+;; 	  rx (readstring fp eof #\/ metachar))
+;; 	 ;; Now we have to determine what flags are defined.  Arcueid
+;; 	 ;; recognises the i and m flags which denote case-insensitive
+;; 	 ;; and multiline regexes respectively.  They may only be specified
+;; 	 ;; exactly once.
+;; 	 (aloop (iflag nil mflag nil)
+;; 		(case (peekc fp)
+;; 		  #\i (if iflag (err "case-insensitive flag specified more than once")
+;; 			  (do (readc fp) (recur t mflag)))
+;; 		  #\m (if mflag (err "multiline flag specified more than once")
+;; 			  (do (readc fp) (recur iflag t)))
+;; 		  (if (and iflag mflag) (mkregexp rx 3)
+;; 		      iflag (mkregexp rx 2)
+;; 		      mflag (mkregexp rx 1)
+;; 		      (mkregexp rx 0))))))
 
 ;; (def readheredoc (fp eof)
 ;;   ;; first, read the terminator string. Include the newline at the end.
