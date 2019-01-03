@@ -684,24 +684,28 @@ public class ArcThread extends ArcObject implements Callable, Runnable {
             try {
                  jmptbl[(int) vm.code()[ip++] & 0xff].invoke(this);
             } catch (Throwable e) {
-                boolean noex;
+                boolean ex;
                 do {
-                    noex = false;
-                    // Just rethrow the exception if there are no exception handlers registered
+                    // Just rethrow the exception if there are no more exception handlers registered
                     if (exceptionHandlers.is(Nil.NIL))
                         throw new NekoArcException(e.getMessage());
                     // If there is an exception handler, pop it off and execute it.
                     ArcObject eh = exceptionHandlers.car();
                     exceptionHandlers = exceptionHandlers.cdr();
+                    // clear the exception thrown flag
+                    ex = false;
+                    // Pass the exception to the exception handler
                     setargc(1);
                     push(new AException(e));
                     try {
                         eh.apply(this, this);
                     } catch (Throwable et) {
-                        noex = true;
+                        // If the exception handler itself threw an exception, set the
+                        // exception flag, so that we can repeat the above checks
+                        ex = true;
                         e = et;
                     }
-                } while (noex);
+                } while (ex);
             }
         }
     }
