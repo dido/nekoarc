@@ -22,6 +22,7 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.True;
 import com.stormwyrm.nekoarc.functions.*;
 import com.stormwyrm.nekoarc.functions.arith.Add;
+import com.stormwyrm.nekoarc.functions.arith.Mul;
 import com.stormwyrm.nekoarc.functions.io.*;
 import com.stormwyrm.nekoarc.functions.list.*;
 import com.stormwyrm.nekoarc.functions.typehandling.*;
@@ -211,6 +212,7 @@ public class VirtualMachine {
 
         // Math Operations
         defbuiltin(Add.getInstance());
+        defbuiltin(Mul.getInstance());
 
         // Tables
         defbuiltin(FTable.getInstance());
