@@ -28,7 +28,7 @@
 ;; * literal - get a literal from literal space at the offset argument
 ;;
 
-(definst nop #x00 ())
+(definst nop #x00 () nil)
 
 (definst push #x01 ()
 	 (push acc))
@@ -93,7 +93,7 @@
 		  unbound
 		  (car acc))))
 
-(definst dcdr #x27
+(definst dcdr #x27 ()
 	 (acc (if (or (nilp acc) (unboundp acc))
 		  unbound
 		  (cdr acc))))
