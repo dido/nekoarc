@@ -80,22 +80,20 @@ notice and this notice are preserved.
       - [X] vector
       - [X] table
       - [X] string
-** TODO Arc reader [0/13]
-   - [ ] Lists
-   - [ ] Improper lists
-   - [ ] Bracketed functions
-   - [ ] Quotes
-   - [ ] Quasiquotes
-   - [ ] Comma expressions
-   - [ ] Strings
-   - [ ] Runes
-   - [ ] Comments
-   - [ ] Symbols
-   - [ ] Numbers [0/4]
-     - [ ] Integer
-     - [ ] Flonum
-   - [ ] Regexps
-   - [ ] Atstrings
+** DONE Arc reader [11/11]
+   - [X] Lists
+   - [X] Improper lists
+   - [X] Bracketed functions
+   - [X] Quotes
+   - [X] Quasiquotes
+   - [X] Comma expressions (unquote)
+   - [X] Strings
+   - [X] Runes
+   - [X] Comments
+   - [X] Symbols
+   - [X] Numbers [2/2]
+     - [X] Integer
+     - [X] Flonum
 ** TODO Arc compiler [0/5]
    - [ ] Literal expressions [0/9]
      - [ ] nil
