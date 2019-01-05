@@ -30,6 +30,14 @@
 	  (w/instring fp "foo 123 " (list (zread fp) (zread fp)))
 	  (foo 123))
 
+	 ("Read a fixnum"
+	  (w/instring fp "123" (zread fp))
+	  123)
+
+	 ("Read a flonum"
+	  (w/instring fp "1.2" (zread fp))
+	  1.2)
+
 	 ("Read a simple list"
 	  (w/instring fp " (1 2 3 ) " (zread fp))
 	  (1 2 3))
