@@ -30,7 +30,7 @@ import com.stormwyrm.nekoarc.vm.VirtualMachine;
 public enum Op {")
 	       (w/infile fp inf
 		 (whilet inst (read fp)
-		   (let (itype mnemonic opcode args . body) inst
+		   (let (itype mnemonic opcode . extra) inst
 		     (pr "    "(if (no mnemonic)
 				   "NIL"
 				   (upcase mnemonic))
