@@ -21,7 +21,7 @@
   (let itbl (table)
     (w/infile fp inf
       (whilet inst (read fp)
-	(let (itype mnemonic opcode args . body) inst
+	(let (itype mnemonic opcode . extra) inst
 	  (= (itbl opcode)
 	     (if (no mnemonic) "NIL"
 		 (upcase (coerce mnemonic 'string)))))))
