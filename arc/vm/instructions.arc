@@ -1,4 +1,4 @@
-;; Copyright (C) 2018 Rafael R. Sevilla
+;; Copyright (C) 2018, 2019 Rafael R. Sevilla
 ;;
 ;; This file is part of NekoArc
 ;;
@@ -28,72 +28,72 @@
 ;; * literal - get a literal from literal space at the offset argument
 ;;
 
-(definst nop #x00 () nil)
+(definst nop #x00 nil)
 
-(definst push #x01 ()
+(definst push #x01
 	 (push acc))
 
-(definst pop #x02 ()
+(definst pop #x02
 	 (acc (pop)))
 
-(definst ret #x0d ()
+(definst ret #x0d
 	 (restorecont))
 
-(definst no #x11 ()
+(definst no #x11
  	 (acc (if (is acc nil) t nil)))
 
-(definst true #x12 ()
+(definst true #x12
 	 (acc t))
 
-(definst nil #x13 ()
+(definst nil #x13
 	 (acc nil))
 
-(definst hlt #x14 ()
+(definst hlt #x14
 	 (halt))
 
-(definst add #x15 ()
+(definst add #x15
 	 (acc (+ (pop) acc)))
 
-(definst sub #x16 ()
+(definst sub #x16
 	 (acc (- (pop) acc)))
 
-(definst mul #x17 ()
+(definst mul #x17
 	 (acc (* (pop) acc)))
 
-(definst div #x18 ()
+(definst div #x18
 	 (acc (/ (pop) acc)))
 
-(definst cons #x19 ()
+(definst cons #x19
 	 (acc (cons (pop) acc)))
 
-(definst car #x1a ()
+(definst car #x1a
 	 (acc (car acc)))
 
-(definst cdr #x1b ()
+(definst cdr #x1b
 	 (acc (cdr acc)))
 
-(definst scar #x1c ()
+(definst scar #x1c
 	 (let arg1 (pop)
 	   (scar arg1 acc)
 	   (acc arg1)))
 
-(definst scdr #x1d ()
+(definst scdr #x1d
 	 (let arg1 (pop)
 	   (scdr arg1 acc)
 	   (acc arg1)))
 
-(definst is #x1f ()
+(definst is #x1f
 	 (acc (is (pop) acc)))
 
-(definst consr #x24 ()
+(definst consr #x24
 	 (acc (cons acc (pop))))
 
-(definst dcar #x26 ()
+(definst dcar #x26
 	 (acc (if (or (nilp acc) (unboundp acc))
 		  unbound
 		  (car acc))))
 
-(definst dcdr #x27 ()
+(definst dcdr #x27
 	 (acc (if (or (nilp acc) (unboundp acc))
 		  unbound
 		  (cdr acc))))
