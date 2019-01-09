@@ -20,6 +20,7 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.util.ObjectMap;
 
 import java.util.Iterator;
 
@@ -147,7 +148,7 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 	}
 
 	/**
-	 * Get an iterator for the list of cons cells
+	 * Get an iterator for the list of cons cells.
 	 * @return The iterator
 	 */
     @Override
@@ -192,29 +193,72 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
         return(car.iso(o.car()) && cdr.iso(o.cdr()));
 	}
 
+	private static String toStringInternal(ArcObject o, ObjectMap<ArcObject, ArcObject> seen) {
+		if (!(o instanceof Cons))
+			return(o.toString());
+		Cons c = (Cons)o;
+		if (seen.containsKey(c) && seen.get(c) instanceof AString) {
+			AString str = (AString) seen.get(c);
+			if (str.string.codePointAt(0) == '#')
+				return(str.string + "#");
+		}
+		StringBuilder sb = new StringBuilder("(");
 
-	/**
-	 * Get a string representation of the cons cell as a list.
-	 * @return The string representation of the conses
-	 */
-    public String toString() {
-        StringBuilder sb = new StringBuilder("(");
-        // FIXME: recursion might go on forever if there are any cycles
-        Iterator<ArcObject> iter = this.iterator();
-        while (iter.hasNext()) {
-            ArcObject t = iter.next();
-            if (t instanceof Cons && !Nil.NIL.is(t) && !iter.hasNext()) {
-                sb.append(t.car().toString());
-                sb.append(" . ");
-                sb.append(t.cdr().toString());
-            } else
-                sb.append(t.toString());
-            if (iter.hasNext())
-                sb.append(" ");
-        }
-        sb.append(")");
-        return(sb.toString());
-    }
+		ArcObject obj = c;
+		for (;;) {
+			if (seen.containsKey(obj) && seen.get(obj) instanceof AString
+						&& ((AString)seen.get(obj)).string.codePointAt(0) == '#') {
+				sb.append(". ");
+				sb.append(toStringInternal(obj, seen));
+				break;
+			} else if (!(obj instanceof Cons)) {
+				sb.append(". ");
+				sb.append(obj.toString());
+				break;
+			} else {
+				sb.append(toStringInternal(obj.car(), seen));
+			}
+			if (Nil.NIL.is(obj.cdr()))
+				break;
+			sb.append(" ");
+			if (seen.containsKey(obj) && seen.get(obj) instanceof AString) {
+				AString val = (AString) seen.get(obj);
+				val.string.insert(0, "#");
+			}
+			obj = obj.cdr();
+		}
+
+		sb.append(")");
+		if (seen.containsKey(c) && seen.get(c) instanceof AString) {
+			AString val = (AString) seen.get(c);
+			sb.insert(0, val.string + "=");
+		}
+		return(sb.toString());
+	}
+
+	private static void visit(ArcObject o, ObjectMap<ArcObject,ArcObject> seen, int[] counter) {
+		if (!(o instanceof Cons))
+			return;
+		Cons c = (Cons)o;
+		if (seen.containsKey(c)) {
+			ArcObject val = seen.get(c);
+			if (Nil.NIL.is(val)) {
+				seen.put(c, new AString(Integer.toString(counter[0])));
+				counter[0] += 1;
+			}
+			return;
+		}
+		seen.put(c, Nil.NIL);
+		visit(c.car(), seen, counter);
+		visit(c.cdr(), seen, counter);
+	}
+
+	@Override
+	public String toString() {
+		ObjectMap<ArcObject, ArcObject> seen = new ObjectMap<>();
+		visit(this, seen, new int[]{0});
+		return(toStringInternal(this, seen));
+	}
 
 	/**
 	 * Required args to apply a list
