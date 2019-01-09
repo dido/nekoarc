@@ -44,6 +44,27 @@ public class ConsTest {
     }
 
     @Test
+    public void testCyclic() {
+        Cons x, y;
+        Cons c;
+
+        c = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), x=new Cons(Fixnum.get(3), Nil.NIL)));
+        x.scar(c);
+        assertEquals("#0=(1 2 #0#)", c.toString());
+
+        c = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), x=new Cons(Fixnum.get(3), Nil.NIL)));
+        x.scdr(c);
+        assertEquals("#0=(1 2 3 . #0#)", c.toString());
+
+        c = new Cons(Fixnum.get(1), y = new Cons(Fixnum.get(2), new Cons(Fixnum.get(3),
+                x = new Cons(Fixnum.get(4), Nil.NIL))));
+        y.scar(x);
+        x.scdr(c);
+        assertEquals("#0=(1 #1=(4 . #0#) 3 . #1#)", c.toString());
+
+    }
+
+    @Test
     public void testIso() {
         Cons c1, c2;
 
