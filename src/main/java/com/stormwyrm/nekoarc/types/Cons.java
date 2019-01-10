@@ -20,6 +20,7 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.True;
 import com.stormwyrm.nekoarc.util.ObjectMap;
 
 import java.util.Iterator;
@@ -197,17 +198,24 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 		if (!(o instanceof Cons))
 			return(o.toString());
 		Cons c = (Cons)o;
-		if (seen.containsKey(c) && seen.get(c) instanceof AString) {
-			AString str = (AString) seen.get(c);
-			if (str.string.codePointAt(0) == '#')
-				return(str.string + "#");
+		ArcObject s=Nil.NIL;
+		if (seen.containsKey(c) && !Nil.NIL.is(s = seen.get(c)) && !Nil.NIL.is(s.cdr()))
+			return("#" + s.car().toString() + "#");
+		StringBuilder sb = new StringBuilder();
+		if (!Nil.NIL.is(s)) {
+			sb.append("#");
+            sb.append(s.car().toString());
+			sb.append("=");
+			s.scdr(True.T);
 		}
-		StringBuilder sb = new StringBuilder("(");
+		sb.append("(");
+		sb.append(toStringInternal(c.car(), seen));
 
 		ArcObject obj = c;
-		for (;;) {
-			if (seen.containsKey(obj) && seen.get(obj) instanceof AString
-						&& ((AString)seen.get(obj)).string.codePointAt(0) == '#') {
+		obj = obj.cdr();
+		while (!Nil.NIL.is(obj)) {
+			sb.append(" ");
+			if (seen.containsKey(obj) && !Nil.NIL.is(seen.get(obj)) && !Nil.NIL.is(seen.get(obj).cdr())) {
 				sb.append(". ");
 				sb.append(toStringInternal(obj, seen));
 				break;
@@ -218,21 +226,10 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 			} else {
 				sb.append(toStringInternal(obj.car(), seen));
 			}
-			if (Nil.NIL.is(obj.cdr()))
-				break;
-			sb.append(" ");
-			if (seen.containsKey(obj) && seen.get(obj) instanceof AString) {
-				AString val = (AString) seen.get(obj);
-				val.string.insert(0, "#");
-			}
 			obj = obj.cdr();
 		}
 
 		sb.append(")");
-		if (seen.containsKey(c) && seen.get(c) instanceof AString) {
-			AString val = (AString) seen.get(c);
-			sb.insert(0, val.string + "=");
-		}
 		return(sb.toString());
 	}
 
@@ -243,7 +240,7 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 		if (seen.containsKey(c)) {
 			ArcObject val = seen.get(c);
 			if (Nil.NIL.is(val)) {
-				seen.put(c, new AString(Integer.toString(counter[0])));
+				seen.put(c, new Cons(Fixnum.get(counter[0]), Nil.NIL));
 				counter[0] += 1;
 			}
 			return;
