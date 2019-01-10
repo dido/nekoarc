@@ -238,6 +238,14 @@ public abstract class ArcObject implements Callable {
 	    return(iso(other));
     }
 
+
+	/**
+	 * Visit the object. Default implementation does nothing. Only used by composite objects
+	 * like conses and vectors.
+	 * @param seen The seen hash
+	 */
+	public void visit(ObjectMap<ArcObject, ArcObject> seen, int[] counter) { }
+
 	/**
 	 * Deep compare the object with another. The default implementation is the
 	 * same as the 'is' method above, unless overridden by a subclass.
