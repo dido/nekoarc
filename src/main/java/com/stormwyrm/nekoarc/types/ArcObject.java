@@ -22,12 +22,12 @@ import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.util.CallSync;
+import com.stormwyrm.nekoarc.util.ObjectMap;
 
 /**
  * The base class of all Arc Objects. Defines many basic methods.
  */
-public abstract class ArcObject implements Callable
-{
+public abstract class ArcObject implements Callable {
 	private final CallSync caller = new CallSync();
 
 	/**
@@ -226,6 +226,17 @@ public abstract class ArcObject implements Callable
 	public boolean is(ArcObject other) {
 		return(this == other);
 	}
+
+    /**
+     * Deep compare the object with another with a seen hash. The default implementation just
+     * calls iso discarding the seen hash.
+     * @param other the object to compare with
+     * @param seen the seen hash
+     * @return true if the objects are structurally equivalent.
+     */
+	public boolean iso(ArcObject other, ObjectMap<ArcObject, ArcObject> seen) {
+	    return(iso(other));
+    }
 
 	/**
 	 * Deep compare the object with another. The default implementation is the
