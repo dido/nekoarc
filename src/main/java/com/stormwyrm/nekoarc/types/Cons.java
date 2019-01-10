@@ -181,17 +181,34 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 	/**
 	 * Is the other object equal to this one?
 	 * @param other the object to compare with
+	 * @param seen Seen hash
+	 * @return true if they are structurally equal
+	 */
+    public boolean iso(ArcObject other, ObjectMap<ArcObject, ArcObject> seen) {
+    	// If the seen hash is set for this but not for other, then they are clearly different
+    	if (seen.containsKey(this) ^ seen.containsKey(other))
+    		return(false);
+    	// If the seen hash is set for both, then they are not different thus far
+    	if (seen.containsKey(this) && seen.containsKey(other))
+    		return(true);
+		if (this.is(other))
+			return(true);
+		if (!(other instanceof Cons))
+			return(false);
+		seen.put(this, True.T);
+		seen.put(other, True.T);
+		Cons o = (Cons)other;
+		return(car.iso(o.car(), seen) && cdr.iso(o.cdr(), seen));
+	}
+
+	/**
+	 * Is the other object equal to this one? This will create a new seen hash and use it.
+	 * @param other the object to compare with
 	 * @return true if they are structurally equal
 	 */
 	@Override
 	public boolean iso(ArcObject other) {
-	    if (this.is(other))
-	        return(true);
-		// FIXME: This will recurse forever if the conses have any cycles!
-        if (!(other instanceof Cons))
-            return(false);
-        Cons o = (Cons)other;
-        return(car.iso(o.car()) && cdr.iso(o.cdr()));
+		return(iso(other, new ObjectMap<>()));
 	}
 
 	private static String toStringInternal(ArcObject o, ObjectMap<ArcObject, ArcObject> seen) {
