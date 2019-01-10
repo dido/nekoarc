@@ -211,12 +211,10 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 		return(iso(other, new ObjectMap<>()));
 	}
 
-	private static String toStringInternal(ArcObject o, ObjectMap<ArcObject, ArcObject> seen) {
-		if (!(o instanceof Cons))
-			return(o.toString());
-		Cons c = (Cons)o;
+	@Override
+	public String toString(ObjectMap<ArcObject, ArcObject> seen) {
 		ArcObject s=Nil.NIL;
-		if (seen.containsKey(c) && !Nil.NIL.is(s = seen.get(c)) && !Nil.NIL.is(s.cdr()))
+		if (seen.containsKey(this) && !Nil.NIL.is(s = seen.get(this)) && !Nil.NIL.is(s.cdr()))
 			return("#" + s.car().toString() + "#");
 		StringBuilder sb = new StringBuilder();
 		if (!Nil.NIL.is(s)) {
@@ -226,22 +224,21 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 			s.scdr(True.T);
 		}
 		sb.append("(");
-		sb.append(toStringInternal(c.car(), seen));
+		sb.append(this.car().toString(seen));
 
-		ArcObject obj = c;
-		obj = obj.cdr();
+		ArcObject obj = this.cdr();
 		while (!Nil.NIL.is(obj)) {
 			sb.append(" ");
 			if (seen.containsKey(obj) && !Nil.NIL.is(seen.get(obj)) && !Nil.NIL.is(seen.get(obj).cdr())) {
 				sb.append(". ");
-				sb.append(toStringInternal(obj, seen));
+				sb.append(obj.toString(seen));
 				break;
 			} else if (!(obj instanceof Cons)) {
 				sb.append(". ");
-				sb.append(obj.toString());
+				sb.append(obj.toString(seen));
 				break;
 			} else {
-				sb.append(toStringInternal(obj.car(), seen));
+				sb.append(obj.car().toString(seen));
 			}
 			obj = obj.cdr();
 		}
@@ -269,7 +266,7 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 	public String toString() {
 		ObjectMap<ArcObject, ArcObject> seen = new ObjectMap<>();
 		this.visit(seen, new int[]{0});
-		return(toStringInternal(this, seen));
+		return(toString(seen));
 	}
 
 	/**
