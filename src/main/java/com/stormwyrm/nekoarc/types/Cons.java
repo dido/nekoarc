@@ -193,7 +193,7 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
     		return(true);
 		if (this.is(other))
 			return(true);
-		if (!(other instanceof Cons))
+		if (!(other instanceof Cons) || other instanceof Nil)
 			return(false);
 		seen.put(this, True.T);
 		seen.put(other, True.T);
@@ -250,27 +250,25 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 		return(sb.toString());
 	}
 
-	private static void visit(ArcObject o, ObjectMap<ArcObject,ArcObject> seen, int[] counter) {
-		if (!(o instanceof Cons))
-			return;
-		Cons c = (Cons)o;
-		if (seen.containsKey(c)) {
-			ArcObject val = seen.get(c);
+	@Override
+	public void visit(ObjectMap<ArcObject,ArcObject> seen, int[] counter) {
+		if (seen.containsKey(this)) {
+			ArcObject val = seen.get(this);
 			if (Nil.NIL.is(val)) {
-				seen.put(c, new Cons(Fixnum.get(counter[0]), Nil.NIL));
+				seen.put(this, new Cons(Fixnum.get(counter[0]), Nil.NIL));
 				counter[0] += 1;
 			}
 			return;
 		}
-		seen.put(c, Nil.NIL);
-		visit(c.car(), seen, counter);
-		visit(c.cdr(), seen, counter);
+		seen.put(this, Nil.NIL);
+		car.visit(seen, counter);
+		cdr.visit(seen, counter);
 	}
 
 	@Override
 	public String toString() {
 		ObjectMap<ArcObject, ArcObject> seen = new ObjectMap<>();
-		visit(this, seen, new int[]{0});
+		this.visit(seen, new int[]{0});
 		return(toStringInternal(this, seen));
 	}
 
