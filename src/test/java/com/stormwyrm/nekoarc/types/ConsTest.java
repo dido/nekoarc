@@ -87,6 +87,25 @@ public class ConsTest {
     }
 
     @Test
+    public void testIsoCyclic() {
+        Cons c1, c2;
+        Cons x;
+
+        c1 = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), x=new Cons(Fixnum.get(3), Nil.NIL)));
+        x.scar(c1);
+        c2 = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), x=new Cons(Fixnum.get(3), Nil.NIL)));
+        x.scar(c2);
+        assertTrue(c1.iso(c1));
+        assertTrue(c2.iso(c2));
+        assertTrue(c1.iso(c2));
+        assertTrue(c2.iso(c1));
+        c2 = new Cons(Fixnum.get(1), x=new Cons(Fixnum.get(2), new Cons(Fixnum.get(3), Nil.NIL)));
+        x.scar(c2);
+        assertFalse(c1.iso(c2));
+        assertFalse(c2.iso(c1));
+    }
+
+    @Test
     public void testNth() {
         Cons c1 = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), Nil.NIL));
 
