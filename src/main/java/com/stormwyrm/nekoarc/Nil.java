@@ -51,7 +51,7 @@ public class Nil extends Cons {
 	}
 
 	@Override
-	public boolean iso(ArcObject object) {
+	public boolean iso(ArcObject object, ObjectMap<ArcObject, ArcObject> seen) {
 		return(is(object));
 	}
 
