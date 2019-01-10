@@ -80,9 +80,13 @@ notice and this notice are preserved.
       - [X] vector
       - [X] table
       - [X] string
-** DONE Arc reader [11/11]
-   - [X] Lists
-   - [X] Improper lists
+** DONE Arc reader [9/12]
+   - [-] Lists [2/3]
+     - [X] Ordinary Lists
+     - [X] Improper lists
+     - [ ] Sharpsign Equal-Sign Lists
+   - [ ] Vectors
+   - [ ] Hash Tables
    - [X] Bracketed functions
    - [X] Quotes
    - [X] Quasiquotes
@@ -410,26 +414,22 @@ notice and this notice are preserved.
    - [ ] Test behaviour of all arc.arc functions
 ** TODO pretty printer [0/2]
    - [ ] Framework for disp and write
-   - [ ] Printers for various types [0/17]
-     - [ ] nil
-     - [ ] t
-     - [ ] Numeric Types [0/5]
-       - [ ] Fixnums
-       - [ ] Bignums
-       - [ ] Rationals
-       - [ ] Flonums
-       - [ ] Complex numbers
-     - [ ] Runes
-     - [ ] Strings
-     - [ ] Symbols
-     - [ ] Conses
+   - [-] Printers for various types [14/17]
+     - [X] nil
+     - [X] t
+     - [X] Numeric Types [2/2]
+       - [X] Fixnums
+       - [X] Flonums
+     - [X] Runes
+     - [X] Strings
+     - [X] Symbols
+     - [X] Conses
      - [ ] Tables
-     - [ ] Vectors
-     - [ ] Tagged
-     - [ ] Functions
-     - [ ] Input Ports
-     - [ ] Output Ports
-     - [ ] Threads
-     - [ ] Exceptions
+     - [X] Vectors
+     - [X] Tagged
+     - [X] Functions
+     - [X] Input Ports
+     - [X] Output Ports
+     - [X] Threads
+     - [X] Exceptions
      - [ ] Channels
-     - [ ] Regular Expressions
