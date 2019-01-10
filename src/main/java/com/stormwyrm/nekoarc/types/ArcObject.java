@@ -207,6 +207,14 @@ public abstract class ArcObject implements Callable {
 
 	}
 
+
+    /**
+     * Convert object to a string with a seen hash. Usually used only for composite objects
+     * @param seen the seen hash
+     * @return The string representation of the object
+     */
+	public String toString(ObjectMap<ArcObject,ArcObject> seen) { return(toString()); }
+
 	/**
 	 * Convert the object to a string
 	 * @return The string representation of the object
