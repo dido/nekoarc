@@ -190,8 +190,6 @@ public class Cons extends Composite implements Iterable<ArcObject> {
 		} catch (Composite.OOB ex) {
     		// We got an Out of Band exception, so we must continue testing for iso
 		}
-		if (!(other instanceof Cons) || other instanceof Nil)
-			return(false);
 		seen.put(this, True.T);
 		seen.put(other, True.T);
 		Cons o = (Cons)other;
