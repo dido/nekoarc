@@ -28,7 +28,7 @@ import java.util.Iterator;
 /**
  * Cons cells
  */
-public class Cons extends ArcObject implements Iterable<ArcObject> {
+public class Cons extends Composite implements Iterable<ArcObject> {
 	public static final ArcObject TYPE = Symbol.intern("cons");
 	private ArcObject car;
 	private ArcObject cdr;
@@ -185,14 +185,11 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 	 * @return true if they are structurally equal
 	 */
     public boolean iso(ArcObject other, ObjectMap<ArcObject, ArcObject> seen) {
-    	// If the seen hash is set for this but not for other, then they are clearly different
-    	if (seen.containsKey(this) ^ seen.containsKey(other))
-    		return(false);
-    	// If the seen hash is set for both, then they are not different thus far
-    	if (seen.containsKey(this) && seen.containsKey(other))
-    		return(true);
-		if (this.is(other))
-			return(true);
+    	try {
+    		return(super.iso(other, seen));
+		} catch (Composite.OOB ex) {
+    		// We got an Out of Band exception, so we must continue testing for iso
+		}
 		if (!(other instanceof Cons) || other instanceof Nil)
 			return(false);
 		seen.put(this, True.T);
@@ -201,28 +198,11 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 		return(car.iso(o.car(), seen) && cdr.iso(o.cdr(), seen));
 	}
 
-	/**
-	 * Is the other object equal to this one? This will create a new seen hash and use it.
-	 * @param other the object to compare with
-	 * @return true if they are structurally equal
-	 */
-	@Override
-	public boolean iso(ArcObject other) {
-		return(iso(other, new ObjectMap<>()));
-	}
-
 	@Override
 	public String toString(ObjectMap<ArcObject, ArcObject> seen) {
-		ArcObject s=Nil.NIL;
-		if (seen.containsKey(this) && !Nil.NIL.is(s = seen.get(this)) && !Nil.NIL.is(s.cdr()))
-			return("#" + s.car().toString() + "#");
 		StringBuilder sb = new StringBuilder();
-		if (!Nil.NIL.is(s)) {
-			sb.append("#");
-            sb.append(s.car().toString());
-			sb.append("=");
-			s.scdr(True.T);
-		}
+		if (checkReferences(seen, sb))
+			return(sb.toString());
 		sb.append("(");
 		sb.append(this.car().toString(seen));
 
@@ -247,17 +227,15 @@ public class Cons extends ArcObject implements Iterable<ArcObject> {
 		return(sb.toString());
 	}
 
+	/**
+	 * Visit the cons and its car/cdr
+	 * @param seen The seen hash
+	 * @param counter The counter
+	 */
 	@Override
 	public void visit(ObjectMap<ArcObject,ArcObject> seen, int[] counter) {
-		if (seen.containsKey(this)) {
-			ArcObject val = seen.get(this);
-			if (Nil.NIL.is(val)) {
-				seen.put(this, new Cons(Fixnum.get(counter[0]), Nil.NIL));
-				counter[0] += 1;
-			}
+		if (visitThis(seen, counter))
 			return;
-		}
-		seen.put(this, Nil.NIL);
 		car.visit(seen, counter);
 		cdr.visit(seen, counter);
 	}
