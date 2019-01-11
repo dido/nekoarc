@@ -94,6 +94,11 @@ public abstract class Composite extends ArcObject {
      */
     @Override
     public boolean iso(ArcObject other, ObjectMap<ArcObject, ArcObject> seen) {
+        // Other must be an instance of the same class obviously. Nil cannot be iso to
+        // any Composite obviously, even if Nil is a subclass of Cons. Also prevents
+        // Nil from getting added a seen hash.
+        if (Nil.NIL.is(other) || !this.getClass().isInstance(other))
+            return(false);
         // if the seen hash is set for one but not the other, they obviously can't be the same
         if (seen.containsKey(this) ^ seen.containsKey(other))
             return(false);
