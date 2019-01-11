@@ -108,8 +108,6 @@ public class Vector extends Composite implements Iterable<ArcObject> {
 		} catch (OOB ex) {
 			// We got an Out of Band exception, so we must continue testing for iso
 		}
-		if (!(other instanceof Vector))
-			return(false);
 		Vector v2 = (Vector)other;
 		if (v2.len() != this.len())
 			return(false);
