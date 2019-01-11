@@ -28,7 +28,7 @@ import java.util.Iterator;
 /**
  * Vectors
  */
-public class Vector extends ArcObject implements Iterable<ArcObject> {
+public class Vector extends Composite implements Iterable<ArcObject> {
 	public static final ArcObject TYPE = Symbol.intern("vector");
 	private ArcObject[] vec;
 
@@ -66,15 +66,8 @@ public class Vector extends ArcObject implements Iterable<ArcObject> {
 	 */
 	@Override
 	public void visit(ObjectMap<ArcObject, ArcObject> seen, int[] counter) {
-		if (seen.containsKey(this)) {
-			ArcObject val = seen.get(this);
-			if (Nil.NIL.is(val)) {
-				seen.put(this, new Cons(Fixnum.get(counter[0]), Nil.NIL));
-				counter[0] += 1;
-			}
+		if (visitThis(seen, counter))
 			return;
-		}
-		seen.put(this, Nil.NIL);
 		for (ArcObject obj : vec)
 			obj.visit(seen, counter);
 	}
@@ -87,16 +80,9 @@ public class Vector extends ArcObject implements Iterable<ArcObject> {
 	 */
 	@Override
 	public String toString(ObjectMap<ArcObject, ArcObject> seen) {
-		ArcObject s=Nil.NIL;
-		if (seen.containsKey(this) && !Nil.NIL.is(s = seen.get(this)) && !Nil.NIL.is(s.cdr()))
-			return("#" + s.car().toString() + "#");
 		StringBuilder sb = new StringBuilder();
-		if (!Nil.NIL.is(s)) {
-			sb.append("#");
-			sb.append(s.car().toString());
-			sb.append("=");
-			s.scdr(True.T);
-		}
+		if (checkReferences(seen, sb))
+			return(sb.toString());
 		sb.append("[");
 		int i=0;
 		while (i<vec.length) {
@@ -110,18 +96,6 @@ public class Vector extends ArcObject implements Iterable<ArcObject> {
 	}
 
 	/**
-	 * Get the string representation of the vector. Will visit the vector and its children to
-	 * build a seen hash and use the seen hash version to print
-	 * @return The string representation of the vector.
-	 */
-	@Override
-	public String toString() {
-		ObjectMap<ArcObject, ArcObject> seen = new ObjectMap<>();
-		this.visit(seen, new int[]{0});
-		return(toString(seen));
-	}
-
-	/**
 	 * Structural equality predicate
 	 * @param other the object to compare with
 	 * @param seen the seen hash
@@ -129,14 +103,11 @@ public class Vector extends ArcObject implements Iterable<ArcObject> {
 	 */
 	@Override
 	public boolean iso(ArcObject other, ObjectMap<ArcObject, ArcObject> seen) {
-		// if the seen hash is set for one but not the other, they obviously can't be the same
-		if (seen.containsKey(this) ^ seen.containsKey(other))
-			return(false);
-		// If the seen hash is set for both, then they are not different thus far
-		if (seen.containsKey(this) && seen.containsKey(other))
-			return(true);
-		seen.put(this, True.T);
-		seen.put(other, True.T);
+		try {
+			return(super.iso(other, seen));
+		} catch (OOB ex) {
+			// We got an Out of Band exception, so we must continue testing for iso
+		}
 		if (!(other instanceof Vector))
 			return(false);
 		Vector v2 = (Vector)other;
@@ -147,11 +118,6 @@ public class Vector extends ArcObject implements Iterable<ArcObject> {
 				return(false);
 		}
 		return(true);
-	}
-
-	@Override
-	public boolean iso(ArcObject other) {
-		return(iso(other, new ObjectMap<>()));
 	}
 
     @Override
@@ -165,8 +131,7 @@ public class Vector extends ArcObject implements Iterable<ArcObject> {
     }
 
     @Override
-	public ArcObject invoke(InvokeThread ithr)
-	{
+	public ArcObject invoke(InvokeThread ithr) {
 		Fixnum idx = Fixnum.cast(ithr.getenv(0, 0), this);
 		if (idx.fixnum < 0)
 			throw new NekoArcException("negative vector index");
