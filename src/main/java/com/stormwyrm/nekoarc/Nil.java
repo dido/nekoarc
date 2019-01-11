@@ -36,28 +36,79 @@ public class Nil extends Cons {
 		this.rep = rep;
 	}
 
+	/**
+	 * Get string representation of a nil
+	 * @return The string representation
+	 */
+	@Override
 	public String toString() {
 		return(rep);
 	}
 
+	/**
+	 * Get string representation of a nil with a seen hash.  This will return its representation.
+	 * @param seen the seen hash
+	 * @return The string representation.
+	 */
+	@Override
+	public String toString(ObjectMap<ArcObject, ArcObject> seen) {
+		return(toString());
+	}
+
+	/**
+	 * Length of a nil
+	 * @return Always 0
+	 */
 	@Override
 	public long len() {
         return (0);
     }
 
-    @Override
+	/**
+	 * Do a comparison of nil to something else
+	 * @param other The object to compare
+	 * @return True if the other object is also nil.
+	 */
+	@Override
 	public boolean is(ArcObject other) {
 		return(this == other || (other instanceof Nil));
 	}
 
+	/**
+	 * Do a structural comparison of nil to something
+	 * @param object The object to compare
+	 * @param seen Seen hash
+	 * @return True if the other object is also nil
+	 */
 	@Override
 	public boolean iso(ArcObject object, ObjectMap<ArcObject, ArcObject> seen) {
 		return(is(object));
 	}
 
+	/**
+	 * Do a structural comparison of nil to something
+	 * @param other the object to compare with
+	 * @return True if the other object is also nil
+	 */
+	@Override
+	public boolean iso(ArcObject other) {
+		return(is(other));
+	}
+
+	/**
+	 * Visit a nil. This does absolutely nothing.
+	 * @param seen The seen hash
+	 * @param counter The counter
+	 */
 	@Override
 	public void visit(ObjectMap<ArcObject, ArcObject> seen, int[] counter) { }
 
+	/**
+	 * Coerce a nil to some other type.  Only valid conversion is to string.
+	 * @param newtype The new type to convert to
+	 * @param extra additional parameters for the conversion, if any
+	 * @return The nil converted to the new type
+	 */
 	@Override
 	public ArcObject coerce(ArcObject newtype, ArcObject extra) {
 		if (newtype == Symbol.intern("string"))
