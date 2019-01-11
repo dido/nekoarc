@@ -84,6 +84,9 @@ public class ConsTest {
         assertFalse(c1.is(c2));
         assertFalse(c1.iso(c2));
         assertFalse(c2.iso(c1));
+
+        // Test that nil is not iso to '(nil)
+        assertFalse((new Cons(Nil.NIL, Nil.NIL)).iso(Nil.NIL));
     }
 
     @Test
