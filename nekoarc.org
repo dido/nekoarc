@@ -1,5 +1,5 @@
 NEKOARC ROADMAP
-Copyright (C) 2018 Rafael R. Sevilla
+Copyright (C) 2019 Rafael R. Sevilla
 ----------------------------------------------------------------------
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -433,3 +433,34 @@ notice and this notice are preserved.
      - [X] Threads
      - [X] Exceptions
      - [ ] Channels
+** TODO CIEL [0/13]
+   The CIEL dump/restore functionality allows NekoArc to save and load
+   workspaces by tracing the global symbol table and threads and dumping
+   those to a file.
+   - [ ] gnil
+     Push a nil onto the stack
+   - [ ] gtrue
+     Push the true symbol onto the stack
+   - [ ] gfix
+     Push a fixnum onto the stack
+   - [ ] gflo
+     Push a flonum onto the stack
+   - [ ] grune
+     Push a rune onto the stack
+   - [ ] gstr
+     Push a string onto the stack
+   - [ ] gsym
+     Push a symbol onto the stack
+   - [ ] ccons
+     Cons the two objects on the stack and push the result
+   - [ ] cannotate
+     Annotate the the top of stack with the one below it and push the result
+   - [ ] gvec
+     Create a vector of a certain length and push on the stack
+   - [ ] gtab
+     Create an empty table and put it on the stack
+   - [ ] xset
+     Set the value of a cons or a vector
+   - [ ] xtset
+     Store a key-value pair into a table
+
