@@ -22,7 +22,6 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
-import com.stormwyrm.nekoarc.ciel.Ciel;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.util.CallSync;
 import com.stormwyrm.nekoarc.util.ObjectMap;
