@@ -22,6 +22,7 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.ciel.Ciel;
 import com.stormwyrm.nekoarc.util.Callable;
 import com.stormwyrm.nekoarc.util.CallSync;
 import com.stormwyrm.nekoarc.util.ObjectMap;
@@ -209,7 +210,6 @@ public abstract class ArcObject implements Callable {
 
 	}
 
-
     /**
      * Convert object to a string with a seen hash. Usually used only for composite objects
      * @param seen the seen hash
@@ -285,5 +285,14 @@ public abstract class ArcObject implements Callable {
 		if (newtype.is(this.type()))
 			return(this);
 		throw new NekoArcException("Cannot coerce " + this + " to " + newtype);
+	}
+
+
+	/**
+	 * Marshal object into Ciel format to an output port
+	 * @param p The port to write to
+	 */
+	public void marshal(OutputPort p) {
+		throw new NekoArcException("Cannot dump object of type " + this.type());
 	}
 }
