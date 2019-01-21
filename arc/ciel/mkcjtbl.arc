@@ -16,7 +16,7 @@
 ;; License along with this library; if not, see <http://www.gnu.org/licenses/>
 ;;
 ;; Generate CielJmpTbl.java from cielinst.arc
-x;;
+;;
 (def genjmptbl (inf outf)
   (let itbl (table)
     (w/infile fp inf
