@@ -20,33 +20,66 @@
 
 package com.stormwyrm.nekoarc;
 
+import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.InputPort;
+import com.stormwyrm.nekoarc.types.OutputPort;
 import com.stormwyrm.nekoarc.types.Symbol;
 
-public class True extends ArcObject
-{
+/**
+ * True class
+ */
+public class True extends ArcObject {
 	public static final ArcObject TYPE = Symbol.TYPE;
 	public static final True T = new True("t");
 	private final String rep;
 
-	private True(String rep)
-	{
+	/**
+	 * Create a true. This is a singleton so private
+	 * @param rep Representation as a sym
+	 */
+	private True(String rep) {
 		this.rep = rep;
 	}
-	
-	public ArcObject type()
-	{
+
+	/**
+	 * Get the type
+	 * @return Symbol.TYPE
+	 */
+	@Override
+	public ArcObject type() {
 		return(Symbol.TYPE);
 	}
 
-	public String toString()
-	{
+	/**
+	 * Convert to a string
+	 * @return 't'
+	 */
+	public String toString() {
 		return(rep);
 	}
 
+	/**
+	 * Is other the same as this True
+	 * @param other The object to compare
+	 * @return boolean True if True
+	 */
 	@Override
-	public boolean is(ArcObject other)
-	{
-		return(this == other || (other instanceof True) || (other instanceof Symbol && ((Symbol)other).symbol == this.rep));
+	public boolean is(ArcObject other) {
+		return(this == other || (other instanceof True) || (other instanceof Symbol && ((Symbol)other).symbol.equals(this.rep)));
+	}
+
+	/**
+	 * Marshal the true object
+	 * @param p The port to write to
+	 */
+	@Override
+	public void marshal(OutputPort p) {
+		CAsm.GTRUE.emit(p);
+	}
+
+	@Override
+	public ArcObject load(InputPort p) {
+		return(this);
 	}
 }
