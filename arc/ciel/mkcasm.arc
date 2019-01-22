@@ -59,7 +59,7 @@ public enum CAsm {")
      * Emit code for the opcode
      * @param fp The output port to send the opcode to
      */
-    void emit(OutputPort fp) {
+    public void emit(OutputPort fp) {
         fp.writeb(opcode);
     }
 }"))))
