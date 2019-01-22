@@ -22,8 +22,8 @@
 ;; Push a true onto the stack
 (definst gtrue #x08)
 
-;; ;; Push a fixnum onto the stack
-;; (definst gfix #x10)
+;; Push a fixnum onto the stack
+(definst gfix #x10)
 
 ;; ;; Push a flonum onto the stack
 ;; (definst gflo #x18)
