@@ -34,6 +34,6 @@ public class GNIL implements CielInstruction {
      */
     @Override
     public void invoke(Ciel c) {
-        c.push(Nil.NIL.load(c.port()));
+        c.push(Nil.NIL);
     }
 }
