@@ -121,9 +121,4 @@ public class Nil extends Cons {
 	public void marshal(OutputPort p) {
 		CAsm.GNIL.emit(p);
 	}
-
-	@Override
-	public ArcObject load(InputPort p) {
-		return(this);
-	}
 }

@@ -77,9 +77,4 @@ public class True extends ArcObject {
 	public void marshal(OutputPort p) {
 		CAsm.GTRUE.emit(p);
 	}
-
-	@Override
-	public ArcObject load(InputPort p) {
-		return(this);
-	}
 }
