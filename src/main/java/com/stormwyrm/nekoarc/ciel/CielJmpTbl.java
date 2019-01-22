@@ -23,7 +23,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
-            NOINST,
+            new GFIX(),        // 0x10
             NOINST,
             NOINST,
             NOINST,
