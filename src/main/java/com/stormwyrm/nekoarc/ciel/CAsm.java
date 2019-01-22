@@ -8,6 +8,7 @@ import com.stormwyrm.nekoarc.types.OutputPort;
 public enum CAsm {
     GNIL(0x0),
     GTRUE(0x8),
+    GFIX(0x10),
     LAST(0xff);
 
     /**
@@ -35,7 +36,39 @@ public enum CAsm {
      * Emit code for the opcode
      * @param fp The output port to send the opcode to
      */
-    void emit(OutputPort fp) {
+    public void emit(OutputPort fp) {
         fp.writeb(opcode);
+    }
+
+
+    /**
+     * Write a long to the output port
+     * @param p The output port to write to
+     * @param val The value to write
+     */
+    public static void writeLong(OutputPort p, long val) {
+        long abs = (val < 0) ? -val : val;
+        for (;;) {
+            abs >>= 7;
+            if (abs == 0) {
+                p.writeb((int) ((val & 0x7f) | 0x80));
+                break;
+            }
+            p.writeb((int) (val & 0x7f));
+            val >>= 7;
+        }
+    }
+
+    /**
+     * Write a double to the output port. Writes things out in IEEE-754 double precision format
+     * @param p The output port to write to
+     * @param val The value to write
+     */
+    public static void writeDouble(OutputPort p, double val) {
+        long raw = Double.doubleToRawLongBits(val);
+        for (int i=0; i<8; i++) {
+            p.writeb((int) (raw & 0xff));
+            raw >>= 8;
+        }
     }
 }
