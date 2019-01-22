@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
 
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.util.LongMap;
 
 public class Fixnum extends Numeric implements Orderable {
@@ -198,5 +199,18 @@ public class Fixnum extends Numeric implements Orderable {
         if (newtype == Symbol.intern("rune"))
             return(Rune.get((int) this.fixnum));
         return(super.coerce(newtype, params));
+	}
+
+	/**
+	 * Marshal the fixnum.
+	 * @param p The port to write to
+	 */
+	@Override
+	public void marshal(OutputPort p) {
+		// Fixnums can in principle be any size, and are represented in groups of seven bits,
+		// big endian, with the high byte set as 0 for every such octet except for the last,
+		// which is set to 1, marking the end.
+		CAsm.GFIX.emit(p);
+		CAsm.writeLong(p, fixnum);
 	}
 }
