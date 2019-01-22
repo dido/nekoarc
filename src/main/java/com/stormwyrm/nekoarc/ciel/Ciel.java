@@ -22,6 +22,7 @@ package com.stormwyrm.nekoarc.ciel;
 
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.InputPort;
 
 /**
  * CIEL virtual machine context
@@ -30,15 +31,19 @@ public class Ciel {
     private final static int DEFAULT_STACKSIZE = 1024;
     private final ArcObject[] stack;        // stack
     private int sp;
+    private final InputPort fp;
 
-    public Ciel(int stacksize) {
+    public Ciel(InputPort fp, int stacksize) {
         stack = new ArcObject[stacksize];
         sp = 0;
+        this.fp = fp;
     }
 
-    public Ciel() {
-        this(DEFAULT_STACKSIZE);
+    public Ciel(InputPort fp) {
+        this(fp, DEFAULT_STACKSIZE);
     }
+
+    public InputPort port() { return(fp); }
 
     public void push(ArcObject obj) {
         try {
@@ -50,5 +55,40 @@ public class Ciel {
 
     public ArcObject pop() {
         return(stack[--sp]);
+    }
+
+    public double readDouble() {
+        long raw = 0;
+        for (int i=0; i<8; i++) {
+            raw <<= 8;
+            raw |= (fp.readb() & 0xff);
+        }
+        return(Double.longBitsToDouble(raw));
+    }
+
+    public long readLong() {
+        long val = 0, x;
+        int shiftcount = 0;
+        byte b;
+
+        for (;;) {
+            b = (byte) (fp.readb() & 0xff);
+            if ((b & 0x80) != 0)
+                break;
+            if (shiftcount > 63)
+                throw new NekoArcException("long value exceeded");
+            x = b;
+            x <<= shiftcount;
+            val |= x;
+            shiftcount += 7;
+        }
+        if ((b & 0xc0) == 0x80) {
+            // non-negative, clear the topmost bit only
+            b ^= 0x80;
+        }
+        x = b;
+        x <<= shiftcount;
+        val |= x;
+        return(val);
     }
 }
