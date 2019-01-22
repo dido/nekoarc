@@ -19,10 +19,8 @@
  */
 package com.stormwyrm.nekoarc;
 
-import com.stormwyrm.nekoarc.types.AString;
-import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.Cons;
-import com.stormwyrm.nekoarc.types.Symbol;
+import com.stormwyrm.nekoarc.ciel.CAsm;
+import com.stormwyrm.nekoarc.types.*;
 import com.stormwyrm.nekoarc.util.ObjectMap;
 
 /**
@@ -117,5 +115,15 @@ public class Nil extends Cons {
 			return(new AString(""));
 
 		return(super.coerce(newtype, extra));
+	}
+
+	@Override
+	public void marshal(OutputPort p) {
+		CAsm.GNIL.emit(p);
+	}
+
+	@Override
+	public ArcObject load(InputPort p) {
+		return(this);
 	}
 }
