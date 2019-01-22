@@ -33,5 +33,5 @@ public class GTRUE implements CielInstruction {
      * @param c The Ciel context executing the instruction
      */
     @Override
-    public void invoke(Ciel c) { c.push(True.T); }
+    public void invoke(Ciel c) { c.push(True.T.load(c.port())); }
 }
