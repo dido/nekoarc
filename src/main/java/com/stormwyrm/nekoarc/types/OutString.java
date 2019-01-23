@@ -72,4 +72,12 @@ public class OutString extends OutputPort {
     public ArcObject inside() {
         return(new AString(outstr.toString()));
     }
+
+    /**
+     * Get the bytes of the outstring
+     * @return the bytestring
+     */
+    public byte[] insideBytes() {
+        return(outstr.toByteArray());
+    }
 }
