@@ -20,6 +20,7 @@
 
 package com.stormwyrm.nekoarc.ciel;
 
+import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.types.InString;
 import com.stormwyrm.nekoarc.types.OutString;
 import org.junit.Test;
@@ -145,18 +146,106 @@ public class CielTest {
 
         test100Nums(rng, 28);
 
-        // More boundary tests. 134,217,727 and -134,217,728 should be four bytes
+        // More boundary tests. 2^27 -1 (134,217,727) and -2^27 (-134,217,728) should be four bytes
         genericTest(134217727, 4);
         genericTest(-134217728, 4);
 
+        // 2^27 and -2^27 - 1 should go to five
         genericTest(134217728, 5);
         genericTest(-134217729, 5);
 
         test100Nums(rng, 35);
+
+        // 2^34-1 (17,179.869,183) and -2^34 (17,179.869,184) should still be 5
+        genericTest(17179869183L, 5);
+        genericTest(-17179869184L, 5);
+
+        // but 2^34 and -2^34 - 1 should go to 6
+        genericTest(17179869184L, 6);
+        genericTest(-17179869185L, 6);
+
         test100Nums(rng, 42);
+
+        // 2^41-1 and -2^41 should still be 6
+        genericTest(2199023255551L, 6);
+        genericTest(-2199023255552L, 6);
+
+        // but 2^41 and -2^41 - 1 should go to 6
+        genericTest(2199023255552L, 7);
+        genericTest(-2199023255553L, 7);
+
         test100Nums(rng, 49);
+
+        // 2^48-1 and -2^48 should still be 7
+        genericTest(281474976710655L, 7);
+        genericTest(-281474976710656L, 7);
+
+        // but 2^48 and -2^48 - 1 should go to 8
+        genericTest(281474976710656L, 8);
+        genericTest(-281474976710657L, 8);
+
         test100Nums(rng, 56);
+
+        // 2^55-1 and -2^55 should still be 7
+        genericTest(36028797018963967L, 8);
+        genericTest(-36028797018963968L, 8);
+
+        // but 2^55 and -2^55 - 1 should go to 8
+        genericTest(36028797018963968L, 9);
+        genericTest(-36028797018963969L, 9);
+
         test100Nums(rng, 63);
+
+        // 2^62-1 and -2^62 should still be 9
+        genericTest(4611686018427387903L, 9);
+        genericTest(-4611686018427387904L, 9);
+
+        // but 2^62 and -2^62 - 1 should go to 10
+        genericTest(4611686018427387904L, 10);
+        genericTest(-4611686018427387905L, 10);
+
+        // Generate 100 numbers between -2^62-1 and -2^63 or 2^62 and 2^63-1
+        os = new OutString();
+        long[] numbers = new long[100];
+        for (int i=0; i<100; i++) {
+            long num = rng.nextLong();
+
+            // make sure that this number is between the above ranges by setting the high
+            // bits appropriately.
+            if (num >= 0)
+                num |= 0x4000000000000000L;
+            else
+                num &= 0xbfffffffffffffffL;
+
+            assertTrue(num >= 4611686018427387904L || num <= -4611686018427387905L);
+
+            numbers[i] = num;
+            CAsm.writeLong(os, num);
+        }
+        bytes = os.insideBytes();
+        assertEquals(100 * 10, bytes.length);
+        is = new InString(bytes, "");
+        c = new Ciel(is);
+        for (int i=0; i<100; i++)
+            assertEquals(numbers[i], c.readLong());
+
+        // 2^63-1 and -2^63 should go to 10, these are the maximum values supported
+        genericTest(9223372036854775807L, 10);
+        genericTest(-9223372036854775808L, 10);
+
+        // try decoding a random 11-byte value, this should produce an error
+        bytes = new byte[11];
+        for (int i=0; i<10; i++)
+            bytes[i] = (byte) (rng.nextInt() & 0x7f);
+        bytes[10] = (byte) (rng.nextInt() | 0x80);
+        is = new InString(bytes, "");
+        c = new Ciel(is);
+        try {
+            c.readLong();
+            fail("exception not thrown");
+        } catch (NekoArcException e) {
+            assertEquals("long value exceeded", e.getMessage());
+        }
     }
 
 
