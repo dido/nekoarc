@@ -75,7 +75,7 @@ public class Ciel {
             b = (byte) (fp.readb() & 0xff);
             if ((b & 0x80) != 0)
                 break;
-            if (shiftcount > 63)
+            if (shiftcount >= 63)
                 throw new NekoArcException("long value exceeded");
             x = b;
             x <<= shiftcount;
