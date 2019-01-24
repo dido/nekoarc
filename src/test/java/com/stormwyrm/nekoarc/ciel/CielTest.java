@@ -248,5 +248,19 @@ public class CielTest {
         }
     }
 
+    @Test
+    public void testRWDouble() {
+        Random rng = new Random();
+        double value = rng.nextDouble();
+        OutString os = new OutString();
+        CAsm.writeDouble(os, value);
+        byte[] bytes = os.insideBytes();
+        assertEquals(8, bytes.length);
+
+        InString is = new InString(bytes, "");
+        Ciel c = new Ciel(is);
+        // The conversion should ALWAYS be exact, so these must always be equal
+        assertEquals(Double.doubleToLongBits(value), Double.doubleToLongBits(c.readDouble()));
+    }
 
 }
