@@ -42,21 +42,20 @@ public enum CAsm {
 
 
     /**
-     * Write a long to the output port
+     * Write a long to the output port. Fixnums are serialised as octets with groups of 7 bits.
+     * The last octet should have 1 in the high bit, all other octets should have 0 in the high bit.
      * @param p The output port to write to
      * @param val The value to write
      */
     public static void writeLong(OutputPort p, long val) {
-        long abs = (val < 0) ? -val : val;
-        for (;;) {
-            abs >>= 7;
-            if (abs == 0) {
-                p.writeb((int) ((val & 0x7f) | 0x80));
-                break;
-            }
+        // Loop while there are still more than 7 bits left in the number
+        while (val < -64 || val > 63) {
+            // Write seven bits of the number, leaving the MSB 0
             p.writeb((int) (val & 0x7f));
             val >>= 7;
         }
+        // Write the last octet with the remaining bits, setting the MSB to 1
+        p.writeb((int) ((val & 0x7f) | 0x80));
     }
 
     /**
