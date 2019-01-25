@@ -25,8 +25,8 @@
 ;; Push a fixnum onto the stack
 (definst gfix #x10)
 
-;; ;; Push a flonum onto the stack
-;; (definst gflo #x18)
+;; Push a flonum onto the stack
+(definst gflo #x18)
 
 ;; ;; Push a Unicode rune onto the stack
 ;; (definst grune #x20)
