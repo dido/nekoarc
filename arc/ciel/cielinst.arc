@@ -31,8 +31,8 @@
 ;; Push a Unicode rune onto the stack
 (definst grune #x20)
 
-;; ;; Push a string onto the stack
-;; (definst gstr #x30)
+;; Push a string onto the stack
+(definst gstr #x30)
 
 ;; ;; Push a symbol onto the stack
 ;; (definst gsym #x38)
