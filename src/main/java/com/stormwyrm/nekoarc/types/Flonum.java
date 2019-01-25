@@ -20,9 +20,9 @@
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.NekoArcException;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 
-public class Flonum extends Numeric implements Orderable
-{
+public class Flonum extends Numeric implements Orderable {
 	public static final ArcObject TYPE = Symbol.intern("flonum");
 	public double flonum;
 	
@@ -43,8 +43,7 @@ public class Flonum extends Numeric implements Orderable
      * @param caller the object trying to make the conversion
      * @return the object cast to flonum, if this is valid
      */
-	public static Flonum cast(ArcObject arg, ArcObject caller)
-	{
+	public static Flonum cast(ArcObject arg, ArcObject caller) {
 		if (arg instanceof Fixnum) {
 			return(new Flonum((double)((Fixnum) arg).fixnum));
 		} else if (arg instanceof Flonum) {
@@ -60,8 +59,7 @@ public class Flonum extends Numeric implements Orderable
      * @return the sum, if the type of ae can be coerced to a flonum
      */
 	@Override
-	public ArcObject add(ArcObject ae)
-	{
+	public ArcObject add(ArcObject ae) {
 		Flonum addend = Flonum.cast(ae, this);
 		return(new Flonum(this.flonum + addend.flonum));
 	}
@@ -71,8 +69,7 @@ public class Flonum extends Numeric implements Orderable
      * @param f the thing to be multiplied
      * @return their product
      */
-	public Flonum mul(Numeric f)
-	{
+	public Flonum mul(Numeric f) {
 		Flonum factor = Flonum.cast(f, this);
 		return(new Flonum(this.flonum * factor.flonum));
 	}
@@ -83,8 +80,7 @@ public class Flonum extends Numeric implements Orderable
      * @param d the divident
      * @return the quotient
      */
-	public Flonum div(Numeric d)
-	{
+	public Flonum div(Numeric d) {
 		Flonum divisor = Flonum.cast(d, this);
 		return(new Flonum(this.flonum / divisor.flonum));
 	}
@@ -115,9 +111,9 @@ public class Flonum extends Numeric implements Orderable
      * @return true if the flonums are identical
      */
 	@Override
-	public boolean is(ArcObject other)
-	{
-		return(this == other || ((other instanceof Flonum) && flonum == (((Flonum)other).flonum)));
+	public boolean is(ArcObject other) {
+		return(this == other || ((other instanceof Flonum) && Double.doubleToLongBits(flonum) ==
+				Double.doubleToLongBits(((Flonum)other).flonum)));
 	}
 
 
@@ -146,4 +142,14 @@ public class Flonum extends Numeric implements Orderable
             return(new AString(this.toString()));
         return(super.coerce(newtype, extra));
     }
+
+	/**
+	 * Marshal the flonum
+	 * @param p The port to write to
+	 */
+	@Override
+	public void marshal(OutputPort p) {
+		CAsm.GFLO.emit(p);
+		CAsm.writeDouble(p, flonum);
+	}
 }
