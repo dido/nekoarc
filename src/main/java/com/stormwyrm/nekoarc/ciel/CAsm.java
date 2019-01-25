@@ -9,6 +9,7 @@ public enum CAsm {
     GNIL(0x0),
     GTRUE(0x8),
     GFIX(0x10),
+    GFLO(0x18),
     LAST(0xff);
 
     /**
@@ -39,7 +40,6 @@ public enum CAsm {
     public void emit(OutputPort fp) {
         fp.writeb(opcode);
     }
-
 
     /**
      * Write a long to the output port. Fixnums are serialised as octets with groups of 7 bits.
