@@ -21,6 +21,7 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Op;
+import com.stormwyrm.nekoarc.ciel.Ciel;
 import com.stormwyrm.nekoarc.vm.VirtualMachine;
 import org.junit.Test;
 
@@ -133,5 +134,17 @@ public class AStringTest {
         result = s.coerce(Symbol.intern("vector"), Nil.NIL);
         assertEquals("vector", result.type().toString());
         assertTrue((new Vector(Rune.get(0x61), Rune.get(0x62), Rune.get(0x63))).iso(result));
+    }
+
+    @Test
+    public void testMarshal() {
+        OutString os = new OutString();
+        AString str = new AString("foo");
+        str.marshal(os);
+        byte[] b = os.insideBytes();
+        InString is = new InString(b, "");
+        Ciel c = new Ciel(is);
+        c.load();
+        assertTrue((new AString("foo")).iso(c.pop()));
     }
 }
