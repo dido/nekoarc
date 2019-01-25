@@ -61,9 +61,10 @@ public class Ciel {
 
     public double readDouble() {
         long raw = 0;
+        int shiftcount = 0;
         for (int i=0; i<8; i++) {
-            raw <<= 8;
-            raw |= (fp.readb() & 0xff);
+            raw |= ((long)(fp.readb() & 0xff)) << shiftcount;
+            shiftcount += 8;
         }
         return(Double.longBitsToDouble(raw));
     }
