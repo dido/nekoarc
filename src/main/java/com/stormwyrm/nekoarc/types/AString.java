@@ -22,6 +22,7 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 
 public class AString extends ArcObject
 {
@@ -133,4 +134,10 @@ public class AString extends ArcObject
 
         return super.coerce(newtype, extra);
     }
+
+	@Override
+	public void marshal(OutputPort p) {
+		CAsm.GSTR.emit(p);
+		CAsm.writeString(p, string.toString());
+	}
 }
