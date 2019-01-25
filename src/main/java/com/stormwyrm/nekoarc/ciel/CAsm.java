@@ -4,6 +4,7 @@
 package com.stormwyrm.nekoarc.ciel;
 
 import com.stormwyrm.nekoarc.types.OutputPort;
+import com.stormwyrm.nekoarc.types.Rune;
 
 public enum CAsm {
     GNIL(0x0),
@@ -11,6 +12,7 @@ public enum CAsm {
     GFIX(0x10),
     GFLO(0x18),
     GRUNE(0x20),
+    GSTR(0x30),
     LAST(0xff);
 
     /**
@@ -70,5 +72,15 @@ public enum CAsm {
             p.writeb((int) (raw & 0xff));
             raw >>= 8;
         }
+    }
+
+    /**
+     * Write a UTF-8 string into the output port. Prefixes the length.
+     * @param p The port to write to
+     * @param str the string
+     */
+    public static void writeString(OutputPort p, String str) {
+        writeLong(p, str.length());
+        str.chars().forEach(ch -> p.writec(Rune.get(ch)));
     }
 }
