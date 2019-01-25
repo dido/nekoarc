@@ -31,7 +31,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
-            NOINST,
+            new GFLO(),        // 0x18
             NOINST,
             NOINST,
             NOINST,
