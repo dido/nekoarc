@@ -250,7 +250,7 @@ public class CielTest {
 
     @Test
     public void testRWDouble() {
-        Random rng = new Random();
+        Random rng = new Random(4604448116707249553L);
         double value = rng.nextDouble();
         OutString os = new OutString();
         CAsm.writeDouble(os, value);
