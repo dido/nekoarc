@@ -55,7 +55,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
-            NOINST,
+            new GSTR(),        // 0x30
             NOINST,
             NOINST,
             NOINST,
