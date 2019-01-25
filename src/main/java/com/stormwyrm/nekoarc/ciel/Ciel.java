@@ -21,8 +21,10 @@
 package com.stormwyrm.nekoarc.ciel;
 
 import com.stormwyrm.nekoarc.NekoArcException;
+import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.InputPort;
+import com.stormwyrm.nekoarc.types.Rune;
 
 /**
  * CIEL virtual machine context
@@ -93,6 +95,18 @@ public class Ciel {
         x <<= shiftcount;
         val |= x;
         return(val);
+    }
+
+    public String readString() {
+        StringBuilder sb = new StringBuilder();
+        long len = readLong();
+        for (int i=0; i<len; i++) {
+            ArcObject r = fp.readc();
+            if (Nil.NIL.is(r))
+                throw new NekoArcException("unterminated string reaches end of file in Ciel marshalled data");
+            sb.appendCodePoint(((Rune)r).rune);
+        }
+        return(sb.toString());
     }
 
     public void load() {
