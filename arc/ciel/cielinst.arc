@@ -28,8 +28,8 @@
 ;; Push a flonum onto the stack
 (definst gflo #x18)
 
-;; ;; Push a Unicode rune onto the stack
-;; (definst grune #x20)
+;; Push a Unicode rune onto the stack
+(definst grune #x20)
 
 ;; ;; Push a string onto the stack
 ;; (definst gstr #x30)
