@@ -21,7 +21,10 @@
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.ciel.Ciel;
 import org.junit.Test;
+
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -42,6 +45,28 @@ public class FlonumTest {
         result = f.coerce(Symbol.intern("string"), Nil.NIL);
         assertEquals("string", result.type().toString());
         assertEquals("3.14159265", result.toString());
+    }
+
+    @Test
+    public void testMarshal() {
+        OutString os = new OutString();
+        // Generate 100 random flonums, and marshal them into os.
+        Random rng = new Random();
+        ArcObject[] nums = new ArcObject[100];
+        for (int i=0; i<100; i++) {
+            nums[i] = new Flonum(rng.nextDouble());
+            nums[i].marshal(os);
+        }
+        byte[] b = os.insideBytes();
+        assertEquals(900, b.length);
+        InString is = new InString(b, "");
+
+        // Now, load the marshalled data.
+        Ciel c = new Ciel(is);
+        c.load();
+        // The stack of the Ciel object should contain each of the flonums we have in nums in reverse order
+        for (int i=99; i>=0; i--)
+            assertTrue(nums[i].iso(c.pop()));
     }
 
 }
