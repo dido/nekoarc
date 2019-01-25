@@ -32,11 +32,13 @@ public class Ciel {
     private final ArcObject[] stack;        // stack
     private int sp;
     private final InputPort fp;
+    private boolean runnable;
 
     public Ciel(InputPort fp, int stacksize) {
         stack = new ArcObject[stacksize];
         sp = 0;
         this.fp = fp;
+        runnable = true;
     }
 
     public Ciel(InputPort fp) {
@@ -90,5 +92,16 @@ public class Ciel {
         x <<= shiftcount;
         val |= x;
         return(val);
+    }
+
+    public void load() {
+        while (runnable) {
+            int op = fp.readb();
+            if (op < 0) {
+                runnable = false;
+                break;
+            }
+            CielJmpTbl.jmptbl[op].invoke(this);
+        }
     }
 }
