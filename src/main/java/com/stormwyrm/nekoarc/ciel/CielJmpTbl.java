@@ -39,7 +39,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
-            NOINST,
+            new GRUNE(),        // 0x20
             NOINST,
             NOINST,
             NOINST,
