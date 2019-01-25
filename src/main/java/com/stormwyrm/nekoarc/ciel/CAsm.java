@@ -10,6 +10,7 @@ public enum CAsm {
     GTRUE(0x8),
     GFIX(0x10),
     GFLO(0x18),
+    GRUNE(0x20),
     LAST(0xff);
 
     /**
