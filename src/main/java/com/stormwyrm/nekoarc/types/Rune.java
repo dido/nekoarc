@@ -21,6 +21,7 @@ package com.stormwyrm.nekoarc.types;
 
 
 import com.stormwyrm.nekoarc.NekoArcException;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.util.LongMap;
 
 import java.lang.ref.ReferenceQueue;
@@ -90,5 +91,11 @@ public class Rune extends ArcObject {
         if (newtype == Symbol.intern("string"))
             return(new AString(String.format("%c", this.rune)));
         return super.coerce(newtype, extra);
+    }
+
+    @Override
+    public void marshal(OutputPort p) {
+        CAsm.GRUNE.emit(p);
+        CAsm.writeLong(p, rune);
     }
 }
