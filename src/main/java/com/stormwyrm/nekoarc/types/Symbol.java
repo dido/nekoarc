@@ -23,6 +23,7 @@ import java.lang.ref.WeakReference;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.True;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.util.LongMap;
 import com.stormwyrm.nekoarc.util.MurmurHash;
 
@@ -90,5 +91,11 @@ public class Symbol extends Atom {
 		if (newtype == Symbol.intern("string"))
 			return(new AString(this.toString()));
 		return(super.coerce(newtype, extra));
+	}
+
+	@Override
+	public void marshal(OutputPort p) {
+		CAsm.GSYM.emit(p);
+		CAsm.writeString(p, this.symbol);
 	}
 }
