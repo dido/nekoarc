@@ -13,6 +13,7 @@ public enum CAsm {
     GFLO(0x18),
     GRUNE(0x20),
     GSTR(0x30),
+    GSYM(0x38),
     LAST(0xff);
 
     /**
@@ -82,5 +83,16 @@ public enum CAsm {
     public static void writeString(OutputPort p, String str) {
         writeLong(p, str.length());
         str.chars().forEach(ch -> p.writec(Rune.get(ch)));
+    }
+
+    /**
+     * Write a binary string into the output port. Prefixes the length.
+     * @param p The port to write to
+     * @param bytes the binary string
+     */
+    public static void writeBinStr(OutputPort p, byte[] bytes) {
+        writeLong(p, bytes.length);
+        for (byte b : bytes)
+            p.writeb(b);
     }
 }
