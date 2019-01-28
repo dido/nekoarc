@@ -37,8 +37,8 @@
 ;; Push a symbol onto the stack
 (definst gsym #x38)
 
-;; ;; Cons the two top elements on the stack
-;; (definst ccons #x80)
+;; Cons the two top elements on the stack
+(definst ccons #x80)
 
 ;; ;; Annotate with the two top elements on the stack
 ;; (definst cann #x81)
@@ -50,11 +50,14 @@
 ;; ;; Push an empty hash table onto the stack
 ;; (definst gtab #x91)
 
-;; ;; Set an element of a cons or a vector with the index
-;; (definst xset #xa0)
+;; Set an element of a cons or a vector with the index
+(definst xset #xa0)
 
+;; ;; Set a table entry from the top two stack elements
 ;; (definst xtset #xa1)
 
-;; (definst mput #xc0)
+;; Put top of stack into the memo
+(definst mput #xc0)
 
-;; (definst mget #xc1)
+;; Push memo value onto the stack
+(definst mget #xc1)
