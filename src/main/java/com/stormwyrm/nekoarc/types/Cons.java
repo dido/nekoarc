@@ -23,6 +23,7 @@ import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.True;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.util.ObjectMap;
 
 import java.util.Iterator;
@@ -196,6 +197,37 @@ public class Cons extends Composite implements Iterable<ArcObject> {
 		seen.put(other, True.T);
 		Cons o = (Cons)other;
 		return(car.iso(o.car(), seen) && cdr.iso(o.cdr(), seen));
+	}
+
+	/**
+	 * Marshal a
+	 * @param p The port to write to
+	 * @param seen The seen hash
+	 */
+	@Override
+	public void marshal(OutputPort p, ObjectMap<ArcObject, ArcObject> seen) {
+		switch (checkReferences(seen, p,
+				(fp) -> { CAsm.GNIL.emit(fp); CAsm.GNIL.emit(fp); CAsm.CCONS.emit(fp);} )) {
+			case 1:
+				// Do nothing if this instance marshals to an mget
+				break;
+			case 2:
+				// If this marshals to an MPUT, we need to set the car and cdr of the blank
+				// cons cell just created as placeholder
+				car.marshal(p, seen);
+				CAsm.XSET.emit(p);
+				CAsm.writeLong(p, 0);
+				cdr.marshal(p, seen);
+				CAsm.XSET.emit(p);
+				CAsm.writeLong(p, 1);
+				break;
+			default:
+				// Just marshal the car and cdr and then emit a CCONS to cons them up after.
+				car.marshal(p, seen);
+				cdr.marshal(p, seen);
+				CAsm.CCONS.emit(p);
+				break;
+		}
 	}
 
 	@Override
