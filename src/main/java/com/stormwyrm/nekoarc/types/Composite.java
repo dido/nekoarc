@@ -21,7 +21,10 @@ package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.True;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.util.ObjectMap;
+
+import java.util.function.Consumer;
 
 /**
  * Superclass of all composite objects (vectors, conses, and tables). Defines several common
@@ -46,6 +49,29 @@ public abstract class Composite extends ArcObject {
         }
         seen.put(this, Nil.NIL);
         return(false);
+    }
+
+    /**
+     * Get the reference number in the seen hash of the object, if any. 0 if no reference exists.
+     * @param seen The seen hash
+     * @return 0 if no reference exists, 1 if an mget was made or 2 if an mput was made.
+     */
+    protected int checkReferences(ObjectMap<ArcObject, ArcObject> seen,
+                                      OutputPort p, Consumer<OutputPort> fn) {
+        ArcObject s=Nil.NIL;
+        if (seen.containsKey(this) && !Nil.NIL.is(s = seen.get(this)) && !Nil.NIL.is(s.cdr())) {
+            CAsm.MGET.emit(p);
+            CAsm.writeLong(p, ((Fixnum)s.car()).fixnum);
+            return(1);
+        }
+        if (!Nil.NIL.is(s)) {
+            fn.accept(p);
+            CAsm.MPUT.emit(p);
+            CAsm.writeLong(p, ((Fixnum)s.car()).fixnum);
+            s.scdr(True.T);
+            return(2);
+        }
+        return(0);
     }
 
     /**
@@ -121,5 +147,17 @@ public abstract class Composite extends ArcObject {
     @Override
     public boolean iso(ArcObject other) {
         return(iso(other, new ObjectMap<>()));
+    }
+
+    /**
+     * The basic steps for marshalling a composite object will be to visit it and all of
+     * its children to generate a seen hash, and then to use the seen hash to update it.
+     * @param p The port to write marshalled data to
+     */
+    @Override
+    public void marshal(OutputPort p) {
+        ObjectMap<ArcObject, ArcObject> seen = new ObjectMap<>();
+        this.visit(seen, new int[]{0});
+        marshal(p, seen);
     }
 }
