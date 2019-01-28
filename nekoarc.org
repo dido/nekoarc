@@ -433,7 +433,7 @@ notice and this notice are preserved.
      - [X] Threads
      - [X] Exceptions
      - [ ] Channels
-** TODO CIEL [6/17]
+** TODO CIEL [11/19]
    The CIEL dump/restore functionality allows NekoArc to save and load
    workspaces by tracing the global symbol table and threads and dumping
    those to a file.
@@ -449,7 +449,7 @@ notice and this notice are preserved.
      Push a rune onto the stack
    - [X] gstr
      Push a string onto the stack
-   - [ ] gsym
+   - [X] gsym
      Push a symbol onto the stack
    - [ ] gcode
      Push a code object onto the stack
@@ -459,7 +459,7 @@ notice and this notice are preserved.
      Push an environment onto the stack
    - [ ] gcont
      Push a continuation onto the stack
-   - [ ] ccons
+   - [X] ccons
      Cons the two objects on the stack and push the result
    - [ ] cann
      Annotate the the top of stack with the one below it and push the result
@@ -467,8 +467,12 @@ notice and this notice are preserved.
      Create a vector of a certain length and push on the stack
    - [ ] gtab
      Create an empty table and put it on the stack
-   - [ ] xset
+   - [X] xset
      Set the value of a cons or a vector
    - [ ] xtset
      Store a key-value pair into a table
+   - [X] mput
+     Store a value to the memo
+   - [X] mget
+     Get a value from the memo
 
