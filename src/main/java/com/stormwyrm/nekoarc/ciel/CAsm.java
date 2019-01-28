@@ -14,6 +14,10 @@ public enum CAsm {
     GRUNE(0x20),
     GSTR(0x30),
     GSYM(0x38),
+    CCONS(0x80),
+    XSET(0xa0),
+    MPUT(0xc0),
+    MGET(0xc1),
     LAST(0xff);
 
     /**
