@@ -34,8 +34,8 @@
 ;; Push a string onto the stack
 (definst gstr #x30)
 
-;; ;; Push a symbol onto the stack
-;; (definst gsym #x38)
+;; Push a symbol onto the stack
+(definst gsym #x38)
 
 ;; ;; Cons the two top elements on the stack
 ;; (definst ccons #x80)
