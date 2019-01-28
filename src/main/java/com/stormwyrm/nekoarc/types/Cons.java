@@ -214,17 +214,18 @@ public class Cons extends Composite implements Iterable<ArcObject> {
 			case 2:
 				// If this marshals to an MPUT, we need to set the car and cdr of the blank
 				// cons cell just created as placeholder
-				car.marshal(p, seen);
+                cdr.marshal(p, seen);
+                CAsm.XSET.emit(p);
+                CAsm.writeLong(p, 1);
+
+                car.marshal(p, seen);
 				CAsm.XSET.emit(p);
 				CAsm.writeLong(p, 0);
-				cdr.marshal(p, seen);
-				CAsm.XSET.emit(p);
-				CAsm.writeLong(p, 1);
 				break;
 			default:
 				// Just marshal the car and cdr and then emit a CCONS to cons them up after.
-				car.marshal(p, seen);
 				cdr.marshal(p, seen);
+                car.marshal(p, seen);
 				CAsm.CCONS.emit(p);
 				break;
 		}
