@@ -21,6 +21,7 @@
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.ciel.Ciel;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -153,5 +154,33 @@ public class ConsTest {
         assertEquals("vector", result.type().toString());
         assertTrue((new Vector(Fixnum.get(1), Fixnum.get(2), Fixnum.get(3))).iso(result));
 
+    }
+
+    @Test
+    public void testMarshal() {
+        OutString os = new OutString();
+        Cons cons = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), new Cons(Fixnum.get(3), Nil.NIL)));
+        cons.marshal(os);
+        byte[] b = os.insideBytes();
+        InString is = new InString(b, "");
+        Ciel c = new Ciel(is);
+        c.load();
+        assertTrue(cons.iso(c.pop()));
+    }
+
+    @Test
+    public void testMarshalCyclic() {
+        Cons c;
+        Cons x, y;
+
+        c = new Cons(Fixnum.get(1), new Cons(Fixnum.get(2), x=new Cons(Fixnum.get(3), Nil.NIL)));
+        x.scar(c);
+        OutString os = new OutString();
+        c.marshal(os);
+        byte[] b = os.insideBytes();
+        InString is = new InString(b, "");
+        Ciel ciel = new Ciel(is);
+        ciel.load();
+        assertTrue(c.iso(ciel.pop()));
     }
 }
