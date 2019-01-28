@@ -294,4 +294,13 @@ public abstract class ArcObject implements Callable {
 	public void marshal(OutputPort p) {
 		throw new NekoArcException("Cannot dump object of type " + this.type());
 	}
+
+	/**
+	 * Marshal object into Ciel format  to an output port with a seen hash
+	 * @param p The port to write to
+	 * @param seen The seen hash
+	 */
+	public void marshal(OutputPort p, ObjectMap<ArcObject, ArcObject> seen) {
+		marshal(p);
+	}
 }
