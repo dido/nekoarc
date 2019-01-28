@@ -103,4 +103,15 @@ public enum CAsm {")
         writeLong(p, str.length());
         str.chars().forEach(ch -> p.writec(Rune.get(ch)));
     }
+
+    /**
+     * Write a binary string into the output port. Prefixes the length.
+     * @param p The port to write to
+     * @param bytes the binary string
+     */
+    public static void writeBinStr(OutputPort p, byte[] bytes) {
+        writeLong(p, bytes.length);
+        for (byte b : bytes)
+            p.writeb(b);
+    }
 }"))))
