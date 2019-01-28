@@ -15,6 +15,7 @@ public enum CAsm {
     GSTR(0x30),
     GSYM(0x38),
     CCONS(0x80),
+    GVEC(0x90),
     XSET(0xa0),
     MPUT(0xc0),
     MGET(0xc1),

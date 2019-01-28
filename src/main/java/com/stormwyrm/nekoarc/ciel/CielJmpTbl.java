@@ -151,7 +151,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
-            NOINST,
+            new GVEC(),        // 0x90
             NOINST,
             NOINST,
             NOINST,
