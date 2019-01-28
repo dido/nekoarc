@@ -63,7 +63,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
-            NOINST,
+            new GSYM(),        // 0x38
             NOINST,
             NOINST,
             NOINST,
