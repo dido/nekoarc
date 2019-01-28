@@ -21,6 +21,7 @@
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.ciel.Ciel;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -39,6 +40,18 @@ public class SymbolTest {
         result = sym.coerce(Symbol.intern("string"), Nil.NIL);
         assertEquals("string", result.type().toString());
         assertTrue(new AString(sym.toString()).is(result));
+    }
+
+    @Test
+    public void testMarshal() {
+        OutString os = new OutString();
+        ArcObject sym = Symbol.intern("foo");
+        sym.marshal(os);
+        byte[] b = os.insideBytes();
+        InString is = new InString(b, "");
+        Ciel c = new Ciel(is);
+        c.load();
+        assertTrue(Symbol.intern("foo").is(c.pop()));
     }
 
 }
