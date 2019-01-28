@@ -22,9 +22,8 @@ package com.stormwyrm.nekoarc.types;
 import com.stormwyrm.nekoarc.InvokeThread;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
-import com.stormwyrm.nekoarc.True;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.util.ObjectMap;
-
 import java.util.Iterator;
 
 /**
@@ -172,5 +171,28 @@ public class Vector extends Composite implements Iterable<ArcObject> {
 			return(str);
 		}
 		return(super.coerce(newtype, extra));
+	}
+
+	@Override
+	public void marshal(OutputPort p, ObjectMap<ArcObject, ArcObject> seen) {
+		switch (checkReferences(seen, p, (fp) -> { CAsm.GVEC.emit(fp);
+												   CAsm.writeLong(fp, this.len()); })) {
+			case 1:
+				// do nothing if this marshals to an mget, we're done
+				break;
+			case 0:
+				// create the vector first
+				CAsm.GVEC.emit(p);
+				CAsm.writeLong(p, this.len());
+			case 2:
+				// Fall through. Either way top of stack should contain the blank vector.
+				// Marshal each element of the vector and then XSET.
+				for (int i = 0; i < vec.length; i++) {
+					this.index(i).marshal(p, seen);
+					CAsm.XSET.emit(p);
+					CAsm.writeLong(p, i);
+				}
+				break;
+		}
 	}
 }
