@@ -84,7 +84,7 @@ public class Vector extends Composite implements Iterable<ArcObject> {
 		StringBuilder sb = new StringBuilder();
 		if (checkReferences(seen, sb))
 			return(sb.toString());
-		sb.append("[");
+		sb.append("#vec(");
 		int i=0;
 		while (i<vec.length) {
 			sb.append(vec[i].toString(seen));
@@ -92,7 +92,7 @@ public class Vector extends Composite implements Iterable<ArcObject> {
 				sb.append(" ");
 			i++;
 		}
-		sb.append("]");
+		sb.append(")");
 		return(sb.toString());
 	}
 
