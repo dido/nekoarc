@@ -118,6 +118,11 @@ public class Nil extends Cons {
 	}
 
 	@Override
+	public void marshal(OutputPort p, ObjectMap<ArcObject, ArcObject> seen) {
+		marshal(p);
+	}
+
+	@Override
 	public void marshal(OutputPort p) {
 		CAsm.GNIL.emit(p);
 	}
