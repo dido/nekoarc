@@ -25,6 +25,7 @@ import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.InputPort;
 import com.stormwyrm.nekoarc.types.Rune;
+import com.stormwyrm.nekoarc.util.LongMap;
 
 /**
  * CIEL virtual machine context
@@ -32,6 +33,7 @@ import com.stormwyrm.nekoarc.types.Rune;
 public class Ciel {
     private final static int DEFAULT_STACKSIZE = 1024;
     private final ArcObject[] stack;        // stack
+    private final LongMap<ArcObject> memo;  // memo
     private int sp;
     private final InputPort fp;
     private boolean runnable;
@@ -41,6 +43,7 @@ public class Ciel {
         sp = 0;
         this.fp = fp;
         runnable = true;
+        memo = new LongMap<>();
     }
 
     public Ciel(InputPort fp) {
@@ -57,9 +60,19 @@ public class Ciel {
         }
     }
 
+    /**
+     * Pop the stack
+     * @return Topmost element
+     */
     public ArcObject pop() {
         return(stack[--sp]);
     }
+
+    /**
+     * Get the current top of stack
+     * @return Current top of stack
+     */
+    public ArcObject tos() { return(stack[sp-1]); }
 
     public double readDouble() {
         long raw = 0;
@@ -118,5 +131,25 @@ public class Ciel {
             }
             CielJmpTbl.jmptbl[op].invoke(this);
         }
+    }
+
+    /**
+     * Set a memo value
+     * @param index Memo index
+     * @param value Value to store
+     * @return Value stored
+     */
+    public ArcObject setMemo(long index, ArcObject value) {
+        memo.put(index, value);
+        return(value);
+    }
+
+    /**
+     * Get a memo value
+     * @param index Index into the memo
+     * @return Value stored at index
+     */
+    public ArcObject getMemo(long index) {
+        return(memo.get(index));
     }
 }
