@@ -135,6 +135,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
+            new CCONS(),        // 0x80
             NOINST,
             NOINST,
             NOINST,
@@ -166,6 +167,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
+            new XSET(),        // 0xa0
             NOINST,
             NOINST,
             NOINST,
@@ -197,10 +199,8 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
-            NOINST,
-            NOINST,
-            NOINST,
-            NOINST,
+            new MPUT(),        // 0xc0
+            new MGET(),        // 0xc1
             NOINST,
             NOINST,
             NOINST,
