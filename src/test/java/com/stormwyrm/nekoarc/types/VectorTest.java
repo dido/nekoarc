@@ -34,7 +34,7 @@ public class VectorTest {
 
         for (int i=0; i<len; i++)
             v.setIndex(i, Fixnum.get(i));
-        assertEquals("[0 1 2 3 4]", v.toString());
+        assertEquals("#vec(0 1 2 3 4)", v.toString());
     }
 
     @Test
@@ -45,12 +45,12 @@ public class VectorTest {
         for (int i=0; i<len; i++)
             v.setIndex(i, Fixnum.get(i));
         v.setIndex(0, v);
-        assertEquals("#0=[#0# 1 2 3 4]", v.toString());
+        assertEquals("#0=#vec(#0# 1 2 3 4)", v.toString());
 
         for (int i=0; i<len; i++)
             v.setIndex(i, Fixnum.get(i));
         v.setIndex(1, v);
-        assertEquals("#0=[0 #0# 2 3 4]", v.toString());
+        assertEquals("#0=#vec(0 #0# 2 3 4)", v.toString());
 
         Cons x, y;
         Cons c;
@@ -64,7 +64,7 @@ public class VectorTest {
             v.setIndex(i, Fixnum.get(i));
         v.setIndex(1, c);
         v.setIndex(4, c);
-        assertEquals("#0=[0 #1=(1 #2=(#0# . #1#) 3 . #2#) 2 3 #1#]", v.toString());
+        assertEquals("#0=#vec(0 #1=(1 #2=(#0# . #1#) 3 . #2#) 2 3 #1#)", v.toString());
     }
 
     @Test
