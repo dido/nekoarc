@@ -21,10 +21,8 @@ package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.*;
 import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.ArcThread;
 import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.types.Symbol;
-import com.stormwyrm.nekoarc.util.Callable;
 
 /**
  * Builtin function ccc - Call with Current Continuation. Accepts one parameter, which is a closure.
