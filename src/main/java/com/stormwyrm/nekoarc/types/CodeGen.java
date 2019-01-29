@@ -32,10 +32,9 @@ import java.util.Arrays;
  */
 public class CodeGen extends ArcObject {
     public static final ArcObject TYPE = Symbol.intern("code");
-
-    private byte[] geninst;
+    public byte[] geninst;
     private int pos, litpos;
-    private LongMap<ArcObject> genlits;
+    public final LongMap<ArcObject> genlits;
     private final ObjectMap<String, ArcObject> codeLabelMap;
     private final ObjectMap<String, ArcObject> litLabelMap;
     private ArcObject ldls;
@@ -67,10 +66,12 @@ public class CodeGen extends ArcObject {
     /**
      * Add an LDL instruction to the list.
      * @param ldlpos The position of the LDL instruction
+     * @param index The current value of the arg to the LDL
      */
-    public void ldl(int ldlpos) {
+    public void ldl(int ldlpos, int index) {
         // store the address as a one relative to the start
-        ldls = new Cons(Fixnum.get(start - ldlpos), ldls);
+        ldls = new Cons(new Cons(Fixnum.get(start - ldlpos),
+                                 Fixnum.get(index)), ldls);
     }
 
     /**
@@ -78,7 +79,7 @@ public class CodeGen extends ArcObject {
      * @return A closure from the code just generated.
      */
     public Code endCode() {
-        Code code = new Code(start, pos - start, ldls);
+        Code code = new Code(this, start, pos - start, ldls);
         start = -1;
         ldls = Nil.NIL;
         return(code);
@@ -285,6 +286,19 @@ public class CodeGen extends ArcObject {
             litpos++;
         genlits.put(litpos, lit);
         return(litpos);
+    }
+
+    /**
+     * Add a literal to the literals table with an index. Will update lidx accordingly.
+     * @param lidx the position in the literals table to put it
+     * @param lit the literal to add
+     * @return the position in the literals table in which it was put
+     */
+    public int literal(int lidx, ArcObject lit) {
+        genlits.put(lidx, lit);
+        if (litpos < lidx)
+            litpos = lidx;
+        return(lidx);
     }
 
     /**
