@@ -152,7 +152,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             new GVEC(),        // 0x90
-            NOINST,
+            new GTAB(),        // 0x91
             NOINST,
             NOINST,
             NOINST,
@@ -168,7 +168,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             new XSET(),        // 0xa0
-            NOINST,
+            new XTSET(),        // 0xa1
             NOINST,
             NOINST,
             NOINST,
