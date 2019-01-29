@@ -20,6 +20,7 @@
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.ciel.Ciel;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -95,5 +96,36 @@ public class VectorTest {
         result = v.coerce(Symbol.intern("string"), Nil.NIL);
         assertEquals("string", result.type().toString());
         assertEquals("123", result.toString());
+    }
+
+    @Test
+    public void testMarshal() {
+        OutString os = new OutString();
+        Vector vec = new Vector(Fixnum.get(1), Fixnum.get(2), Fixnum.get(3));
+        vec.marshal(os);
+        byte[] b = os.insideBytes();
+        InString is = new InString(b, "");
+        Ciel c = new Ciel(is);
+        c.load();
+        assertTrue(vec.iso(c.pop()));
+    }
+
+    @Test
+    public void testMarshalCyclic() {
+
+        int len = 5;
+        Vector v = new Vector(len);
+
+        for (int i=0; i<len; i++)
+            v.setIndex(i, Fixnum.get(i));
+        v.setIndex(0, v);
+
+        OutString os = new OutString();
+        v.marshal(os);
+        byte[] b = os.insideBytes();
+        InString is = new InString(b, "");
+        Ciel ciel = new Ciel(is);
+        ciel.load();
+        assertTrue(v.iso(ciel.pop()));
     }
 }
