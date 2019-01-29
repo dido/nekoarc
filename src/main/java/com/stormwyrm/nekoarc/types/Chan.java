@@ -35,7 +35,9 @@ public class Chan extends ArcObject {
             try {
                 q.put(obj);
                 return;
-            } catch (InterruptedException e) { }
+            } catch (InterruptedException e) {
+                // this space intentionally left blank
+            }
         }
     }
 
@@ -43,7 +45,9 @@ public class Chan extends ArcObject {
         for (;;) {
             try {
                 return(q.take());
-            } catch (InterruptedException e) { }
+            } catch (InterruptedException e) {
+                // this space intentionally left blank
+            }
         }
     }
 
