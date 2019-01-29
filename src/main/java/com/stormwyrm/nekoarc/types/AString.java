@@ -27,7 +27,7 @@ import com.stormwyrm.nekoarc.ciel.CAsm;
 public class AString extends ArcObject
 {
 	public static final ArcObject TYPE = Symbol.intern("string");
-	public StringBuffer string;
+	public final StringBuffer string;
 
 	public AString(String str) {
 		this.string = new StringBuffer(str);
