@@ -22,7 +22,6 @@ package com.stormwyrm.nekoarc;
 
 import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.types.ArcObject;
-import com.stormwyrm.nekoarc.types.InputPort;
 import com.stormwyrm.nekoarc.types.OutputPort;
 import com.stormwyrm.nekoarc.types.Symbol;
 
