@@ -43,9 +43,9 @@
 ;; ;; Annotate with the two top elements on the stack
 ;; (definst cann #x81)
 
-;; ;; Push a vector of a certain length given by the argument
-;; ;; onto the stack
-;; (definst gvec #x90)
+;; Push a vector of a certain length given by the argument
+;; onto the stack
+(definst gvec #x90)
 
 ;; ;; Push an empty hash table onto the stack
 ;; (definst gtab #x91)
