@@ -21,7 +21,6 @@
 package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.InvokeThread;
-import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.Unbound;
 import com.stormwyrm.nekoarc.types.AString;
 import com.stormwyrm.nekoarc.types.ArcObject;
