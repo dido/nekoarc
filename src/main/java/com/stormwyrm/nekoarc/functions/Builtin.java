@@ -20,7 +20,6 @@
 package com.stormwyrm.nekoarc.functions;
 
 import com.stormwyrm.nekoarc.InvokeThread;
-import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.types.ArcObject;
 import com.stormwyrm.nekoarc.types.Symbol;
 
