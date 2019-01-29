@@ -22,7 +22,6 @@ package com.stormwyrm.nekoarc.vm.instruction;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.types.Closure;
 import com.stormwyrm.nekoarc.types.Code;
-import com.stormwyrm.nekoarc.types.Fixnum;
 import com.stormwyrm.nekoarc.vm.Instruction;
 import com.stormwyrm.nekoarc.types.ArcThread;
 
