@@ -14,6 +14,7 @@ public enum CAsm {
     GRUNE(0x20),
     GSTR(0x30),
     GSYM(0x38),
+    GCODE(0x40),
     CCONS(0x80),
     GVEC(0x90),
     GTAB(0x91),

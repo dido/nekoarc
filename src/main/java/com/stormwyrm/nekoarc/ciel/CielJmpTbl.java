@@ -71,7 +71,7 @@ public class CielJmpTbl {
             NOINST,
             NOINST,
             NOINST,
-            NOINST,
+            new GCODE(),        // 0x40
             NOINST,
             NOINST,
             NOINST,
