@@ -18,10 +18,8 @@
  *
  */
 package com.stormwyrm.nekoarc.types;
-
 import com.stormwyrm.nekoarc.InvokeThread;
-import com.stormwyrm.nekoarc.Nil;
-import com.stormwyrm.nekoarc.True;
+import com.stormwyrm.nekoarc.ciel.CAsm;
 import com.stormwyrm.nekoarc.util.ObjectMap;
 
 import java.util.Iterator;
@@ -169,5 +167,25 @@ public class Table extends Composite implements Iterable<ArcObject> {
         if (newtype == Symbol.intern("string"))
             return(new AString(this.toString()));
         return super.coerce(newtype, extra);
+    }
+
+    @Override
+    public void marshal(OutputPort p, ObjectMap<ArcObject, ArcObject> seen) {
+        switch (checkReferences(seen, p, CAsm.GTAB::emit)) {
+            case 1:
+                // do nothing if this marshals to an mget, we're done
+                break;
+            case 0:
+                // Create table
+                CAsm.GTAB.emit(p);
+            case 2:
+                // Fall through. Either way top of stack should contain the blank table.
+                // Marshal each key/value pair and then XTSET.
+                for (ArcObject key : this) {
+                    this.get(key).marshal(p, seen);
+                    key.marshal(p, seen);
+                    CAsm.XTSET.emit(p);
+                }
+        }
     }
 }
