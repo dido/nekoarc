@@ -47,14 +47,14 @@
 ;; onto the stack
 (definst gvec #x90)
 
-;; ;; Push an empty hash table onto the stack
-;; (definst gtab #x91)
+;; Push an empty hash table onto the stack
+(definst gtab #x91)
 
 ;; Set an element of a cons or a vector with the index
 (definst xset #xa0)
 
-;; ;; Set a table entry from the top two stack elements
-;; (definst xtset #xa1)
+;; Set a table entry from the top two stack elements
+(definst xtset #xa1)
 
 ;; Put top of stack into the memo
 (definst mput #xc0)
