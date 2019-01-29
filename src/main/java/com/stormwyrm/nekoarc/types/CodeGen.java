@@ -90,7 +90,7 @@ public class CodeGen extends ArcObject {
      * @param b the opcode
      * @return offset at which the instruction was written
      */
-    private int instwrite(byte b) {
+    public int instwrite(byte b) {
         if (start < 0)
             throw new NekoArcException("code generated without startCode");
         if (pos >= geninst.length)
