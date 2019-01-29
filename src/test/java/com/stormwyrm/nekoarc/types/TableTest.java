@@ -21,6 +21,7 @@
 package com.stormwyrm.nekoarc.types;
 
 import com.stormwyrm.nekoarc.Nil;
+import com.stormwyrm.nekoarc.ciel.Ciel;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -38,6 +39,22 @@ public class TableTest {
         result = t.coerce(Symbol.intern("string"), Nil.NIL);
         assertEquals("string", result.type().toString());
         assertEquals("#hash()", result.toString());
+    }
+
+    @Test
+    public void testMarshal() {
+        OutString os = new OutString();
+        Table tbl = new Table();
+
+        for (int i=0; i<10; i++)
+            tbl.put(Fixnum.get(i*2), Fixnum.get(i));
+
+        tbl.marshal(os);
+        byte[] b = os.insideBytes();
+        InString is = new InString(b, "");
+        Ciel c = new Ciel(is);
+        c.load();
+        assertTrue(tbl.iso(c.pop()));
     }
 
 }
