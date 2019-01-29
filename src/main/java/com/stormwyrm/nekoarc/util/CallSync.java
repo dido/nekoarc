@@ -30,7 +30,7 @@ public class CallSync
 
 	public CallSync()
 	{
-		syncqueue = new SynchronousQueue<ArcObject>();
+		syncqueue = new SynchronousQueue<>();
 	}
 
 	public void ret(ArcObject retval)
@@ -39,7 +39,9 @@ public class CallSync
 			try {
 				syncqueue.put(retval);
 				return;
-			} catch (InterruptedException e) { }
+			} catch (InterruptedException e) {
+				// explicitly empty, we retry
+			}
 		}
 	}
 
@@ -48,7 +50,9 @@ public class CallSync
 		for (;;) {
 			try {
 				return(syncqueue.take());
-			} catch (InterruptedException e) { }
+			} catch (InterruptedException e) {
+				// explicitly empty catch
+			}
 		}
 	}
 }
