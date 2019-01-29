@@ -21,8 +21,8 @@
 package com.stormwyrm.nekoarc.types;
 
 public class Annotated extends ArcObject {
-    private ArcObject atype;
-    private ArcObject arep;
+    private final ArcObject atype;
+    private final ArcObject arep;
 
     public Annotated(ArcObject t, ArcObject r) {
         atype = t;
