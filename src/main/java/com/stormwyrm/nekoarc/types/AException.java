@@ -21,7 +21,7 @@ package com.stormwyrm.nekoarc.types;
 
 public class AException extends ArcObject {
     public static final ArcObject TYPE = Symbol.intern("exception");
-    public Throwable exception;
+    public final Throwable exception;
     public AException(Throwable e) {
         exception = e;
     }
