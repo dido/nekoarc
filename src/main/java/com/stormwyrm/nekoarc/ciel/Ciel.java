@@ -23,6 +23,7 @@ package com.stormwyrm.nekoarc.ciel;
 import com.stormwyrm.nekoarc.NekoArcException;
 import com.stormwyrm.nekoarc.Nil;
 import com.stormwyrm.nekoarc.types.ArcObject;
+import com.stormwyrm.nekoarc.types.CodeGen;
 import com.stormwyrm.nekoarc.types.InputPort;
 import com.stormwyrm.nekoarc.types.Rune;
 import com.stormwyrm.nekoarc.util.LongMap;
@@ -35,19 +36,28 @@ public class Ciel {
     private final ArcObject[] stack;        // stack
     private final LongMap<ArcObject> memo;  // memo
     private int sp;
+
     private final InputPort fp;
+    private final CodeGen cg;
     private boolean runnable;
 
-    public Ciel(InputPort fp, int stacksize) {
+    public Ciel(InputPort fp, CodeGen cg, int stacksize) {
         stack = new ArcObject[stacksize];
         sp = 0;
         this.fp = fp;
         runnable = true;
+        this.cg = cg;
         memo = new LongMap<>();
     }
 
-    public Ciel(InputPort fp) {
-        this(fp, DEFAULT_STACKSIZE);
+    public Ciel(InputPort fp, CodeGen cg) {
+        this(fp, cg, DEFAULT_STACKSIZE);
+    }
+
+    public Ciel(InputPort fp) { this(fp, new CodeGen(), DEFAULT_STACKSIZE); }
+
+    public CodeGen getCG() {
+        return(cg);
     }
 
     public InputPort port() { return(fp); }
