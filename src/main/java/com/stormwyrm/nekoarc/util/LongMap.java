@@ -67,10 +67,10 @@ public class LongMap<V> {
 		return value + 1;
 	}
 
-	public static Random random = new Random();
+	public static final Random random = new Random();
 
 	/** Returns a random number between 0 (inclusive) and the specified value (inclusive). */
-	public static final int random (int range) {
+	public static int random (int range) {
 		return random.nextInt(range + 1);
 	}
 
@@ -587,8 +587,8 @@ public class LongMap<V> {
 	 * time this method is called. Use the {@link Entries} constructor for nested or multithreaded iteration. */
 	public Entries<V> entries () {
 		if (entries1 == null) {
-			entries1 = new Entries<V>(this);
-			entries2 = new Entries<V>(this);
+			entries1 = new Entries<>(this);
+			entries2 = new Entries<>(this);
 		}
 		if (!entries1.valid) {
 			entries1.reset();
@@ -606,8 +606,8 @@ public class LongMap<V> {
 	 * time this method is called. Use the {@link Entries} constructor for nested or multithreaded iteration. */
 	public Values<V> values () {
 		if (values1 == null) {
-			values1 = new Values<V>(this);
-			values2 = new Values<V>(this);
+			values1 = new Values<>(this);
+			values2 = new Values<>(this);
 		}
 		if (!values1.valid) {
 			values1.reset();
@@ -625,8 +625,8 @@ public class LongMap<V> {
 	 * this method is called. Use the {@link Entries} constructor for nested or multithreaded iteration. */
 	public Keys<V> keys () {
 		if (keys1 == null) {
-			keys1 = new Keys<V>(this);
-			keys2 = new Keys<V>(this);
+			keys1 = new Keys<>(this);
+			keys2 = new Keys<>(this);
 		}
 		if (!keys1.valid) {
 			keys1.reset();
@@ -702,7 +702,7 @@ public class LongMap<V> {
 	}
 
 	static public class Entries<V> extends MapIterator<V> implements Iterable<Entry<V>>, Iterator<Entry<V>> {
-		private Entry<V> entry = new Entry<V>();
+		private final Entry<V> entry = new Entry<>();
 
 		public Entries (LongMap<V> map) {
 			super(map);
