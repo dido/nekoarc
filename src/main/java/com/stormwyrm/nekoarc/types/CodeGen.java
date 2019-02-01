@@ -37,7 +37,7 @@ public class CodeGen extends ArcObject {
     public final LongMap<ArcObject> genlits;
     private final ObjectMap<String, ArcObject> codeLabelMap;
     private final ObjectMap<String, ArcObject> litLabelMap;
-    private ArcObject ldls;
+    private ArcObject litlist;
     private int start;
 
     /**
@@ -50,7 +50,7 @@ public class CodeGen extends ArcObject {
         genlits = new LongMap<>();
         codeLabelMap = new ObjectMap<>();
         litLabelMap = new ObjectMap<>();
-        ldls = Nil.NIL;
+        litlist = Nil.NIL;
         start = -1;
     }
 
@@ -59,29 +59,18 @@ public class CodeGen extends ArcObject {
      */
     public int startCode() {
         start = pos;
-        ldls = Nil.NIL;
+        litlist = Nil.NIL;
         return(start);
     }
 
     /**
-     * Add an LDL instruction to the list.
-     * @param ldlpos The position of the LDL instruction
-     * @param index The current value of the arg to the LDL
-     */
-    public void ldl(int ldlpos, int index) {
-        // store the address as a one relative to the start
-        ldls = new Cons(new Cons(Fixnum.get(start - ldlpos),
-                                 Fixnum.get(index)), ldls);
-    }
-
-    /**
-     * Finish up code generation. Creates a Code and will reset start and the ldl list.
+     * Finish up code generation. Creates a Code and will reset start and the literal list.
      * @return A closure from the code just generated.
      */
     public Code endCode() {
-        Code code = new Code(this, start, pos - start, ldls);
+        Code code = new Code(this, start, pos - start, litlist);
         start = -1;
-        ldls = Nil.NIL;
+        litlist = Nil.NIL;
         return(code);
     }
 
@@ -188,9 +177,9 @@ public class CodeGen extends ArcObject {
     }
 
     /**
-     * Emit an instruction with a literal operand. This will set the argument to the label if its position is already
-     * known, or else add the position of the instruction to the label hash for later update when the label value
-     * becomes known.
+     * Emit an instruction with a literal operand. This will set the argument to the label if
+     * its position is already known, or else add the position of the instruction to the label
+     * hash for later update when the label value becomes known.
      * @param op The opcode of the instruction
      * @param label The label
      * @return The position of the instruction
@@ -285,6 +274,7 @@ public class CodeGen extends ArcObject {
         while (genlits.containsKey(litpos))
             litpos++;
         genlits.put(litpos, lit);
+        litlist = new Cons(Fixnum.get(litpos), litlist);
         return(litpos);
     }
 
