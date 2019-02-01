@@ -28,7 +28,7 @@ import com.stormwyrm.nekoarc.types.ArcThread;
 /** Heap environment */
 public class HeapEnv extends Vector {
 	public static final ArcObject TYPE = Symbol.intern("environment");
-	private ArcObject prev;
+	private final ArcObject prev;
 
 	/**
 	 * Create a new heap environment
