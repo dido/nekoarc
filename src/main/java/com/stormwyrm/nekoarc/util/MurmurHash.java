@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
 public class MurmurHash
 {
 	private static final String CHARSET = "UTF8";
-    private static byte[] tmpdata = new byte[8];
+    private static final byte[] tmpdata = new byte[8];
 
 	static class State {
 		long h1;
@@ -93,6 +93,7 @@ public class MurmurHash
 				| (((long) data[i + 7] & 0x00000000000000FFL) << 56));
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private static void bmix(State state)
 	{
 		state.k1 *= state.c1;
