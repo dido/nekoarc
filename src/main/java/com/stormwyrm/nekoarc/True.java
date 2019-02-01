@@ -37,6 +37,7 @@ public class True extends ArcObject {
 	 * Create a true. This is a singleton so private
 	 * @param rep Representation as a sym
 	 */
+	@SuppressWarnings("SameParameterValue")
 	private True(String rep) {
 		this.rep = rep;
 	}
