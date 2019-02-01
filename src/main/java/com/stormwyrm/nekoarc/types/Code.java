@@ -19,26 +19,66 @@
  */
 package com.stormwyrm.nekoarc.types;
 
-import com.stormwyrm.nekoarc.vm.VirtualMachine;
+import com.stormwyrm.nekoarc.ciel.CAsm;
+import com.stormwyrm.nekoarc.util.ObjectMap;
+
+import java.util.Arrays;
 
 /**
  * A code object
  */
-public class Code extends ArcObject {
+public class Code extends Composite {
     public static final ArcObject TYPE = Symbol.intern("code");
 
     public final int ip;
     public final int size;
-    public final ArcObject ldls;
+    public final ArcObject litlist;
+    private final CodeGen cg;
 
-    public Code(int ip, int size, ArcObject ldls) {
+    public Code(CodeGen cg, int ip, int size, ArcObject litlist) {
+        this.cg = cg;
         this.ip = ip;
         this.size = size;
-        this.ldls = ldls;
+        this.litlist = litlist;
     }
 
     @Override
     public ArcObject type() {
         return(TYPE);
+    }
+
+    @Override
+    public void visit(ObjectMap<ArcObject, ArcObject> seen, int[] counter) {
+        if (visitThis(seen, counter))
+            return;
+        litlist.visit(seen, counter);
+    }
+
+    @Override
+    public String toString(ObjectMap<ArcObject, ArcObject> seen) {
+        return("#<code:" + this.hashCode() + "#>");
+    }
+
+    @Override
+    public String toString() {
+        return(toString(null));
+    }
+
+    @Override
+    public void marshal(OutputPort p, ObjectMap<ArcObject, ArcObject> seen) {
+        CAsm.SCODE.emit(p);
+        // Write the bytecode
+        CAsm.GCODE.emit(p);
+        byte[] code = Arrays.copyOfRange(cg.geninst, ip, ip+size);
+        CAsm.writeBinStr(p, code);
+        Cons ldls = (Cons) this.litlist;
+        // Write data
+        for (ArcObject x : ldls) {
+            long index = ((Fixnum) x).fixnum;
+            cg.genlits.get(index).marshal(p, seen);
+            CAsm.GDATA.emit(p);
+            CAsm.writeLong(p, index);
+        }
+        CAsm.ECODE.emit(p);
     }
 }
