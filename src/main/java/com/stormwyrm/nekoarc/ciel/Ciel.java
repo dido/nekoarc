@@ -132,6 +132,14 @@ public class Ciel {
         return(sb.toString());
     }
 
+    public byte[] readByteString() {
+        long len = readLong();
+        byte[] bstr = new byte[(int)len];
+        for (int i=0; i<len; i++)
+            bstr[i] = (byte)fp.readb();
+        return(bstr);
+    }
+
     public void load() {
         while (runnable) {
             int op = fp.readb();
