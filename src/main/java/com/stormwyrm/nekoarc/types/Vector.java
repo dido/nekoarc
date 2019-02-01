@@ -31,7 +31,7 @@ import java.util.Iterator;
  */
 public class Vector extends Composite implements Iterable<ArcObject> {
 	public static final ArcObject TYPE = Symbol.intern("vector");
-	private ArcObject[] vec;
+	private final ArcObject[] vec;
 
 	public Vector(int length) {
 		vec = new ArcObject[length];
