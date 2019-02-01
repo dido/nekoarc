@@ -47,8 +47,7 @@ public class AString extends ArcObject
 
 	@Override
 	public ArcObject add(ArcObject ae) {
-		this.string.append(ae.toString());
-		return(this);
+		return(new AString(this.string + ae.toString()));
 	}
 
 	@Override
