@@ -24,7 +24,7 @@ import com.stormwyrm.nekoarc.ciel.CAsm;
 
 public class Flonum extends Numeric implements Orderable {
 	public static final ArcObject TYPE = Symbol.intern("flonum");
-	public double flonum;
+	public final double flonum;
 	
 	public Flonum(double flonum)
 	{
