@@ -29,7 +29,7 @@ import java.util.Iterator;
  */
 public class Table extends Composite implements Iterable<ArcObject> {
     public static final ArcObject TYPE = Symbol.intern("table");
-    private ObjectMap<ArcObject, ArcObject> table;
+    private final ObjectMap<ArcObject, ArcObject> table;
 
     public Table() {
         table = new ObjectMap<>();
