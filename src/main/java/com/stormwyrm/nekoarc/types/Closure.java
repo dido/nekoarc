@@ -27,7 +27,7 @@ import com.stormwyrm.nekoarc.util.Callable;
 public class Closure extends ArcObject {
 	public static final ArcObject TYPE = Symbol.intern("closure");
 
-	private ArcObject env;
+	private final ArcObject env;
 	private final Code code;
 
 	/**
