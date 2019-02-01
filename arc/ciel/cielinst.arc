@@ -37,6 +37,18 @@
 ;; Push a symbol onto the stack
 (definst gsym #x38)
 
+;; Start code
+(definst scode #x40)
+
+;; End code
+(definst ecode #x41)
+
+;; Push code binary data onto the stack
+(definst gcode #x42)
+
+;; Put data on stack into data area
+(definst gdata #x43)
+
 ;; Cons the two top elements on the stack
 (definst ccons #x80)
 
